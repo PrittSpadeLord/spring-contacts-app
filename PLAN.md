@@ -51,20 +51,26 @@ Behind the scenes, the server must undertake the following:
 - Hash `password` using a strong computationally expensive hashing process such as Argon2
 - Store the hashed password in the database
 
-**Username already taken:**
+**Basic error format:**
 
-This error is unlikely to occur as the client is expected to poll the username (endpoint for that later) and inform the user that a username is taken before they are even allowed to proceed. However, given that clientside code can always be bypassed, a server check is mandatory, and will return a response of Status 409 with the following JSON payload:
+All errors and exceptions will be returned in a standard format as so:
 
 | Key           | Type     | Description                                               |
 |---------------|----------|-----------------------------------------------------------|
 | `status`      | `number` | The HTTP Status code of the response                      |
 | `timestamp`   | `string` | An ISO 8601 formatted timestamp for when error was thrown |
 | `errorType`   | `string` | The title for the HTTP status                             |
-| `description` | `string` | A user-friendly description mentioning the username was already taken; stripped of any information that could expose underlying functionality |
+| `description` | `string` | A user-friendly description stripped of any information that could expose underlying functionality |
+
+**Username already taken:**
+
+This error is unlikely to occur as the client is expected to poll the username (endpoint for that later) and inform the user that a username is taken before they are even allowed to proceed. However, given that clientside code can always be bypassed, a server check is mandatory, and will return the error response of Status 409: Conflict
 
 **Username or Nickname contains invalid characters:**
 
-WIP
+(This error is unlikely to occur as the client is expected to perform RegEx to provide feedback to the user and disable various buttons)
+
+Returns an error response of Status 4xx: xxx
 
 **Username of Nickname contains prohibited content:**
 
@@ -74,6 +80,68 @@ WIP
 
 WIP
 
+**Internal Server Error:**
+
+WIP
+
+#### Logging in
+
+After the registration is complete, the user will need to log in with their username and password to authenticate. In this process, the user sends their username and password to the server. If the server finds it to be satisfactory, it will return a JWT token that the client must use for requests under the Contacts Management section.
+
+The API endpoint the client must use to perform this shall be a POST to `/auth` and requires a JSON with the following keys:
+
+| Key        | Type     |
+|------------|----------|
+| `username` | `string` |
+| `password` | `string` |
+
+Behind the scenes, the server must first check if the username exists on the database. After that, it will perform Argon2 verification of the submitted password with what was stored on the database. If it matches, the server shall begin token generation. It must be done on the fly in order to ensure it remains stateless. This is how it shall be done:
+
+- The header of the JWT must be a JSON with the following keys:
+
+| Key   | Type     | Value     |
+|-------|----------|-----------|
+| `alg` | `string` | `"HS256"` |
+| `typ` | `string` | `"JWT"`   |
+
+- The payload of the JWT must be a JSON with the following keys:
+
+| Key        | Type     | Description                                                                  |
+|------------|----------|------------------------------------------------------------------------------|
+| `aud`      | `string` | RFC 7519: The domain URL of the contacts app                                 |
+| `iat`      | `number` | RFC 7519: Timestamp in seconds from Unix Epoch of most recent password reset |
+| `iss`      | `string` | RFC 7519: The domain URL of the contacts app                                 |
+| `sub`      | `string` | RFC 7519: The account ID in string format                                    |
+| `username` | `string` | The username of the account 
+
+- The server must maintain a global secret key of atleast 256 bits. To maintain statelessness, this cannot be stored on the database, and must be passed in via environmental variables. This secret key must never be leaked. If the worst comes to pass, where both the database is breached and the secret key is leaked; the attackers will be able to obtain full control of every single account. As a countermeasure, we may create a backup global secret key that is airgapped at all times, but within reach to quickly replace and invalidate all tokens if the worst comes to pass.
+
+- This global secret key will be used to perform Hmac (either 256 or 512) on the hashed password in the database, the resultant of that shall be used as the signature of the JWT
+
+- This signature will be used to sign the JWT using the HmacSha256 algorithm before returning the token in the response.
+
+Upon sending the request, the client may expect any one of these following responses:
+
+**Success:**
+
+If the authentication process is successful, the server will return the token in the form of a JWT as so:
+
+| Key         | Type     | Description                                                            |
+|-------------|----------|------------------------------------------------------------------------|
+| `timestamp` | `string` | When the authentication process was performed                          |
+| `token`     | `string` | A stateless JWT that the client must cache and use for resource access |
+
+
+**Password is invalid:**
+
+WIP
+
+**Username does not exist:**
+
+WIP
+
+### Contacts Management
+
 <!-- This section is still work in progress -->
 -----
 
@@ -82,3 +150,4 @@ Rough notes not yet formalized:
 - Database ID generation will follow the customized snowflake format based off the 2020 Epoch
 - JWT for user authentication to use a serverwide master secret and the hashed password
 - Nickname must only contain characters from the QWERTY English keyboard to make it easier to enforce prohibited content
+- Table must store timestamp of last password reset
