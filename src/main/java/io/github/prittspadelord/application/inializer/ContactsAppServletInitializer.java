@@ -1,7 +1,9 @@
 package io.github.prittspadelord.application.inializer;
 
 import io.github.prittspadelord.application.configs.ContactsAppWebConfig;
+
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class ContactsAppServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
