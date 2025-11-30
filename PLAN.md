@@ -38,7 +38,7 @@ If the creation of the user is successful, the server will return the response o
 
 | Key         | Type     | Description                                         |
 |-------------|----------|-----------------------------------------------------|
-| `id`        | `number` | A unique id for each account                        |
+| `id`        | `string` | A unique id for each account                        |
 | `timestamp` | `string` | An ISO 8601 formatted timestamp of account creation |
 | `username`  | `string` | The unique username for each account                |
 | `nickname`  | `string` | The user's preferred nickname                       |
@@ -55,11 +55,11 @@ Behind the scenes, the server must undertake the following:
 
 All errors and exceptions will be returned in a standard format as so:
 
-| Key           | Type     | Description                                               |
-|---------------|----------|-----------------------------------------------------------|
-| `status`      | `number` | The HTTP Status code of the response                      |
-| `timestamp`   | `string` | An ISO 8601 formatted timestamp for when error was thrown |
-| `errorType`   | `string` | The title for the HTTP status                             |
+| Key           | Type     | Description                                                                                        |
+|---------------|----------|----------------------------------------------------------------------------------------------------|
+| `status`      | `number` | The HTTP Status code of the response                                                               |
+| `timestamp`   | `string` | An ISO 8601 formatted timestamp for when error was thrown                                          |
+| `errorType`   | `string` | The title for the HTTP status                                                                      |
 | `description` | `string` | A user-friendly description stripped of any information that could expose underlying functionality |
 
 **Username already taken:**
@@ -112,7 +112,7 @@ Behind the scenes, the server must first check if the username exists on the dat
 | `iat`      | `number` | RFC 7519: Timestamp in seconds from Unix Epoch of most recent password reset |
 | `iss`      | `string` | RFC 7519: The domain URL of the contacts app                                 |
 | `sub`      | `string` | RFC 7519: The account ID in string format                                    |
-| `username` | `string` | The username of the account 
+| `username` | `string` | The username of the account                                                  |
 
 - The server must maintain a global secret key of atleast 256 bits. To maintain statelessness, this cannot be stored on the database, and must be passed in via environmental variables. This secret key must never be leaked. If the worst comes to pass, where both the database is breached and the secret key is leaked; the attackers will be able to obtain full control of every single account. As a countermeasure, we may create a backup global secret key that is airgapped at all times, but within reach to quickly replace and invalidate all tokens if the worst comes to pass.
 
