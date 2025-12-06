@@ -1,10 +1,12 @@
 package io.github.prittspadelord.application.configs;
 
+import io.github.prittspadelord.application.rest.interceptors.RestApiRateLimitingInterceptor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverters;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import tools.jackson.databind.DeserializationFeature;
@@ -15,6 +17,17 @@ import tools.jackson.databind.json.JsonMapper;
 @ComponentScan(basePackages = "io.github.prittspadelord.application.controllers")
 @EnableWebMvc
 public class ContactsAppWebConfig implements WebMvcConfigurer {
+
+    private final RestApiRateLimitingInterceptor restApiRateLimitingInterceptor;
+
+    public ContactsAppWebConfig(RestApiRateLimitingInterceptor restApiRateLimitingInterceptor) {
+        this.restApiRateLimitingInterceptor = restApiRateLimitingInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(restApiRateLimitingInterceptor);
+    }
 
     @Override
     public void configureMessageConverters(HttpMessageConverters.ServerBuilder converters) {

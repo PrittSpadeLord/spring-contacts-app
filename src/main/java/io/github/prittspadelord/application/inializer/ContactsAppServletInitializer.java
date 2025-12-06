@@ -1,7 +1,10 @@
 package io.github.prittspadelord.application.inializer;
 
+import io.github.prittspadelord.application.configs.ContactsAppDatabaseConfig;
+import io.github.prittspadelord.application.configs.ContactsAppRootConfig;
 import io.github.prittspadelord.application.configs.ContactsAppWebConfig;
 
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -9,7 +12,10 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class ContactsAppServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?> @Nullable [] getRootConfigClasses() {
-        return new Class[] {};
+        return new Class[] {
+            ContactsAppDatabaseConfig.class,
+            ContactsAppRootConfig.class,
+        };
     }
 
     @Override
@@ -19,6 +25,7 @@ public class ContactsAppServletInitializer extends AbstractAnnotationConfigDispa
         };
     }
 
+    @NullMarked
     @Override
     protected String[] getServletMappings() {
         return new String[] { "/" };

@@ -1,6 +1,6 @@
 package io.github.prittspadelord.application.controllers;
 
-import io.github.prittspadelord.application.restmodels.RegisterAccountResponse;
+import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,9 +16,9 @@ import java.time.Instant;
 public class ContactsAppRestControllerV1 {
 
     @GetMapping("/register")
-    public RegisterAccountResponse handleAccountRegistration() {
+    public RegisterUserResponse handleAccountRegistration() {
 
-        var registerAccountResponse = new RegisterAccountResponse();
+        var registerAccountResponse = new RegisterUserResponse();
         registerAccountResponse.setId(String.valueOf(97882569828204544L));
         registerAccountResponse.setTimestamp(Instant.ofEpochMilli(1764532985738L));
         registerAccountResponse.setUsername("pritt0780");
