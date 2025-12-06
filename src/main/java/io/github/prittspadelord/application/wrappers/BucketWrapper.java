@@ -1,4 +1,4 @@
-package wrappers;
+package io.github.prittspadelord.application.wrappers;
 
 import io.github.bucket4j.Bucket;
 import lombok.Getter;

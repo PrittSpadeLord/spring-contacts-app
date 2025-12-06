@@ -175,3 +175,18 @@ Rough notes not yet formalized:
 - Nickname must only contain characters from the QWERTY English keyboard to make it easier to enforce prohibited content
 - Users table must have column: id, username, nickname, hashed_pass, password_reset_timestamp
 - Contacts table must have column: id, user_id, name, email, phone... WAIT HOW DO I MAP MULTIPLE PHONE NUMBERS WITH LABEL? NEED MORE BRAINSTORMING
+
+Banned words initial brainstorming with character mapping:
+
+| QWERTY Character      | Common Leetspeak Look-Alike |      Mapped To      |
+|:----------------------|:---------------------------:|:-------------------:|
+| **Uppercase** (`A-Z`) |             N/A             | `Lowercase` (`a-z`) |
+| `1`                   |         `i` or `l`          |         `i`         |
+| `!`                   |             `i`             |         `i`         |
+| `0`                   |             `o`             |         `o`         |
+| `3`                   |             `e`             |         `e`         |
+| `7`                   |             `t`             |         `t`         |
+| `@`                   |             `a`             |         `a`         |
+| `4`                   |             `a`             |         `a`         |
+| `$`                   |             `s`             |         `s`         |
+| `5`                   |             `s`             |         `s`         |
