@@ -1,6 +1,7 @@
 package io.github.prittspadelord.application.configs;
 
 import io.github.prittspadelord.application.rest.interceptors.RestApiRateLimitingInterceptor;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverters;

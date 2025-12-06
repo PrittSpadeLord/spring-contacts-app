@@ -1,10 +1,13 @@
 package io.github.prittspadelord.application.factories;
 
+import io.github.prittspadelord.application.wrappers.BucketWrapper;
+
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
-import io.github.prittspadelord.application.wrappers.BucketWrapper;
 
 import java.time.Duration;
 import java.time.Instant;
