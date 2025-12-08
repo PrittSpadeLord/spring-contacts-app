@@ -5,13 +5,10 @@ import lombok.Setter;
 
 import org.jspecify.annotations.NonNull;
 
-import java.time.Instant;
-
 @Getter
 @Setter
-public class RegisterUserResponse {
-    private String id;
-    @NonNull private String nickname;
-    @NonNull private Instant timestamp;
+public class RegisterUserRequest {
     @NonNull private String username;
+    @NonNull private String nickname;
+    @NonNull private String password;
 }

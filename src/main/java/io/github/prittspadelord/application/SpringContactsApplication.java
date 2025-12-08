@@ -1,7 +1,5 @@
 package io.github.prittspadelord.application;
 
-import io.github.prittspadelord.application.inializer.ContactsAppServletInitializer;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.catalina.Context;

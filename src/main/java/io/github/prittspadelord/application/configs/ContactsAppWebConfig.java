@@ -1,6 +1,9 @@
 package io.github.prittspadelord.application.configs;
 
-import io.github.prittspadelord.application.rest.interceptors.RestApiRateLimitingInterceptor;
+import io.github.prittspadelord.application.rest.interceptors.InputFormatValidationInterceptor;
+import io.github.prittspadelord.application.rest.interceptors.RateLimitingInterceptor;
+
+import lombok.AllArgsConstructor;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,34 +17,33 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
 
+@AllArgsConstructor
 @Configuration
-@ComponentScan(basePackages = "io.github.prittspadelord.application.controllers")
+@ComponentScan(basePackages = "io.github.prittspadelord.application.rest.controllers")
 @EnableWebMvc
 public class ContactsAppWebConfig implements WebMvcConfigurer {
 
-    private final RestApiRateLimitingInterceptor restApiRateLimitingInterceptor;
-
-    public ContactsAppWebConfig(RestApiRateLimitingInterceptor restApiRateLimitingInterceptor) {
-        this.restApiRateLimitingInterceptor = restApiRateLimitingInterceptor;
-    }
+    private final RateLimitingInterceptor rateLimitingInterceptor;
+    private final InputFormatValidationInterceptor inputFormatValidationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(restApiRateLimitingInterceptor);
+        registry.addInterceptor(rateLimitingInterceptor);
+        registry.addInterceptor(inputFormatValidationInterceptor);
     }
 
     @Override
     public void configureMessageConverters(HttpMessageConverters.ServerBuilder converters) {
         JsonMapper mapper = JsonMapper.builder()
-                .enable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
-                .enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
-                .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .enable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
+            .enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+            .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
+            .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 
-                .disable(DateTimeFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .disable(DeserializationFeature.ACCEPT_FLOAT_AS_INT)
-                .disable(DateTimeFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
-                .build();
+            .disable(DateTimeFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+            .disable(DeserializationFeature.ACCEPT_FLOAT_AS_INT)
+            .disable(DateTimeFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
+            .build();
 
         converters.addCustomConverter(new JacksonJsonHttpMessageConverter(mapper));
     }

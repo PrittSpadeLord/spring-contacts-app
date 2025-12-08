@@ -1,4 +1,4 @@
-package io.github.prittspadelord.application.controllers;
+package io.github.prittspadelord.application.rest.controllers;
 
 import io.github.prittspadelord.application.rest.RateLimitException;
 import io.github.prittspadelord.application.rest.models.ApiErrorInfo;

@@ -1,10 +1,12 @@
-package io.github.prittspadelord.application.controllers;
+package io.github.prittspadelord.application.rest.controllers;
 
+import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,8 +17,10 @@ import java.time.Instant;
 @Slf4j
 public class ContactsAppRestControllerV1 {
 
-    @GetMapping("/register")
-    public RegisterUserResponse handleAccountRegistration() {
+    @PostMapping("/register")
+    public RegisterUserResponse handleAccountRegistration(@RequestBody RegisterUserRequest registerUserRequest) {
+
+        log.info(registerUserRequest.getUsername());
 
         var registerAccountResponse = new RegisterUserResponse();
         registerAccountResponse.setId(String.valueOf(97882569828204544L));

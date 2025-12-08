@@ -1,7 +1,7 @@
 package io.github.prittspadelord.application.data.dao.impl;
 
 import io.github.prittspadelord.application.data.dao.UserDao;
-import io.github.prittspadelord.application.data.dbmodels.User;
+import io.github.prittspadelord.application.data.models.User;
 
 import lombok.extern.slf4j.Slf4j;
 

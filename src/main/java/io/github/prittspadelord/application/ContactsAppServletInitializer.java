@@ -1,4 +1,4 @@
-package io.github.prittspadelord.application.inializer;
+package io.github.prittspadelord.application;
 
 import io.github.prittspadelord.application.configs.ContactsAppDatabaseConfig;
 import io.github.prittspadelord.application.configs.ContactsAppRootConfig;

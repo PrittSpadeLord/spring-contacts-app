@@ -15,12 +15,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 @Slf4j
-public class RestApiRateLimitingInterceptor implements HandlerInterceptor {
+public class RateLimitingInterceptor implements HandlerInterceptor {
 
     private final BucketFactory bucketFactory;
 
     @Autowired
-    public RestApiRateLimitingInterceptor(BucketFactory bucketFactory) {
+    public RateLimitingInterceptor(BucketFactory bucketFactory) {
         this.bucketFactory = bucketFactory;
     }
 

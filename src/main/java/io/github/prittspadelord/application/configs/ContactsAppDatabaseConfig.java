@@ -3,8 +3,6 @@ package io.github.prittspadelord.application.configs;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,7 +13,6 @@ import javax.sql.DataSource;
 
 @ComponentScan(basePackages = "io.github.prittspadelord.application.dao.impl")
 @Configuration
-@Slf4j
 public class ContactsAppDatabaseConfig {
 
     @Bean
