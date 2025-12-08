@@ -11,6 +11,7 @@ import org.springframework.core.task.VirtualThreadTaskExecutor;
 import org.springframework.web.SpringServletContainerInitializer;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
@@ -35,6 +36,7 @@ public class SpringContactsApplication {
                 log.info("Gracefully shutting down the server...");
                 tomcat.stop();
                 tomcat.getServer().await();
+                deleteDirectory(new File("tomcat." + System.getenv("PORT")));
                 log.info("Shutdown complete");
             }
             catch(LifecycleException e) {
@@ -51,5 +53,14 @@ public class SpringContactsApplication {
             log.error("Failed to start the server due to {} with message: {}", e.getClass().getName(), e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    private static void deleteDirectory(File directory) {
+
+        for(File subDirectory: Objects.requireNonNull(directory.listFiles())) {
+            deleteDirectory(subDirectory);
+        }
+
+        boolean _ = directory.delete();
     }
 }
