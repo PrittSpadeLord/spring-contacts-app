@@ -34,7 +34,7 @@ public class JdbcCreateNewUserService implements CreateNewUserService {
 
     private long generateSnowflakeId(Instant instant) {
         long timestamp = instant.toEpochMilli();
-        long machineId = Integer.parseInt(System.getenv("MACHINE_ID"));
+        long machineId = Long.parseLong(System.getenv("MACHINE_ID"));
         long threadId = Thread.currentThread().threadId();
         long incrementer = 0L; //for now, this will be thread-safe and atomically incremented for requests within the same millisecond
 
