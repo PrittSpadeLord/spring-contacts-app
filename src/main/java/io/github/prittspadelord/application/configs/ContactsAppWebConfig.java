@@ -18,8 +18,8 @@ import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
 
 @AllArgsConstructor
-@Configuration
 @ComponentScan(basePackages = "io.github.prittspadelord.application.rest.controllers")
+@Configuration
 @EnableWebMvc
 public class ContactsAppWebConfig implements WebMvcConfigurer {
 

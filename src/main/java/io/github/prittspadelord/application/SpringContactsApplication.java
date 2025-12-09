@@ -56,7 +56,6 @@ public class SpringContactsApplication {
     }
 
     private static void deleteDirectory(File directory) {
-
         for(File subDirectory: Objects.requireNonNull(directory.listFiles())) {
             deleteDirectory(subDirectory);
         }

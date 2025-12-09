@@ -11,6 +11,6 @@ public class User {
     private long id;
     @NonNull private String username;
     @NonNull private String nickname;
-    @NonNull private String hashedPassword; //serious debate needed on whether we need it here or not
+    @NonNull private String hashedPassword;
     private long recentPasswordUpdateTimestamp;
 }

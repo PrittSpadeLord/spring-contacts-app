@@ -15,7 +15,7 @@ public class InputFormatValidationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //how am I supposed to get an instance of
+        //how am I supposed to get an instance of the body?
         return true;
     }
 }

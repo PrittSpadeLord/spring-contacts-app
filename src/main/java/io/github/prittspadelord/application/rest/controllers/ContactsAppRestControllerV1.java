@@ -23,7 +23,7 @@ public class ContactsAppRestControllerV1 {
         log.info(registerUserRequest.getUsername());
 
         var registerAccountResponse = new RegisterUserResponse();
-        registerAccountResponse.setId(String.valueOf(97882569828204544L));
+        registerAccountResponse.setId(registerUserRequest.);
         registerAccountResponse.setTimestamp(Instant.ofEpochMilli(1764532985738L));
         registerAccountResponse.setUsername("pritt0780");
         registerAccountResponse.setNickname("Nara Meztli Yanfei Simp");
