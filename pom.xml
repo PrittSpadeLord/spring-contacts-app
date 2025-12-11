@@ -26,7 +26,7 @@
         <mockito.version>5.20.0</mockito.version>
         <postgresql.version>42.7.8</postgresql.version>
         <slf4j.version>2.0.17</slf4j.version>
-        <spring.framework.version>7.0.1</spring.framework.version>
+        <spring.framework.version>7.0.2</spring.framework.version>
         <spring.security.version>7.0.0</spring.security.version>
 
         <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
@@ -109,7 +109,7 @@
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-debug-jdk15to18</artifactId>
+            <artifactId>bcprov-debug-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
 
