@@ -1,14 +1,15 @@
 package io.github.prittspadelord.application.rest.models;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 import lombok.Getter;
 import lombok.Setter;
-
-import org.jspecify.annotations.NonNull;
 
 @Getter
 @Setter
 public class RegisterUserRequest {
-    @NonNull private String username;
-    @NonNull private String nickname;
-    @NonNull private String password;
+    @NotNull @Pattern(regexp = "[0-9a-z_]+") private String username;
+    @NotNull @Pattern(regexp = "[\\x20-\\x7E]+") private String nickname;
+    @NotNull @Pattern(regexp = "[\\x20-\\x7E]+") private String password;
 }

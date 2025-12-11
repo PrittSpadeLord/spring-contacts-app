@@ -1,4 +1,4 @@
-package io.github.prittspadelord.application.wrappers;
+package io.github.prittspadelord.application.rest.support;
 
 import io.github.bucket4j.Bucket;
 

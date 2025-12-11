@@ -1,6 +1,4 @@
-package io.github.prittspadelord.application.factories;
-
-import io.github.prittspadelord.application.wrappers.BucketWrapper;
+package io.github.prittspadelord.application.rest.support;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;

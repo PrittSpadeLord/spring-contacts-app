@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
-@ComponentScan(basePackages = "io.github.prittspadelord.application.dao.impl")
+@ComponentScan(basePackages = "io.github.prittspadelord.application.data.dao.impl")
 @Configuration
 public class ContactsAppDatabaseConfig {
 

@@ -1,8 +1,8 @@
 package io.github.prittspadelord.application.services;
 
-import io.github.prittspadelord.application.data.models.User;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
+import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 
 public interface CreateNewUserService {
-    User createUser(RegisterUserRequest registerUserRequest);
+    RegisterUserResponse createUser(RegisterUserRequest registerUserRequest);
 }

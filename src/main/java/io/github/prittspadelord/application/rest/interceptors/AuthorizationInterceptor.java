@@ -10,12 +10,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 @Slf4j
-public class InputFormatValidationInterceptor implements HandlerInterceptor {
+public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        //how am I supposed to get an instance of the body?
+
         return true;
     }
 }

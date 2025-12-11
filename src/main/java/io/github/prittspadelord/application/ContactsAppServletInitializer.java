@@ -2,6 +2,7 @@ package io.github.prittspadelord.application;
 
 import io.github.prittspadelord.application.configs.ContactsAppDatabaseConfig;
 import io.github.prittspadelord.application.configs.ContactsAppRootConfig;
+import io.github.prittspadelord.application.configs.ContactsAppSecurityConfig;
 import io.github.prittspadelord.application.configs.ContactsAppWebConfig;
 
 import org.jspecify.annotations.NullMarked;
@@ -15,6 +16,7 @@ public class ContactsAppServletInitializer extends AbstractAnnotationConfigDispa
         return new Class[] {
             ContactsAppDatabaseConfig.class,
             ContactsAppRootConfig.class,
+            ContactsAppSecurityConfig.class
         };
     }
 

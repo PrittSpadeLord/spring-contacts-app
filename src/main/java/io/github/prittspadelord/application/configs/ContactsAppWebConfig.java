@@ -1,6 +1,5 @@
 package io.github.prittspadelord.application.configs;
 
-import io.github.prittspadelord.application.rest.interceptors.InputFormatValidationInterceptor;
 import io.github.prittspadelord.application.rest.interceptors.RateLimitingInterceptor;
 
 import lombok.AllArgsConstructor;
@@ -24,12 +23,10 @@ import tools.jackson.databind.json.JsonMapper;
 public class ContactsAppWebConfig implements WebMvcConfigurer {
 
     private final RateLimitingInterceptor rateLimitingInterceptor;
-    private final InputFormatValidationInterceptor inputFormatValidationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(rateLimitingInterceptor);
-        registry.addInterceptor(inputFormatValidationInterceptor);
     }
 
     @Override

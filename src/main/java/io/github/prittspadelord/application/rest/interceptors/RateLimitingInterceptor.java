@@ -2,7 +2,7 @@ package io.github.prittspadelord.application.rest.interceptors;
 
 import io.github.bucket4j.Bucket;
 import io.github.prittspadelord.application.rest.RateLimitException;
-import io.github.prittspadelord.application.factories.BucketFactory;
+import io.github.prittspadelord.application.rest.support.BucketFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

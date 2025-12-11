@@ -23,7 +23,9 @@ public class JdbcTemplateUserDao implements UserDao {
     @Override
     public void insertUser(User user) {
 
-        String sql = "INSER INTO users (id, username, nickname, hashed_password, recent_password_update_timestamp) VALUES (:id, :username, :nickname, :hashed_password, :recent_password_update_timestamp)";
+        //first check if user is already present or not
+
+        String sql = "INSERT INTO users (id, username, nickname, hashed_password, recent_password_update_timestamp) VALUES (:id, :username, :nickname, :hashed_password, :recent_password_update_timestamp)";
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", user.getId())
