@@ -20,6 +20,7 @@ import java.time.Instant;
 public class JdbcCreateNewUserService implements CreateNewUserService {
 
     private final Argon2PasswordEncoder passwordEncoder;
+    private final UniqueIdGenerationService uniqueIdGenerationService;
     private final UserDao userDao;
 
     @Override
@@ -27,7 +28,7 @@ public class JdbcCreateNewUserService implements CreateNewUserService {
 
         User user = new User();
         Instant now = Instant.now();
-        long snowflakeId = this.generateSnowflakeId(now);
+        long snowflakeId = uniqueIdGenerationService.generateUniqueId(now);
         String hashedPassword = this.hashPassword(this.passwordEncoder, registerUserRequest.getPassword());
 
         user.setId(snowflakeId);
@@ -46,15 +47,6 @@ public class JdbcCreateNewUserService implements CreateNewUserService {
         registerUserResponse.setNickname(registerUserRequest.getNickname());
 
         return registerUserResponse;
-    }
-
-    private long generateSnowflakeId(Instant instant) {
-        long timestamp = instant.toEpochMilli();
-        long machineId = Long.parseLong(System.getenv("MACHINE_ID"));
-        long threadId = Thread.currentThread().threadId();
-        long incrementer = 0L; //for now, later this will be thread-safe and atomically incremented for requests within the same millisecond
-
-        return ((timestamp - 1577836800000L) << 19) + (machineId << 11) + (threadId << 3) + (incrementer);
     }
 
     private String hashPassword(Argon2PasswordEncoder passwordEncoder, String password) {
