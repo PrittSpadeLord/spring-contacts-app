@@ -5,6 +5,7 @@ import io.github.prittspadelord.application.data.models.User;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 import io.github.prittspadelord.application.services.CreateNewUserService;
+import io.github.prittspadelord.application.services.UniqueIdGenerationService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

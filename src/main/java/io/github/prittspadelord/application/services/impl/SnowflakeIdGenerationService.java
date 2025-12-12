@@ -1,5 +1,7 @@
 package io.github.prittspadelord.application.services.impl;
 
+import io.github.prittspadelord.application.services.UniqueIdGenerationService;
+
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
