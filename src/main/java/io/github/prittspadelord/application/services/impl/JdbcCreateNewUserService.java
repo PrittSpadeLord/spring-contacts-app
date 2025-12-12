@@ -30,7 +30,7 @@ public class JdbcCreateNewUserService implements CreateNewUserService {
         User user = new User();
         Instant now = Instant.now();
         long snowflakeId = uniqueIdGenerationService.generateUniqueId(now);
-        String hashedPassword = this.hashPassword(this.passwordEncoder, registerUserRequest.getPassword());
+        String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword());
 
         user.setId(snowflakeId);
         user.setUsername(registerUserRequest.getUsername());
@@ -48,9 +48,5 @@ public class JdbcCreateNewUserService implements CreateNewUserService {
         registerUserResponse.setNickname(registerUserRequest.getNickname());
 
         return registerUserResponse;
-    }
-
-    private String hashPassword(Argon2PasswordEncoder passwordEncoder, String password) {
-        return passwordEncoder.encode(password);
     }
 }
