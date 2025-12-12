@@ -23,8 +23,6 @@ public class JdbcTemplateUserDao implements UserDao {
     @Override
     public void insertUser(User user) {
 
-        //first check if user is already present or not
-
         String sql = "INSERT INTO users (id, username, nickname, hashed_password, recent_password_update_timestamp) VALUES (:id, :username, :nickname, :hashed_password, :recent_password_update_timestamp)";
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
@@ -34,7 +32,7 @@ public class JdbcTemplateUserDao implements UserDao {
             .addValue("hashed_password", user.getHashedPassword())
             .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
 
-        int rowsAffected = namedParameterJdbcTemplate.update(sql, parameterSource);
+        int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 
         log.info("Inserted user with id {} with {} rows affected", user.getId(), rowsAffected);
     }

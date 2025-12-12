@@ -29,7 +29,7 @@ public class JdbcCreateNewUserService implements CreateNewUserService {
 
         User user = new User();
         Instant now = Instant.now();
-        long snowflakeId = uniqueIdGenerationService.generateUniqueId(now);
+        long snowflakeId = this.uniqueIdGenerationService.generateUniqueId(now);
         String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword());
 
         user.setId(snowflakeId);
@@ -38,7 +38,7 @@ public class JdbcCreateNewUserService implements CreateNewUserService {
         user.setHashedPassword(hashedPassword);
         user.setRecentPasswordUpdateTimestamp(now.toEpochMilli());
 
-        userDao.insertUser(user);
+        this.userDao.insertUser(user);
         log.info("Called the userDao to insert user with username {}", registerUserRequest.getUsername());
 
         var registerUserResponse = new RegisterUserResponse();

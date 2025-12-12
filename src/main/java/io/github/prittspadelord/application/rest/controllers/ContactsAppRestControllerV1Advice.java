@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +22,20 @@ import java.util.List;
 @Slf4j
 public class ContactsAppRestControllerV1Advice {
 
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiErrorResponse duplicateEntryExceptionHandler(DuplicateKeyException e, HttpServletRequest req) {
+        var error = new ApiErrorResponse();
+        error.setStatus(HttpStatus.FORBIDDEN.value());
+        error.setTimestamp(Instant.now());
+        error.setErrorType(HttpStatus.FORBIDDEN.name());
+        error.setDescription("The username you provided already exists in the database. Why did you bypass the client-side validation huh?");
+        error.setAdditionalData(null);
+
+        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.FORBIDDEN.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrorResponse validationExceptionHandler(MethodArgumentNotValidException e, HttpServletRequest req) {
@@ -29,12 +44,9 @@ public class ContactsAppRestControllerV1Advice {
         error.setTimestamp(Instant.now());
         error.setErrorType(HttpStatus.BAD_REQUEST.name());
         error.setDescription("The input you have provided is invalid! See additionalData for more information");
+        error.setAdditionalData(null);
 
-        List<ValidationErrorEnumeration> validationErrors = e.getFieldErrors()
-                .stream().map((fieldError) -> {
-                    return new ValidationErrorEnumeration(fieldError);
-                })
-                .toList();
+        List<ValidationErrorEnumeration> validationErrors = e.getFieldErrors().stream().map(ValidationErrorEnumeration::new).toList();
 
         error.setAdditionalData(validationErrors);
 

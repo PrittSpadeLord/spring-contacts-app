@@ -44,11 +44,11 @@ Given the information we have gathered, we shall name the database as `spring_co
 
 ```sql
 CREATE TABLE users (
-    id bigint NOT NULL PRIMARY KEY,
-    username varchar(255) NOT NULL UNIQUE,
-    nickname varchar(255) NOT NULL,
-    hashed_password varchar(255) NOT NULL,
-    recent_password_update_timestamp bigint NOT NULL
+     id bigint NOT NULL PRIMARY KEY,
+     username varchar(63) NOT NULL UNIQUE,
+     nickname varchar(63) NOT NULL,
+     hashed_password varchar(255) NOT NULL,
+     recent_password_update_timestamp bigint NOT NULL
 );
 ```
 
