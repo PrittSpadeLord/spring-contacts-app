@@ -3,7 +3,7 @@ package io.github.prittspadelord.application.configs;
 import io.github.prittspadelord.application.rest.interceptors.AuthorizationInterceptor;
 import io.github.prittspadelord.application.rest.interceptors.RateLimitingInterceptor;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @ComponentScan(basePackages = "io.github.prittspadelord.application.rest.controllers")
 @Configuration
 @EnableWebMvc
