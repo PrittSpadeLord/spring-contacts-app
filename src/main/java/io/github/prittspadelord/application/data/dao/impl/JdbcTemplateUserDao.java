@@ -5,6 +5,7 @@ import io.github.prittspadelord.application.data.models.User;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -18,6 +19,23 @@ public class JdbcTemplateUserDao implements UserDao {
 
     public JdbcTemplateUserDao(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
+
+    @Override
+    public boolean checkUsername(String username) {
+        String sql = "SELECT id FROM users WHERE username = :username";
+
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+            .addValue("username", username);
+
+        try {
+            Long id = this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Long.class);
+
+            return id != null;
+        }
+        catch(EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 
     @Override

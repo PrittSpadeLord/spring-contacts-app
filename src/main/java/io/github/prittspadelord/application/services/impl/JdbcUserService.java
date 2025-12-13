@@ -2,9 +2,10 @@ package io.github.prittspadelord.application.services.impl;
 
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.data.models.User;
+import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
-import io.github.prittspadelord.application.services.CreateNewUserService;
+import io.github.prittspadelord.application.services.UserService;
 import io.github.prittspadelord.application.services.UniqueIdGenerationService;
 
 import lombok.AllArgsConstructor;
@@ -18,11 +19,19 @@ import java.time.Instant;
 @AllArgsConstructor
 @Service
 @Slf4j
-public class JdbcCreateNewUserService implements CreateNewUserService {
+public class JdbcUserService implements UserService {
 
     private final Argon2PasswordEncoder passwordEncoder;
     private final UniqueIdGenerationService uniqueIdGenerationService;
     private final UserDao userDao;
+
+    @Override
+    public CheckUsernameExistsResponse checkUsername(String string) {
+        var checkUsernameExistsResponse = new CheckUsernameExistsResponse();
+        checkUsernameExistsResponse.setResponse(this.userDao.checkUsername(string));
+
+        return checkUsernameExistsResponse;
+    }
 
     @Override
     public RegisterUserResponse createUser(RegisterUserRequest registerUserRequest) {
