@@ -1,5 +1,6 @@
 package io.github.prittspadelord.application.services.impl;
 
+import io.github.prittspadelord.application.components.SnowflakeIdGenerator;
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
@@ -17,10 +18,10 @@ import java.time.Instant;
 class JdbcUserServiceTest {
 
     private final Argon2PasswordEncoder passwordEncoder = Mockito.mock(Argon2PasswordEncoder.class);
-    private final UniqueIdGenerationService uniqueIdGenerationService = Mockito.mock(UniqueIdGenerationService.class);
+    private final SnowflakeIdGenerator snowflakeIdGenerator = Mockito.mock(SnowflakeIdGenerator.class);
     private final UserDao userDao = Mockito.mock(UserDao.class);
 
-    private final JdbcUserService jdbcUserService = new JdbcUserService(this.passwordEncoder, this.uniqueIdGenerationService, userDao);
+    private final JdbcUserService jdbcUserService = new JdbcUserService(this.passwordEncoder, this.snowflakeIdGenerator, userDao);
 
     @Test
     public void checkUsernameShouldReturnFalseIfDoesntExist() {
@@ -61,7 +62,7 @@ class JdbcUserServiceTest {
         Mockito.when(this.passwordEncoder.encode(rawPassword))
             .thenReturn(hashedPassword);
 
-        Mockito.when(this.uniqueIdGenerationService.generateUniqueId(Mockito.any(Instant.class)))
+        Mockito.when(this.snowflakeIdGenerator.generateSnowflakeId(Mockito.any(Instant.class)))
             .thenReturn(id);
 
         RegisterUserResponse registerUserResponse = this.jdbcUserService.createUser(registerUserRequest);
