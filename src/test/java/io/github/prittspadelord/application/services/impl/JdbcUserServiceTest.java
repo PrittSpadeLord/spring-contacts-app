@@ -4,7 +4,6 @@ import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
-import io.github.prittspadelord.application.services.UniqueIdGenerationService;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

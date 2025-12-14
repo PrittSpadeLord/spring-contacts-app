@@ -5,7 +5,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
-@ComponentScan(basePackages = "io.github.prittspadelord.application.components")
 @Configuration
 public class ContactsAppSecurityConfig {
 

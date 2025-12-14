@@ -1,8 +1,9 @@
-package io.github.prittspadelord.application.rest.support;
+package io.github.prittspadelord.application.components;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 
+import io.github.prittspadelord.application.components.support.BucketWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Component;

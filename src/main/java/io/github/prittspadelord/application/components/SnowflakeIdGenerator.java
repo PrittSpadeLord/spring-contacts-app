@@ -1,16 +1,13 @@
-package io.github.prittspadelord.application.services.impl;
+package io.github.prittspadelord.application.components;
 
-import io.github.prittspadelord.application.services.UniqueIdGenerationService;
-
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
-@Service
-public class SnowflakeIdGenerationService implements UniqueIdGenerationService {
-    
-    @Override
-    public long generateUniqueId(Instant instant) {
+@Component
+public class SnowflakeIdGenerator {
+
+    public long generateSnowflakeId(Instant instant) {
         long timestamp = instant.toEpochMilli();
         long machineId = Long.parseLong(System.getenv("MACHINE_ID"));
         long threadId = Thread.currentThread().threadId();

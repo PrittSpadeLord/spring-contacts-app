@@ -14,13 +14,60 @@ Given that the API may be updated over time, we will implement proper versioning
 
 We can divide this into two major categories: Authentication and Contacts Management. Unless otherwise stated, assume that all endpoints for the API from hereafter are assumed to have `/api/v1` as prefix.
 
+But before we proceed further, let us decide upon a common schema for error handling. It shall be returned in this format for any kind of error that might be returned from the application:
+
+| Key              | Type     | Description                                                                                        |
+|------------------|----------|----------------------------------------------------------------------------------------------------|
+| `status`         | `number` | The HTTP Status code of the response                                                               |
+| `timestamp`      | `string` | An ISO 8601 formatted timestamp for when error was thrown                                          |
+| `errorType`      | `string` | The title for the HTTP status                                                                      |
+| `description`    | `string` | A user-friendly description stripped of any information that could expose underlying functionality |
+| `additionalData` | `object` | Additional object-type data that is inconvenient to be placed within `description`                 |
+
+It would also be a good moment to mention a generic "catch-all" error for any kind of expected server error that our application might encounter during its operation. Naturally, it shall be returned as a 500 Internal server error with this message: "An unknown error has occured! Don't worry, we have recorded what just happened and will investigate shortly! We apologize for the inconvenience".
+
 ### Authentication
 
 We will need one endpoint for allowing users to register a new account, and another one for allowing them to log in. For the time being, we will not be implementing any external authentication, such as "Sign in with Google" or the like.
 
 #### Registeration of new account
 
-moved to REGISTER.md
+The basics of registeration will involve the user to create an account with a Username, a Nickname, and Password. The Username must be unique, and we will enforce the password to be atleast 8 characters long and contain atleast 1 digit, 1 uppercase letter, 1 lowercase letter, and 1 symbol from a QWERTY English keyboard (!, @, #, $, etc.)
+
+Since we will be creating a new resource on server, and we do not want the sensitive details to be hijacked via URL parameters, the POST endpoint is the most suitable for this choice. The endpoint will be accessed via `/register` and require the user to pass in a JSON in the request payload with keys as so:
+
+| Key        | Type     | Additional Constraints                                               |
+|------------|----------|----------------------------------------------------------------------|
+| `username` | `string` | Must be alphanumeric only                                            |
+| `nickname` | `string` | Must only contain characters in the standard QWERTY English keyboard |
+| `password` | `string` | Must only contain characters in the standard QWERTY English keyboard |
+
+The implementation details of how this request will be processed will be found in `REGISTER_USER.md`. After the request is sent, the response received from the server can be one of the following:
+
+**Success:**
+
+If the creation of the user is successful, the server will return the response of Status 200 and response payload as JSON with the following keys:
+
+| Key                | Type     | Description                                         |
+|--------------------|----------|-----------------------------------------------------|
+| `id`               | `string` | A unique id for each account                        |
+| `createdTimestamp` | `string` | An ISO 8601 formatted timestamp of account creation |
+| `username`         | `string` | The unique username for each account                |
+| `nickname`         | `string` | The user's preferred nickname                       |
+
+**Username already taken:**
+
+This error is unlikely to occur as the client is expected to poll the username (endpoint for that later) and inform the user that a username is taken before they are even allowed to proceed. However, given that clientside code can always be bypassed, a server check is mandatory, and will return the error response of Status 409: Conflict
+
+**Data supplied is invalid:**
+
+WIP (This error is unlikely to occur as the client is expected to perform RegEx to provide feedback to the user and disable various buttons)
+
+Returns an error response of Status 400 Bad Request with description: "The input you have provided is invalid! See additionalData for more information". In the additional data, it will provide a list of fields and a user-friendly explanation for how it has failed the validation.
+
+**Username of Nickname contains prohibited content:**
+
+WIP
 
 #### Logging in
 
@@ -33,32 +80,7 @@ The API endpoint the client must use to perform this shall be a POST to `/auth` 
 | `username` | `string` |
 | `password` | `string` |
 
-Behind the scenes, the server must first check if the username exists on the database. After that, it will perform Argon2 verification of the submitted password with what was stored on the database. If it matches, the server shall begin token generation. It must be done on the fly in order to ensure it remains stateless. This is how it shall be done:
-
-- The header of the JWT must be a JSON with the following keys:
-
-| Key   | Type     | Value     |
-|-------|----------|-----------|
-| `alg` | `string` | `"HS256"` |
-| `typ` | `string` | `"JWT"`   |
-
-- The payload of the JWT must be a JSON with the following keys:
-
-| Key        | Type     | Description                                                                  |
-|------------|----------|------------------------------------------------------------------------------|
-| `aud`      | `string` | RFC 7519: The domain URL of the contacts app                                 |
-| `iat`      | `number` | RFC 7519: Timestamp in seconds from Unix Epoch of most recent password reset |
-| `iss`      | `string` | RFC 7519: The domain URL of the contacts app                                 |
-| `sub`      | `string` | RFC 7519: The account ID in string format                                    |
-| `username` | `string` | The username of the account                                                  |
-
-- The server must maintain a global secret key of atleast 256 bits. To maintain statelessness, this cannot be stored on the database, and must be passed in via environmental variables. This secret key must never be leaked. If the worst comes to pass, where both the database is breached and the secret key is leaked; the attackers will be able to obtain full control of every single account. As a countermeasure, we may create a backup global secret key that is airgapped at all times, but within reach to quickly replace and invalidate all tokens if the worst comes to pass.
-
-- This global secret key will be used to perform Hmac (either 256 or 512) on the hashed password in the database, the resultant of that shall be used as the signature of the JWT
-
-- This signature will be used to sign the JWT using the HmacSha256 algorithm before returning the token in the response.
-
-Upon sending the request, the client may expect any one of these following responses:
+Implementation details of how the server will process it will be found in `LOGGING_IN.md`. Upon sending the request, the client may expect any one of these following responses:
 
 **Success:**
 

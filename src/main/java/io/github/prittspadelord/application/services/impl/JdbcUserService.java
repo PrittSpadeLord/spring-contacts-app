@@ -1,12 +1,12 @@
 package io.github.prittspadelord.application.services.impl;
 
+import io.github.prittspadelord.application.components.SnowflakeIdGenerator;
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.data.models.User;
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 import io.github.prittspadelord.application.services.UserService;
-import io.github.prittspadelord.application.services.UniqueIdGenerationService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.time.Instant;
 public class JdbcUserService implements UserService {
 
     private final Argon2PasswordEncoder passwordEncoder;
-    private final UniqueIdGenerationService uniqueIdGenerationService;
+    private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final UserDao userDao;
 
     @Override
@@ -38,7 +38,7 @@ public class JdbcUserService implements UserService {
 
         User user = new User();
         Instant now = Instant.now();
-        long snowflakeId = this.uniqueIdGenerationService.generateUniqueId(now);
+        long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
         String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword());
 
         user.setId(snowflakeId);

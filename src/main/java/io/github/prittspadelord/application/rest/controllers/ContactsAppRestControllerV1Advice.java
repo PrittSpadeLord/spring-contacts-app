@@ -77,7 +77,7 @@ public class ContactsAppRestControllerV1Advice {
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setTimestamp(Instant.now());
         error.setErrorType(HttpStatus.INTERNAL_SERVER_ERROR.name());
-        error.setDescription("An unknown error has occured! Don't worry, we have recorded what just happened and will investigate shortly! We apologize for the inconvenience.");
+        error.setDescription("An unknown error has occured! Don't worry, we have recorded what just happened and will investigate shortly! We apologize for the inconvenience");
         error.setAdditionalData(null);
 
         log.warn("Unclassified exception occured while processing request from {} of type {} with message: {}", req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
