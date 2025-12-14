@@ -3,6 +3,7 @@ package io.github.prittspadelord.application.data.dao.impl;
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.data.models.User;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,14 +13,11 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 @Slf4j
 public class JdbcTemplateUserDao implements UserDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    public JdbcTemplateUserDao(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-    }
 
     @Override
     public boolean checkUsername(String username) {

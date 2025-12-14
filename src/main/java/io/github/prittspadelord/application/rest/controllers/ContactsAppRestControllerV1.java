@@ -1,5 +1,7 @@
 package io.github.prittspadelord.application.rest.controllers;
 
+import io.github.prittspadelord.application.rest.annotations.Authorized;
+import io.github.prittspadelord.application.rest.annotations.support.AuthorizationLevel;
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
@@ -24,11 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContactsAppRestControllerV1 {
     private final UserService userService;
 
+    @Authorized(AuthorizationLevel.NONE)
     @GetMapping("/checkUsername")
     public CheckUsernameExistsResponse handleUsernameCheck(@RequestParam("username") String username) {
         return this.userService.checkUsername(username);
     }
 
+    @Authorized(AuthorizationLevel.NONE)
     @PostMapping("/register")
     public RegisterUserResponse handleAccountRegistration(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         return this.userService.createUser(registerUserRequest);

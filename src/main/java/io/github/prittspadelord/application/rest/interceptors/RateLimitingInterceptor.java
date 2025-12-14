@@ -7,22 +7,18 @@ import io.github.prittspadelord.application.components.BucketFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class RateLimitingInterceptor implements HandlerInterceptor {
 
     private final BucketFactory bucketFactory;
-
-    @Autowired
-    public RateLimitingInterceptor(BucketFactory bucketFactory) {
-        this.bucketFactory = bucketFactory;
-    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse ignoredResponse, Object ignoredHandler) {

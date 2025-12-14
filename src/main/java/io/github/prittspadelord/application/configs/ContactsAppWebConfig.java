@@ -17,10 +17,10 @@ import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
 
-@RequiredArgsConstructor
 @ComponentScan(basePackages = "io.github.prittspadelord.application.rest.controllers")
 @Configuration
 @EnableWebMvc
+@RequiredArgsConstructor
 public class ContactsAppWebConfig implements WebMvcConfigurer {
 
     private final RateLimitingInterceptor rateLimitingInterceptor;

@@ -8,7 +8,7 @@ import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 import io.github.prittspadelord.application.services.UserService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 @Slf4j
 public class JdbcUserService implements UserService {
