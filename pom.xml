@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <apache.tomcat.version>11.0.14</apache.tomcat.version>
-        <bouncycastle.version>1.83</bouncycastle.version>
+        <bouncycastle.version>2.73.10</bouncycastle.version>
         <bucket4j.version>8.15.0</bucket4j.version>
         <hibernate.validator.version>9.1.0.Final</hibernate.validator.version>
         <hikaricp.version>7.0.2</hikaricp.version>
@@ -109,7 +109,7 @@
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-debug-jdk18on</artifactId>
+            <artifactId>bcprov-lts8on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
 
