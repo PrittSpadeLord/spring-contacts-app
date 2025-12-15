@@ -13,7 +13,7 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <apache.tomcat.version>11.0.14</apache.tomcat.version>
+        <apache.tomcat.version>11.0.15</apache.tomcat.version>
         <bouncycastle.version>2.73.10</bouncycastle.version>
         <bucket4j.version>8.15.0</bucket4j.version>
         <hibernate.validator.version>9.1.0.Final</hibernate.validator.version>
@@ -21,9 +21,9 @@
         <jackson.version>3.0.3</jackson.version>
         <jakarta.el.version>4.0.2</jakarta.el.version>
         <junit5.version>5.14.1</junit5.version>
-        <logback.version>1.5.21</logback.version>
+        <logback.version>1.5.22</logback.version>
         <lombok.version>1.18.42</lombok.version>
-        <mockito.version>5.20.0</mockito.version>
+        <mockito.version>5.21.0</mockito.version>
         <postgresql.version>42.7.8</postgresql.version>
         <slf4j.version>2.0.17</slf4j.version>
         <spring.framework.version>7.0.2</spring.framework.version>
