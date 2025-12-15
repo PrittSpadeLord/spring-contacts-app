@@ -27,7 +27,7 @@
         <postgresql.version>42.7.8</postgresql.version>
         <slf4j.version>2.0.17</slf4j.version>
         <spring.framework.version>7.0.2</spring.framework.version>
-        <spring.security.version>7.0.0</spring.security.version>
+        <spring.security.version>7.0.1</spring.security.version>
 
         <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
         <maven.dependency.plugin.version>3.9.0</maven.dependency.plugin.version>
