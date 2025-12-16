@@ -1,4 +1,4 @@
-package io.github.prittspadelord.application.services.impl;
+package io.github.prittspadelord.application.services;
 
 import io.github.prittspadelord.application.components.SnowflakeIdGenerator;
 import io.github.prittspadelord.application.data.dao.UserDao;
@@ -15,13 +15,13 @@ import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
 import java.time.Instant;
 
-class JdbcUserServiceTest {
+class UserServiceTest {
 
     private final Argon2PasswordEncoder passwordEncoder = Mockito.mock(Argon2PasswordEncoder.class);
     private final SnowflakeIdGenerator snowflakeIdGenerator = Mockito.mock(SnowflakeIdGenerator.class);
     private final UserDao userDao = Mockito.mock(UserDao.class);
 
-    private final JdbcUserService jdbcUserService = new JdbcUserService(this.passwordEncoder, this.snowflakeIdGenerator, userDao);
+    private final UserService userService = new UserService(this.passwordEncoder, this.snowflakeIdGenerator, userDao);
 
     @Test
     public void checkUsernameShouldReturnFalseIfDoesntExist() {
@@ -29,7 +29,7 @@ class JdbcUserServiceTest {
 
         Mockito.when(this.userDao.checkUsername(username)).thenReturn(false);
 
-        CheckUsernameExistsResponse checkUsernameExistsResponse = this.jdbcUserService.checkUsername(username);
+        CheckUsernameExistsResponse checkUsernameExistsResponse = this.userService.checkUsername(username);
 
         Assertions.assertFalse(checkUsernameExistsResponse.isResponse());
     }
@@ -40,7 +40,7 @@ class JdbcUserServiceTest {
 
         Mockito.when(this.userDao.checkUsername(username)).thenReturn(true);
 
-        CheckUsernameExistsResponse checkUsernameExistsResponse = this.jdbcUserService.checkUsername(username);
+        CheckUsernameExistsResponse checkUsernameExistsResponse = this.userService.checkUsername(username);
 
         Assertions.assertTrue(checkUsernameExistsResponse.isResponse());
     }
@@ -60,12 +60,12 @@ class JdbcUserServiceTest {
         registerUserRequest.setPassword(rawPassword);
 
         Mockito.when(this.passwordEncoder.encode(rawPassword))
-            .thenReturn(hashedPassword);
+                .thenReturn(hashedPassword);
 
         Mockito.when(this.snowflakeIdGenerator.generateSnowflakeId(Mockito.any(Instant.class)))
-            .thenReturn(id);
+                .thenReturn(id);
 
-        RegisterUserResponse registerUserResponse = this.jdbcUserService.createUser(registerUserRequest);
+        RegisterUserResponse registerUserResponse = this.userService.createUser(registerUserRequest);
 
         Assertions.assertEquals(String.valueOf(id), registerUserResponse.getId(), "User id must be the same as what was generated");
         Assertions.assertEquals(username, registerUserResponse.getUsername(), "Username must be the same as what was supplied");
