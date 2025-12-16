@@ -68,8 +68,8 @@ public class ContactsAppRestControllerV1Advice {
         return error;
     }
 
+    /* --- Catch-all handler placed at the very bottom --- */
 
-    //Catch-all handler placed at the very bottom
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiErrorResponse genericExceptionHandler(Exception e, HttpServletRequest req) {

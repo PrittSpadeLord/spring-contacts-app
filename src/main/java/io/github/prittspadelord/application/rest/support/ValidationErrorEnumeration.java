@@ -1,6 +1,5 @@
 package io.github.prittspadelord.application.rest.support;
 
-
 import lombok.Getter;
 
 import org.jspecify.annotations.Nullable;
