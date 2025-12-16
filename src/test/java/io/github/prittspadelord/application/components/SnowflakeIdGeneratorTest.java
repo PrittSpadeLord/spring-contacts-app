@@ -28,13 +28,13 @@ public class SnowflakeIdGeneratorTest {
     }
 
     @Test
-    public void snowflakeThreadIdIsCorrect() {
+    public void snowflakeWorkerIdIsCorrect() {
 
         Instant now = Instant.now();
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
-        long threadId = (snowflake >> 3) & 0xFFL;
+        long workerId = (snowflake >> 3) & 0xFFL;
 
-        Assertions.assertEquals(Thread.currentThread().threadId(), threadId, "Thread id component of snowflake matches current thread id");
+        Assertions.assertEquals(0L, workerId, "Thread id component of snowflake is 0 for now.");
     }
 
     @Test

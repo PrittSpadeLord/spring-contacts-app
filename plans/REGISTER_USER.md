@@ -46,4 +46,3 @@ CREATE TABLE users (
      recent_password_update_timestamp bigint NOT NULL
 );
 ```
-
