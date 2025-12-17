@@ -46,6 +46,4 @@ COPY --from=builder /usr/lib64/libgcc_s.so.1 /usr/lib64/
 ENV JAVA_HOME=/usr/lib/jvm/jre-min
 ENV PORT=8443
 
-EXPOSE PORT
-
 ENTRYPOINT ["/usr/lib/jvm/jre-min/bin/java", "-jar", "/app/app.jar"]
