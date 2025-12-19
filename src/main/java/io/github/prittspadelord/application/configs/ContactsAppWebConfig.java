@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverters;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -25,6 +27,22 @@ public class ContactsAppWebConfig implements WebMvcConfigurer {
 
     private final RateLimitingInterceptor rateLimitingInterceptor;
     private final AuthorizationInterceptor authorizationInterceptor;
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins(System.getenv("BASE_URL"))
+                .allowedMethods(
+                        HttpMethod.GET.toString(),
+                        HttpMethod.POST.toString(),
+                        HttpMethod.PUT.toString(),
+                        HttpMethod.PATCH.toString(),
+                        HttpMethod.DELETE.toString()
+                )
+                .allowedHeaders("*")
+                .exposedHeaders("Authorization")
+                .allowCredentials(false);
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
