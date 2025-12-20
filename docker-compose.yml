@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  app:
+    build:
+      context: .
+    environment:
+      - BASE_URL
+      - GLOBAL_SECRET
+      - DB_DRIVERCLASSNAME
+      - DB_PASSWORD
+      - DB_URL
+      - DB_USERNAME
+      - MACHINE_ID
+      - NVD_API_KEY
+      - PORT
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  tester:
+    build:
+      context: .
+      target: tester
+    volumes:
+      - ./src:/app/src
+    command: ./mvnw clean test

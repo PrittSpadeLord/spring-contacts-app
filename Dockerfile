@@ -14,14 +14,12 @@ RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 
 COPY src src
 
-RUN ./mvnw clean test
-
 # Generate builder
 FROM amazoncorretto:25.0.1-al2023 AS builder
 
 WORKDIR /app
 
-RUN dnf install -y binutils && dnf clean all
+RUN dnf install -y tar gzip binutils && dnf clean all
 
 COPY --from=tester /app /app
 
@@ -33,7 +31,7 @@ RUN ./mvnw -DskipTests clean package \
 FROM scratch
 
 COPY --from=builder /app/jlink-runtime /usr/lib/jvm/jre-min
-COPY --from=builder /app/target/spring-vue-timer-docker-test-1.0-SNAPSHOT.jar /app/app.jar
+COPY --from=builder /app/target/spring-contacts-app-1.0.0.jar /app/app.jar
 COPY --from=builder /app/target/lib /app/lib
 
 COPY --from=builder /usr/lib64/ld-linux-x86-64.so.2 /lib64/
