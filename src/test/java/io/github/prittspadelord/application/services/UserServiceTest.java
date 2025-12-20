@@ -67,8 +67,8 @@ class UserServiceTest {
 
         RegisterUserResponse registerUserResponse = this.userService.createUser(registerUserRequest);
 
-        Assertions.assertEquals(String.valueOf(id), registerUserResponse.getId(), "User id must be the same as what was generated");
-        Assertions.assertEquals(username, registerUserResponse.getUsername(), "Username must be the same as what was supplied");
-        Assertions.assertEquals(nickname, registerUserResponse.getNickname(), "Nickname must be the same as what was supplied");
+        Assertions.assertEquals(String.valueOf(id), registerUserResponse.getId());
+        Assertions.assertEquals(username, registerUserResponse.getUsername());
+        Assertions.assertEquals(nickname, registerUserResponse.getNickname());
     }
 }

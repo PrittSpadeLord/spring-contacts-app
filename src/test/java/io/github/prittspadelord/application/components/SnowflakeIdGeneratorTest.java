@@ -15,7 +15,7 @@ public class SnowflakeIdGeneratorTest {
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
         long timestamp = (snowflake >> 19) + 1577836800000L;
 
-        Assertions.assertEquals(now.toEpochMilli(), timestamp, "Timestamp component of snowflake matches the timestamp of snowflake generation");
+        Assertions.assertEquals(now.toEpochMilli(), timestamp);
     }
 
     @Test
@@ -24,17 +24,16 @@ public class SnowflakeIdGeneratorTest {
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
         long machineId = (snowflake >> 11) & 0xFFL;
 
-        Assertions.assertEquals(Long.parseLong(System.getenv("MACHINE_ID")), machineId, "Machine id component of snowflake matches machine id from environmental variable");
+        Assertions.assertEquals(Long.parseLong(System.getenv("MACHINE_ID")), machineId);
     }
 
     @Test
     public void snowflakeWorkerIdIsCorrect() {
-
         Instant now = Instant.now();
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
         long workerId = (snowflake >> 3) & 0xFFL;
 
-        Assertions.assertEquals(0L, workerId, "Thread id component of snowflake is 0 for now.");
+        Assertions.assertEquals(0L, workerId);
     }
 
     @Test
@@ -43,6 +42,6 @@ public class SnowflakeIdGeneratorTest {
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
         long incrementer = (snowflake) & 0x7L;
 
-        Assertions.assertEquals(0L, incrementer, "Incrementer value is 0. This will be changed later");
+        Assertions.assertEquals(0L, incrementer);
     }
 }
