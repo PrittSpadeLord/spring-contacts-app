@@ -16,12 +16,12 @@ We can divide this into two major categories: Authentication and Contacts Manage
 
 But before we proceed further, let us decide upon a common schema for error handling. It shall be returned in this format for any kind of error that might be returned from the application:
 
-| Key              | Type     | Description                                                                                        |
-|------------------|----------|----------------------------------------------------------------------------------------------------|
-| `status`         | `number` | The HTTP Status code of the response                                                               |
-| `timestamp`      | `string` | An ISO 8601 formatted timestamp for when error was thrown                                          |
-| `errorType`      | `string` | The title for the HTTP status                                                                      |
-| `description`    | `string` | A user-friendly description stripped of any information that could expose underlying functionality |
+|       Key        |   Type   | Description                                                                                        |
+|:----------------:|:--------:|:---------------------------------------------------------------------------------------------------|
+|     `status`     | `number` | The HTTP Status code of the response                                                               |
+|   `timestamp`    | `string` | An ISO 8601 formatted timestamp for when error was thrown                                          |
+|   `errorType`    | `string` | The title for the HTTP status                                                                      |
+|  `description`   | `string` | A user-friendly description stripped of any information that could expose underlying functionality |
 | `additionalData` | `object` | Additional object-type data that is inconvenient to be placed within `description`                 |
 
 It would also be a good moment to mention a generic "catch-all" error for any kind of expected server error that our application might encounter during its operation. Naturally, it shall be returned as a 500 Internal server error with this message: "An unknown error has occured! Don't worry, we have recorded what just happened and will investigate shortly! We apologize for the inconvenience".
@@ -36,8 +36,8 @@ The basics of registeration will involve the user to create an account with a Us
 
 Since we will be creating a new resource on server, and we do not want the sensitive details to be hijacked via URL parameters, the POST endpoint is the most suitable for this choice. The endpoint will be accessed via `/register` and require the user to pass in a JSON in the request payload with keys as so:
 
-| Key        | Type     | Additional Constraints                                               |
-|------------|----------|----------------------------------------------------------------------|
+|    Key     |   Type   | Additional Constraints                                               |
+|:----------:|:--------:|:---------------------------------------------------------------------|
 | `username` | `string` | Must be alphanumeric only                                            |
 | `nickname` | `string` | Must only contain characters in the standard QWERTY English keyboard |
 | `password` | `string` | Must only contain characters in the standard QWERTY English keyboard |
@@ -48,12 +48,12 @@ The implementation details of how this request will be processed will be found i
 
 If the creation of the user is successful, the server will return the response of Status 200 and response payload as JSON with the following keys:
 
-| Key                | Type     | Description                                         |
-|--------------------|----------|-----------------------------------------------------|
-| `id`               | `string` | A unique id for each account                        |
+|        Key         |   Type   | Description                                         |
+|:------------------:|:--------:|:----------------------------------------------------|
+|        `id`        | `string` | A unique id for each account                        |
 | `createdTimestamp` | `string` | An ISO 8601 formatted timestamp of account creation |
-| `username`         | `string` | The unique username for each account                |
-| `nickname`         | `string` | The user's preferred nickname                       |
+|     `username`     | `string` | The unique username for each account                |
+|     `nickname`     | `string` | The user's preferred nickname                       |
 
 **Username already taken:**
 
@@ -75,8 +75,8 @@ After the registration is complete, the user will need to log in with their user
 
 The API endpoint the client must use to perform this shall be a POST to `/auth` and requires a JSON with the following keys:
 
-| Key        | Type     |
-|------------|----------|
+|    Key     |   Type   |
+|:----------:|:--------:|
 | `username` | `string` |
 | `password` | `string` |
 
@@ -86,10 +86,10 @@ Implementation details of how the server will process it will be found in `LOGGI
 
 If the authentication process is successful, the server will return the token in the form of a JWT as so:
 
-| Key         | Type     | Description                                                            |
-|-------------|----------|------------------------------------------------------------------------|
-| `timestamp` | `string` | When the authentication process was performed                          |
-| `token`     | `string` | A stateless JWT that the client must cache and use for resource access |
+|     Key     |   Type   |                              Description                               |
+|:-----------:|:--------:|:----------------------------------------------------------------------:|
+| `timestamp` | `string` |             When the authentication process was performed              |
+|   `token`   | `string` | A stateless JWT that the client must cache and use for resource access |
 
 
 **Password is invalid:**
@@ -112,18 +112,19 @@ Rough notes not yet formalized:
 - Nickname must only contain characters from the QWERTY English keyboard to make it easier to enforce prohibited content
 - Users table must have column: id, username, nickname, hashed_pass, password_reset_timestamp
 - Contacts table must have column: id, user_id, name, email, phone... WAIT HOW DO I MAP MULTIPLE PHONE NUMBERS WITH LABEL? NEED MORE BRAINSTORMING
+- Browser client app should use: Vue, TypeScript, Vite, Vitest, Rolldown, Oxlint, Tanstack Query, Zod validation
 
 Banned words initial brainstorming with character mapping:
 
-| QWERTY Character      | Common Leetspeak Look-Alike |      Mapped To      |
-|:----------------------|:---------------------------:|:-------------------:|
+|   QWERTY Character    | Common Leetspeak Look-Alike |      Mapped To      |
+|:---------------------:|:---------------------------:|:-------------------:|
 | **Uppercase** (`A-Z`) |             N/A             | `Lowercase` (`a-z`) |
-| `1`                   |         `i` or `l`          |         `i`         |
-| `!`                   |             `i`             |         `i`         |
-| `0`                   |             `o`             |         `o`         |
-| `3`                   |             `e`             |         `e`         |
-| `7`                   |             `t`             |         `t`         |
-| `@`                   |             `a`             |         `a`         |
-| `4`                   |             `a`             |         `a`         |
-| `$`                   |             `s`             |         `s`         |
-| `5`                   |             `s`             |         `s`         |
+|          `1`          |         `i` or `l`          |     `i` or `l`      |
+|          `!`          |             `i`             |         `i`         |
+|          `0`          |             `o`             |         `o`         |
+|          `3`          |             `e`             |         `e`         |
+|          `7`          |             `t`             |         `t`         |
+|          `@`          |             `a`             |         `a`         |
+|          `4`          |             `a`             |         `a`         |
+|          `$`          |             `s`             |         `s`         |
+|          `5`          |             `s`             |         `s`         |

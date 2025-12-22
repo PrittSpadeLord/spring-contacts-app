@@ -23,6 +23,8 @@ RUN dnf install -y tar gzip binutils && dnf clean all
 
 COPY --from=tester /app /app
 
+RUN ./mvnw dependency:go-offline -B
+
 RUN ./mvnw -DskipTests clean package \
     && MODULES=$(jdeps --multi-release 25 -cp "target/lib/*" --ignore-missing-deps --print-module-deps target/spring-contacts-app-1.0.0.jar) \
     && jlink --compress=zip-9 --strip-debug --no-header-files --no-man-pages --add-modules "${MODULES}" --output /app/jlink-runtime
