@@ -1,36 +1,9 @@
-# Maven-Specific Exclusions (Build Artifacts)
-target/
-**/target/
-out/
+# Ignore everything
+*
 
-# Version control history and configurations
-.git
-.gitignore
-.hg
-.svn
-
-# macOS metadata files
-.DS_Store
-
-# Windows thumbnail cache
-Thumbs.db
-
-# IntelliJ IDEA files
-.idea/
-*.iml
-*.iws
-*.ipr
-
-# Eclipse/Spring Tool Suite files
-.settings/
-.classpath
-.project
-
-# Environment and sensitive files
-.env
-*.log
-*.tmp
-*.bak
-
-# Others
-plans/
+# Add what we need
+!pom.xml
+!mvnw
+!mvnw.cmd
+!.mvn/
+!src/

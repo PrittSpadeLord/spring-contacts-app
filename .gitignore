@@ -1,38 +1,14 @@
-certs/
-src/main/resources/application.properties
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.kotlin
+# Ignore everything
+*
 
-### IntelliJ IDEA ###
-.idea/
-*.iws
-*.iml
-*.ipr
-
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-### Mac OS ###
-.DS_Store
+# Add what we need
+!.gitignore
+!.mvn/
+!Dockerfile
+!README.md
+!docker-compose.yml
+!mvnw
+!mvnw.cmd
+!plans/
+!pom.xml
+!src/
