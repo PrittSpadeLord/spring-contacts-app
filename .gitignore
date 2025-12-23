@@ -4,6 +4,7 @@
 # Add what we need
 !.gitignore
 !.mvn/
+!.dockerignore
 !Dockerfile
 !README.md
 !docker-compose.yml
