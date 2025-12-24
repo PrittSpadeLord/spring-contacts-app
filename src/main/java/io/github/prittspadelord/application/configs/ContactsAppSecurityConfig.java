@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class ContactsAppSecurityConfig {
 
+    // Consider getting rid of this for a direct bouncy castle version
     @Bean
     public Argon2PasswordEncoder passwordEncoder() {
         return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();

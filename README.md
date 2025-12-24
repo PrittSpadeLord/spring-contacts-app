@@ -5,7 +5,7 @@ Docker compose has been set up!
 To run tests, do:
 
 ```
-docker compose run -e BASE_URL='https://yourbaseurl.com/' -e PORT='8080' -e ...(all other env vars)... tester
+docker compose run --build --rm -e BASE_URL='https://yourbaseurl.com/' -e PORT='8080' -e ...(all other env vars)... tester
 ```
 
 Consult the `docker-compose.yml` file to see the list of env vars necessary for tests to pass.
@@ -13,7 +13,7 @@ Consult the `docker-compose.yml` file to see the list of env vars necessary for 
 To run the application, do:
 
 ```
-BASE_URL='https://yourbaseurl.com/' PORT='8080' ...(all other env vars)... docker compose up app
+BASE_URL='https://yourbaseurl.com/' PORT='8080' ...(all other env vars)... docker compose up --build app
 ```
 
 Pro tip: if you are running your database outside the container, replace `localhost` with `host.docker.internal` as described in the `docker-compose.yml`.

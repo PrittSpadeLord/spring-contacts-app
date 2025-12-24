@@ -11,5 +11,5 @@ import lombok.Setter;
 public class RegisterUserRequest {
     @NotNull @Pattern(regexp = "[0-9a-z_]+") private String username;
     @NotNull @Pattern(regexp = "[\\x20-\\x7E]+") private String nickname;
-    @NotNull @Pattern(regexp = "[\\x20-\\x7E]+") private String password; //SEC: Strings are immutable and prone to memory dumps
+    private char[] password; //needs validation
 }

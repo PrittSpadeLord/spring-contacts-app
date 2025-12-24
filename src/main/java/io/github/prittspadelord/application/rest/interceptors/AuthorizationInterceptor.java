@@ -1,6 +1,5 @@
 package io.github.prittspadelord.application.rest.interceptors;
 
-import io.github.prittspadelord.application.components.JwtCodecFactory;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.rest.annotations.support.AuthorizationLevel;
 
@@ -20,8 +19,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthorizationInterceptor implements HandlerInterceptor {
-
-    private final JwtCodecFactory jwtCodecFactory;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

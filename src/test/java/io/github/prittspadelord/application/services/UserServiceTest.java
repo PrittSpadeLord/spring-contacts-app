@@ -57,7 +57,7 @@ class UserServiceTest {
         RegisterUserRequest registerUserRequest = new RegisterUserRequest();
         registerUserRequest.setUsername(username);
         registerUserRequest.setNickname(nickname);
-        registerUserRequest.setPassword(rawPassword);
+        registerUserRequest.setPassword(rawPassword.toCharArray()); //TEMPORARY
 
         Mockito.when(this.passwordEncoder.encode(rawPassword))
                 .thenReturn(hashedPassword);

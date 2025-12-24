@@ -36,7 +36,7 @@ public class UserService {
         User user = new User();
         Instant now = Instant.now();
         long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
-        String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword()); //SEC: see below
+        String hashedPassword = this.passwordEncoder.encode(String.copyValueOf(registerUserRequest.getPassword())); //SEC: see below
 
         /*
         It's truly frustrating that Argon2PasswordEncoder demands the input be passed as String.
