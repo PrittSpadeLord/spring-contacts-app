@@ -29,6 +29,10 @@ public class ValidationErrorEnumeration {
             return "Must only contain characters on the QWERTY English keyboard";
         }
 
+        if("Must only contain characters on the QWERTY English keyboard".equals(defaultMessage)) {
+            return "Must only contain characters on the QWERTY English keyboard";
+        }
+
         return "Unspecified error";
     }
 }

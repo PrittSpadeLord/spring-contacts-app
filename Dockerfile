@@ -1,29 +1,22 @@
-# Generate tester
-FROM amazoncorretto:25.0.1-al2023 AS tester
-
-WORKDIR /app
-
-RUN dnf install -y tar gzip && dnf clean all
-
-COPY pom.xml .
-COPY mvnw .
-COPY mvnw.cmd .
-COPY .mvn .mvn
-
-RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
-
-COPY src src
-
-# Generate builder
-FROM amazoncorretto:25.0.1-al2023 AS builder
+# Stage 1: Dependencies (Cache Layer)
+FROM amazoncorretto:25.0.1-al2023 AS base
 
 WORKDIR /app
 
 RUN dnf install -y tar gzip binutils && dnf clean all
 
-COPY --from=tester /app /app
+COPY pom.xml mvnw mvnw.cmd ./
+COPY .mvn .mvn/
 
-RUN ./mvnw dependency:go-offline -B
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+
+# Generate builder
+FROM base AS tester
+
+COPY src src
+
+# Generate builder
+FROM tester AS builder
 
 RUN ./mvnw -DskipTests clean package \
     && MODULES=$(jdeps --multi-release 25 -cp "target/lib/*" --ignore-missing-deps --print-module-deps target/spring-contacts-app-1.0.0.jar) \

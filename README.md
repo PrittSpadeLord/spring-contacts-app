@@ -5,7 +5,7 @@ Docker compose has been set up!
 To run tests, do:
 
 ```
-docker compose run --build --rm -e BASE_URL='https://yourbaseurl.com/' -e PORT='8080' -e ...(all other env vars)... tester
+docker compose run --build --remove-orphans -e BASE_URL='https://yourbaseurl.com/' -e PORT='8080' -e ...(all other env vars)... tester
 ```
 
 Consult the `docker-compose.yml` file to see the list of env vars necessary for tests to pass.
