@@ -50,7 +50,7 @@ class UserServiceTest {
 
         String username = "testUser";
         String nickname = "Test Nickname";
-        String rawPassword = "rawPassword123";
+        String rawPassword = "rawPassword123"; //SEC: Strings are immutable and prone to memory dumps
         String hashedPassword = "$argon2id$v=19$m=16384,t=2,p=1$testingsaltvalue012345$thehashedvalueofthesalt/J2xEkVFYZ+HLWJkJ8XS";
         long id = 1577836800000L;
 

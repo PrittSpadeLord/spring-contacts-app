@@ -36,7 +36,13 @@ public class UserService {
         User user = new User();
         Instant now = Instant.now();
         long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
-        String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword());
+        String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword()); //SEC: see below
+
+        /*
+        It's truly frustrating that Argon2PasswordEncoder demands the input be passed as String.
+
+        We may want to explore using Bouncy Castle directly to perform the encoding securely using char[] instead followed by fill
+         */
 
         user.setId(snowflakeId);
         user.setUsername(registerUserRequest.getUsername());

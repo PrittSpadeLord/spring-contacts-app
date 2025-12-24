@@ -19,6 +19,13 @@ Behind the scenes, the server must first check if the username exists on the dat
 
 - The server must maintain a global secret key of atleast 256 bits. To maintain statelessness, this cannot be stored on the database, and must be passed in via environmental variables. This secret key must never be leaked. If the worst comes to pass, where both the database is breached and the secret key is leaked; the attackers will be able to obtain full control of every single account. As a countermeasure, we may create a backup global secret key that is airgapped at all times, but within reach to quickly replace and invalidate all tokens if the worst comes to pass.
 
-- This global secret key will be used to perform Hmac (either 256 or 512) on the hashed password in the database, the resultant of that shall be used as the signature of the JWT
+- This global secret key will be used to sign the JWT
 
 - This signature will be used to sign the JWT using the HmacSha256 algorithm before returning the token in the response.
+
+- Since the 
+
+-----
+
+WAIT, WE MAY NOT NEED TO DO THE HMAC OF GLOB SEC WITH HASH PASS, WE CAN USE THE GLOB SEC DIRECTLY
+JWT can be invalidated by changing the recent password reset timestamp value
