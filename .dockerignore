@@ -5,5 +5,5 @@
 !pom.xml
 !mvnw
 !mvnw.cmd
-!.mvn/
-!src/
+!.mvn/**
+!src/**
