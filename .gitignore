@@ -10,7 +10,7 @@ target/
 
 # Add what we need
 !.gitignore
-!.mvn/
+!.mvn/**
 !.dockerignore
 !Dockerfile
 !README.md
