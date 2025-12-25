@@ -2,9 +2,7 @@ package io.github.prittspadelord.application.rest.controllers;
 
 import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.rest.annotations.support.AuthorizationLevel;
-import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
-import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
-import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
+import io.github.prittspadelord.application.rest.models.*;
 import io.github.prittspadelord.application.services.UserService;
 
 import jakarta.validation.Valid;
@@ -30,6 +28,12 @@ public class ContactsAppRestControllerV1 {
     @GetMapping("/checkUsername")
     public CheckUsernameExistsResponse handleUsernameCheck(@RequestParam("username") String username) {
         return this.userService.checkUsername(username);
+    }
+
+    @Authorized(AuthorizationLevel.NONE)
+    @GetMapping("/login")
+    public LoginUserResponse handleLogin(@Valid @RequestBody LoginUserRequest loginUserRequest) {
+        return null;
     }
 
     @Authorized(AuthorizationLevel.NONE)

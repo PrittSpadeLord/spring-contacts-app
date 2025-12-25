@@ -1,9 +1,9 @@
 package io.github.prittspadelord.application.components;
 
+import io.github.prittspadelord.application.components.support.BucketWrapper;
+
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-
-import io.github.prittspadelord.application.components.support.BucketWrapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,13 +25,13 @@ public class BucketFactory {
         BucketWrapper bucketWrapper = buckets.computeIfAbsent(remoteAddr, (_) -> {
             log.info("Bucket not found for remote address {}, commencing creation", remoteAddr);
             Bandwidth bandwidth = Bandwidth.builder()
-                    .capacity(5)
-                    .refillGreedy(1, Duration.ofSeconds(2))
-                    .build();
+                .capacity(5)
+                .refillGreedy(1, Duration.ofSeconds(2))
+                .build();
 
             Bucket bucket = Bucket.builder()
-                    .addLimit(bandwidth)
-                    .build();
+                .addLimit(bandwidth)
+                .build();
 
             log.info("Bucket successfully created for remote address {} and added to the map", remoteAddr);
             return new BucketWrapper(Instant.now().toEpochMilli(), bucket);

@@ -22,58 +22,69 @@ public class SecureArgon2PasswordEncoder {
 
         byte[] hash = new byte[32];
 
-        Argon2Parameters params = new Argon2Parameters
-            .Builder(Argon2Parameters.ARGON2_id)
-            .withSalt(this.saltGenerator.generateKey())
-            .withParallelism(1)
-            .withMemoryAsKB(19456)
-            .withIterations(2)
-            .build();
+        try {
+            Argon2Parameters params = new Argon2Parameters
+                .Builder(Argon2Parameters.ARGON2_id)
+                .withSalt(this.saltGenerator.generateKey())
+                .withParallelism(1)
+                .withMemoryAsKB(19456)
+                .withIterations(2)
+                .build();
 
-        Argon2BytesGenerator generator = new Argon2BytesGenerator();
-        generator.init(params);
-        generator.generateBytes(rawPassword, hash);
-        Arrays.fill(rawPassword, '\0');
+            Argon2BytesGenerator generator = new Argon2BytesGenerator();
+            generator.init(params);
+            generator.generateBytes(rawPassword, hash);
 
-        String encoded = this.encode(hash, params);
-        Arrays.fill(hash, (byte) 0);
-
-        return encoded;
+            return this.encode(hash, params);
+        }
+        finally {
+            Arrays.fill(rawPassword, '\0');
+            Arrays.fill(hash, (byte) 0);
+        }
     }
 
     public boolean matches(char[] rawPassword, String encodedPassword) {
 
-        Matcher matcher = Pattern.compile("^\\$argon2(?:i|d|id)\\$v=\\d+\\$m=(\\d+),t=(\\d+),p=(\\d+)\\$([^$]+)\\$([^$]+)$").matcher(encodedPassword);
+        byte[] actualHash = null;
+        byte[] expectedHash = null;
 
-        if (!matcher.find()) {
-            return false;
+        try {
+            Matcher matcher = Pattern.compile("^\\$argon2(?:i|d|id)\\$v=\\d+\\$m=(\\d+),t=(\\d+),p=(\\d+)\\$([^$]+)\\$([^$]+)$").matcher(encodedPassword);
+
+            if (!matcher.find()) {
+                return false;
+            }
+
+            int memory = Integer.parseInt(matcher.group(1));
+            int iterations = Integer.parseInt(matcher.group(2));
+            int parallelism = Integer.parseInt(matcher.group(3));
+            byte[] salt = Base64.getDecoder().decode(matcher.group(4));
+            expectedHash = Base64.getDecoder().decode(matcher.group(5));
+
+            Argon2Parameters params = new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
+                .withSalt(salt)
+                .withParallelism(parallelism)
+                .withMemoryAsKB(memory)
+                .withIterations(iterations)
+                .build();
+
+            Argon2BytesGenerator generator = new Argon2BytesGenerator();
+            generator.init(params);
+
+            actualHash = new byte[expectedHash.length];
+            generator.generateBytes(rawPassword, actualHash);
+            Arrays.fill(rawPassword, '\0');
+
+            return MessageDigest.isEqual(actualHash, expectedHash);
         }
-
-        int memory = Integer.parseInt(matcher.group(1));
-        int iterations = Integer.parseInt(matcher.group(2));
-        int parallelism = Integer.parseInt(matcher.group(3));
-        byte[] salt = Base64.getDecoder().decode(matcher.group(4));
-        byte[] expectedHash = Base64.getDecoder().decode(matcher.group(5));
-
-        Argon2Parameters params = new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
-            .withSalt(salt)
-            .withParallelism(parallelism)
-            .withMemoryAsKB(memory)
-            .withIterations(iterations)
-            .build();
-
-        Argon2BytesGenerator generator = new Argon2BytesGenerator();
-        generator.init(params);
-
-        byte[] actualHash = new byte[expectedHash.length];
-        generator.generateBytes(rawPassword, actualHash);
-        Arrays.fill(rawPassword, '\0');
-
-        boolean matches = MessageDigest.isEqual(actualHash, expectedHash);
-        Arrays.fill(actualHash, (byte) 0);
-        Arrays.fill(expectedHash, (byte) 0);
-
-        return matches;
+        finally {
+            if(expectedHash != null) {
+                Arrays.fill(expectedHash, (byte) 0);
+            }
+            if(actualHash != null) {
+                Arrays.fill(actualHash, (byte) 0);
+            }
+        }
     }
 
     private String encode(byte[] hash, Argon2Parameters parameters) throws IllegalArgumentException {

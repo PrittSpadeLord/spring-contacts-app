@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -44,7 +43,7 @@ public class UserDao {
                 .addValue("hashed_password", user.getHashedPassword())
                 .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
 
-        //experiment with
+        //experiment with BeanPropertyParameterSource
 
         int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 
