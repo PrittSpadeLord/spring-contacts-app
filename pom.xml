@@ -244,7 +244,7 @@
                 <version>${maven.surefire.plugin.version}</version>
                 <configuration>
                     <argLine>
-                        -Xshare:off -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+                        --enable-native-access=ALL-UNNAMED -Xshare:off -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
                     </argLine>
                 </configuration>
             </plugin>
