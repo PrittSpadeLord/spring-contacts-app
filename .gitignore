@@ -4,8 +4,9 @@
 # Dont ignore directories
 !*/
 
-#Ignore
+# Specifically ignore
 .idea/
+target/
 
 # Add what we need
 !.gitignore
