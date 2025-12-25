@@ -1,6 +1,12 @@
 # Ignore everything
 *
 
+# Dont ignore directories
+!*/
+
+#Ignore
+.idea/
+
 # Add what we need
 !.gitignore
 !.mvn/
@@ -10,6 +16,6 @@
 !docker-compose.yml
 !mvnw
 !mvnw.cmd
-!plans/
+!plans/**
 !pom.xml
-!src/
+!src/**
