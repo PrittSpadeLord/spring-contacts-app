@@ -1,7 +1,7 @@
 # Ignore everything
 *
 
-# Dont ignore directories
+# Don't ignore directories
 !*/
 
 # Specifically ignore

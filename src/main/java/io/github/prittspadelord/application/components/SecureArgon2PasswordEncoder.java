@@ -34,7 +34,11 @@ public class SecureArgon2PasswordEncoder {
         generator.init(params);
         generator.generateBytes(rawPassword, hash);
         Arrays.fill(rawPassword, '\0');
-        return this.encode(hash, params);
+
+        String encoded = this.encode(hash, params);
+        Arrays.fill(hash, (byte) 0);
+
+        return encoded;
     }
 
     public boolean matches(char[] rawPassword, String encodedPassword) {
@@ -65,7 +69,11 @@ public class SecureArgon2PasswordEncoder {
         generator.generateBytes(rawPassword, actualHash);
         Arrays.fill(rawPassword, '\0');
 
-        return MessageDigest.isEqual(actualHash, expectedHash);
+        boolean matches = MessageDigest.isEqual(actualHash, expectedHash);
+        Arrays.fill(actualHash, (byte) 0);
+        Arrays.fill(expectedHash, (byte) 0);
+
+        return matches;
     }
 
     private String encode(byte[] hash, Argon2Parameters parameters) throws IllegalArgumentException {
