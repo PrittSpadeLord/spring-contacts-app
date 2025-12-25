@@ -1,5 +1,6 @@
 package io.github.prittspadelord.application.services;
 
+import io.github.prittspadelord.application.components.SecureArgon2PasswordEncoder;
 import io.github.prittspadelord.application.components.SnowflakeIdGenerator;
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
@@ -11,13 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import org.mockito.Mockito;
 
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
-
 import java.time.Instant;
+import java.util.Arrays;
 
 class UserServiceTest {
 
-    private final Argon2PasswordEncoder passwordEncoder = Mockito.mock(Argon2PasswordEncoder.class);
+    private final SecureArgon2PasswordEncoder passwordEncoder = Mockito.mock(SecureArgon2PasswordEncoder.class);
     private final SnowflakeIdGenerator snowflakeIdGenerator = Mockito.mock(SnowflakeIdGenerator.class);
     private final UserDao userDao = Mockito.mock(UserDao.class);
 
@@ -50,17 +50,19 @@ class UserServiceTest {
 
         String username = "testUser";
         String nickname = "Test Nickname";
-        String rawPassword = "rawPassword123"; //SEC: Strings are immutable and prone to memory dumps
+        char[] rawPassword = {'r', 'a', 'w', 'P', 'a', 's', 's', 'w', 'o', 'r', 'd', '1', '2', '3'};
         String hashedPassword = "$argon2id$v=19$m=16384,t=2,p=1$testingsaltvalue012345$thehashedvalueofthesalt/J2xEkVFYZ+HLWJkJ8XS";
         long id = 1577836800000L;
 
         RegisterUserRequest registerUserRequest = new RegisterUserRequest();
         registerUserRequest.setUsername(username);
         registerUserRequest.setNickname(nickname);
-        registerUserRequest.setPassword(rawPassword.toCharArray()); //TEMPORARY
+        registerUserRequest.setPassword(rawPassword);
 
         Mockito.when(this.passwordEncoder.encode(rawPassword))
                 .thenReturn(hashedPassword);
+
+        Arrays.fill(rawPassword, '\0');
 
         Mockito.when(this.snowflakeIdGenerator.generateSnowflakeId(Mockito.any(Instant.class)))
                 .thenReturn(id);

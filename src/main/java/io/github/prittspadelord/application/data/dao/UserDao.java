@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -25,9 +26,7 @@ public class UserDao {
                 .addValue("username", username);
 
         try {
-            Long id = this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Long.class);
-
-            return id != null;
+            return Boolean.TRUE.equals(this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Boolean.class));
         }
         catch(EmptyResultDataAccessException e) {
             return false;
@@ -44,6 +43,8 @@ public class UserDao {
                 .addValue("nickname", user.getNickname())
                 .addValue("hashed_password", user.getHashedPassword())
                 .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
+
+        //experiment with
 
         int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 

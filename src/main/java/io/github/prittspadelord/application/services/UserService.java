@@ -1,5 +1,6 @@
 package io.github.prittspadelord.application.services;
 
+import io.github.prittspadelord.application.components.SecureArgon2PasswordEncoder;
 import io.github.prittspadelord.application.components.SnowflakeIdGenerator;
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.data.models.User;
@@ -10,7 +11,6 @@ import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,7 +20,7 @@ import java.time.Instant;
 @Slf4j
 public class UserService {
 
-    private final Argon2PasswordEncoder passwordEncoder;
+    private final SecureArgon2PasswordEncoder passwordEncoder;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final UserDao userDao;
 
@@ -36,13 +36,7 @@ public class UserService {
         User user = new User();
         Instant now = Instant.now();
         long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
-        String hashedPassword = this.passwordEncoder.encode(String.copyValueOf(registerUserRequest.getPassword())); //SEC: see below
-
-        /*
-        It's truly frustrating that Argon2PasswordEncoder demands the input be passed as String.
-
-        We may want to explore using Bouncy Castle directly to perform the encoding securely using char[] instead followed by fill
-         */
+        String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword());
 
         user.setId(snowflakeId);
         user.setUsername(registerUserRequest.getUsername());
