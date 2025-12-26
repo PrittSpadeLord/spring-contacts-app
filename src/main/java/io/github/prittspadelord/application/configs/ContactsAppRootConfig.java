@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import tools.jackson.core.StreamReadConstraints;
 import tools.jackson.core.json.JsonFactory;
 import tools.jackson.core.util.JsonRecyclerPools;
 import tools.jackson.databind.DeserializationFeature;
@@ -20,7 +21,18 @@ public class ContactsAppRootConfig {
 
     @Bean
     JsonMapper jsonMapper() {
+
+        StreamReadConstraints constraints = StreamReadConstraints.builder()
+            .maxDocumentLength(10_000)
+            .maxNameLength(50)
+            .maxNestingDepth(5)
+            .maxNumberLength(100)
+            .maxStringLength(100)
+            .maxTokenCount(50)
+            .build();
+
         JsonFactory factory = JsonFactory.builder()
+            .streamReadConstraints(constraints)
             .recyclerPool(JsonRecyclerPools.sharedConcurrentDequePool())
             .build();
 
