@@ -31,7 +31,7 @@ class UserServiceTest {
 
         CheckUsernameExistsResponse checkUsernameExistsResponse = this.userService.checkUsername(username);
 
-        Assertions.assertFalse(checkUsernameExistsResponse.isResponse());
+        Assertions.assertFalse(checkUsernameExistsResponse.isDoesUsernameExist());
     }
 
     @Test
@@ -42,7 +42,7 @@ class UserServiceTest {
 
         CheckUsernameExistsResponse checkUsernameExistsResponse = this.userService.checkUsername(username);
 
-        Assertions.assertTrue(checkUsernameExistsResponse.isResponse());
+        Assertions.assertTrue(checkUsernameExistsResponse.isDoesUsernameExist());
     }
 
     @Test

@@ -23,16 +23,16 @@ import java.util.List;
 public class ContactsAppRestControllerV1Advice {
 
     @ExceptionHandler(DuplicateKeyException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ApiErrorResponse duplicateEntryExceptionHandler(DuplicateKeyException e, HttpServletRequest req) {
         var error = new ApiErrorResponse();
-        error.setStatus(HttpStatus.FORBIDDEN.value());
+        error.setStatus(HttpStatus.CONFLICT.value());
         error.setTimestamp(Instant.now());
-        error.setErrorType(HttpStatus.FORBIDDEN.name());
+        error.setErrorType(HttpStatus.CONFLICT.name());
         error.setDescription("The username you provided already exists in the database. Why did you bypass the client-side validation huh?");
         error.setAdditionalData(null);
 
-        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.FORBIDDEN.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.CONFLICT.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
         return error;
     }
 
