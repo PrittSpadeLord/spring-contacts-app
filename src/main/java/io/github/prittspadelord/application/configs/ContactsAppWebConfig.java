@@ -31,17 +31,17 @@ public class ContactsAppWebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(System.getenv("BASE_URL"))
-                .allowedMethods(
-                        HttpMethod.GET.toString(),
-                        HttpMethod.POST.toString(),
-                        HttpMethod.PUT.toString(),
-                        HttpMethod.PATCH.toString(),
-                        HttpMethod.DELETE.toString()
-                )
-                .allowedHeaders("*")
-                .exposedHeaders("Authorization")
-                .allowCredentials(false);
+            .allowedOrigins(System.getenv("BASE_URL"))
+            .allowedMethods(
+                HttpMethod.GET.toString(),
+                HttpMethod.POST.toString(),
+                HttpMethod.PUT.toString(),
+                HttpMethod.PATCH.toString(),
+                HttpMethod.DELETE.toString()
+            )
+            .allowedHeaders("*")
+            .exposedHeaders("Authorization")
+            .allowCredentials(false);
     }
 
     @Override
