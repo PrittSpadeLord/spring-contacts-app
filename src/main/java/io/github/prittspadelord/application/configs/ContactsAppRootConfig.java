@@ -32,8 +32,8 @@ public class ContactsAppRootConfig {
             .build();
 
         JsonFactory factory = JsonFactory.builder()
+            .recyclerPool(JsonRecyclerPools.nonRecyclingPool())
             .streamReadConstraints(constraints)
-            .recyclerPool(JsonRecyclerPools.sharedConcurrentDequePool())
             .build();
 
         return JsonMapper.builder(factory)
