@@ -26,7 +26,7 @@ public class UserService {
 
     public CheckUsernameExistsResponse checkUsername(String string) {
         var checkUsernameExistsResponse = new CheckUsernameExistsResponse();
-        checkUsernameExistsResponse.setResponse(this.userDao.checkUsername(string));
+        checkUsernameExistsResponse.setDoesUsernameExist(this.userDao.checkUsername(string));
 
         return checkUsernameExistsResponse;
     }

@@ -15,8 +15,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
 
 @ComponentScan(basePackages = "io.github.prittspadelord.application.rest.controllers")
@@ -25,8 +23,10 @@ import tools.jackson.databind.json.JsonMapper;
 @RequiredArgsConstructor
 public class ContactsAppWebConfig implements WebMvcConfigurer {
 
-    private final RateLimitingInterceptor rateLimitingInterceptor;
+    private final JsonMapper jsonMapper;
+
     private final AuthorizationInterceptor authorizationInterceptor;
+    private final RateLimitingInterceptor rateLimitingInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -52,17 +52,6 @@ public class ContactsAppWebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(HttpMessageConverters.ServerBuilder converters) {
-        JsonMapper mapper = JsonMapper.builder()
-            .enable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES)
-            .enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
-            .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
-            .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-
-            .disable(DateTimeFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
-            .disable(DeserializationFeature.ACCEPT_FLOAT_AS_INT)
-            .disable(DateTimeFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)
-            .build();
-
-        converters.addCustomConverter(new JacksonJsonHttpMessageConverter(mapper));
+        converters.addCustomConverter(new JacksonJsonHttpMessageConverter(jsonMapper));
     }
 }

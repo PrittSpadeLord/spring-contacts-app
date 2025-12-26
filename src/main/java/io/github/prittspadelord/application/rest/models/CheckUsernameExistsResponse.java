@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CheckUsernameExistsResponse {
-    private boolean response;
+    private boolean doesUsernameExist;
 }
