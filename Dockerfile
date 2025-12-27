@@ -1,4 +1,4 @@
-# Stage 1: Dependencies (Cache Layer)
+# Generate base
 FROM amazoncorretto:25.0.1-al2023 AS base
 
 WORKDIR /app
@@ -29,7 +29,9 @@ COPY --from=builder /app/jlink-runtime /usr/lib/jvm/jre-min
 COPY --from=builder /app/target/spring-contacts-app-1.0.0.jar /app/app.jar
 COPY --from=builder /app/target/lib /app/lib
 
-COPY --from=builder /usr/lib64/ld-linux-x86-64.so.2 /lib64/
+COPY --from=builder /lib64/ld-linux-x86-64.so.2* /lib64/
+COPY --from=builder /lib/ld-linux-aarch64.so.1* /lib/
+
 COPY --from=builder /usr/lib64/libc.so.6 /lib64/
 COPY --from=builder /usr/lib64/libm.so.6 /lib64/
 COPY --from=builder /usr/lib64/libz.so.1 /usr/lib64/
