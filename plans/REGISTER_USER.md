@@ -40,9 +40,11 @@ Given the information we have gathered, we shall name the database as `spring_co
 ```sql
 CREATE TABLE users (
      id bigint NOT NULL PRIMARY KEY,
-     recent_password_update_timestamp bigint NOT NULL,
+     recent_password_update_timestamp bigint NOT NULL, --should type be timestamptz instead?
      username varchar(63) NOT NULL UNIQUE,
      nickname varchar(63) NOT NULL,
      hashed_password varchar(127) NOT NULL
 );
 ```
+
+SHOULD 

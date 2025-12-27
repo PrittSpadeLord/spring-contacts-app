@@ -11,17 +11,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mockito;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 
 import java.time.Instant;
 import java.util.Arrays;
 
 class UserServiceTest {
 
+    private final JwtEncoder jwtEncoder = Mockito.mock(JwtEncoder.class);
     private final SecureArgon2PasswordEncoder passwordEncoder = Mockito.mock(SecureArgon2PasswordEncoder.class);
     private final SnowflakeIdGenerator snowflakeIdGenerator = Mockito.mock(SnowflakeIdGenerator.class);
     private final UserDao userDao = Mockito.mock(UserDao.class);
 
-    private final UserService userService = new UserService(this.passwordEncoder, this.snowflakeIdGenerator, userDao);
+    private final UserService userService = new UserService(this.jwtEncoder, this.passwordEncoder, this.snowflakeIdGenerator, userDao);
 
     @Test
     public void checkUsernameShouldReturnFalseIfDoesntExist() {

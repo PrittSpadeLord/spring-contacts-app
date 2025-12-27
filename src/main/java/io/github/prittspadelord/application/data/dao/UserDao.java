@@ -48,14 +48,12 @@ public class UserDao {
 
         String sql = "INSERT INTO users (id, recent_password_update_timestamp, username, nickname, hashed_password) VALUES (:id, :recent_password_update_timestamp, :username, :nickname, :hashed_password)";
 
-//        SqlParameterSource parameterSource = new MapSqlParameterSource()
-//            .addValue("id", user.getId())
-//            .addValue("username", user.getUsername())
-//            .addValue("nickname", user.getNickname())
-//            .addValue("hashed_password", user.getHashedPassword())
-//            .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
-
-        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(User.class);
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+            .addValue("id", user.getId())
+            .addValue("username", user.getUsername())
+            .addValue("nickname", user.getNickname())
+            .addValue("hashed_password", user.getHashedPassword())
+            .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
 
         int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 
