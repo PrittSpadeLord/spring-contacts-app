@@ -81,7 +81,8 @@ public class UserService {
 
         JwtClaimsSet claimsSet = JwtClaimsSet.builder()
             .audience(Collections.singletonList(System.getenv("BASE_URL")))
-            .issuedAt(Instant.ofEpochMilli(user.getRecentPasswordUpdateTimestamp()))
+            .claim("pst", Instant.ofEpochMilli(user.getRecentPasswordUpdateTimestamp()).getEpochSecond())
+            .issuedAt(Instant.now())
             .issuer(System.getenv("BASE_URL"))
             .subject(String.valueOf(user.getId()))
             .build();
