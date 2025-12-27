@@ -4,12 +4,12 @@ import io.github.prittspadelord.application.components.SecureArgon2PasswordEncod
 import io.github.prittspadelord.application.components.SnowflakeIdGenerator;
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.data.models.User;
-
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
 import io.github.prittspadelord.application.rest.models.LoginUserRequest;
 import io.github.prittspadelord.application.rest.models.LoginUserResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -88,6 +88,10 @@ public class UserService {
 
         Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(header, claimsSet));
 
-        return null;
+        LoginUserResponse loginUserResponse = new LoginUserResponse();
+        loginUserResponse.setTimestamp(String.valueOf(Instant.now().toEpochMilli()));
+        loginUserResponse.setToken(jwt.toString());
+
+        return loginUserResponse;
     }
 }
