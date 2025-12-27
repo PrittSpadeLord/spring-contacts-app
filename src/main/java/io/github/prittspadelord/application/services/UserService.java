@@ -90,7 +90,7 @@ public class UserService {
 
         LoginUserResponse loginUserResponse = new LoginUserResponse();
         loginUserResponse.setTimestamp(String.valueOf(Instant.now().toEpochMilli()));
-        loginUserResponse.setToken(jwt.toString());
+        loginUserResponse.setToken(jwt.getTokenValue());
 
         return loginUserResponse;
     }

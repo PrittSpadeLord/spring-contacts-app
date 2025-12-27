@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -41,7 +43,9 @@ public class UserDao {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("username", username);
 
-        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, User.class);
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+
+        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
     }
 
     public void insertUser(User user) {

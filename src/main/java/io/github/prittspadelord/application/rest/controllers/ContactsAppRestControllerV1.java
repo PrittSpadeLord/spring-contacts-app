@@ -35,7 +35,7 @@ public class ContactsAppRestControllerV1 {
     }
 
     @Authorized(AuthorizationLevel.NONE)
-    @GetMapping("/login")
+    @PostMapping("/login")
     public LoginUserResponse handleLogin(@Valid @RequestBody LoginUserRequest loginUserRequest) {
         return this.userService.loginUser(loginUserRequest);
     }
