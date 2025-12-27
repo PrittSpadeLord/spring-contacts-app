@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -22,7 +23,7 @@ public class UserDao {
         String sql = "SELECT id FROM users WHERE username = :username";
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("username", username);
+            .addValue("username", username);
 
         try {
             return Boolean.TRUE.equals(this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Boolean.class));
@@ -32,18 +33,29 @@ public class UserDao {
         }
     }
 
-    public void insertUser(User user) {
-
-        String sql = "INSERT INTO users (id, username, nickname, hashed_password, recent_password_update_timestamp) VALUES (:id, :username, :nickname, :hashed_password, :recent_password_update_timestamp)";
+    //should we add another param to filter fields here?
+    //it would limit the data fetched, but would increase complexity of the return object
+    public User getUserFromUsername(String username) {
+        String sql = "SELECT id, recent_password_update_timestamp, username, nickname, hashed_password FROM users WHERE username = :username";
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("id", user.getId())
-                .addValue("username", user.getUsername())
-                .addValue("nickname", user.getNickname())
-                .addValue("hashed_password", user.getHashedPassword())
-                .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
+            .addValue("username", username);
 
-        //experiment with BeanPropertyParameterSource
+        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, User.class);
+    }
+
+    public void insertUser(User user) {
+
+        String sql = "INSERT INTO users (id, recent_password_update_timestamp, username, nickname, hashed_password) VALUES (:id, :recent_password_update_timestamp, :username, :nickname, :hashed_password)";
+
+//        SqlParameterSource parameterSource = new MapSqlParameterSource()
+//            .addValue("id", user.getId())
+//            .addValue("username", user.getUsername())
+//            .addValue("nickname", user.getNickname())
+//            .addValue("hashed_password", user.getHashedPassword())
+//            .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
+
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(User.class);
 
         int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 

@@ -4,22 +4,32 @@ import io.github.prittspadelord.application.components.SecureArgon2PasswordEncod
 import io.github.prittspadelord.application.components.SnowflakeIdGenerator;
 import io.github.prittspadelord.application.data.dao.UserDao;
 import io.github.prittspadelord.application.data.models.User;
+
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
+import io.github.prittspadelord.application.rest.models.LoginUserRequest;
+import io.github.prittspadelord.application.rest.models.LoginUserResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class UserService {
 
+    private final JwtEncoder jwtEncoder;
     private final SecureArgon2PasswordEncoder passwordEncoder;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final UserDao userDao;
@@ -54,5 +64,30 @@ public class UserService {
         registerUserResponse.setNickname(registerUserRequest.getNickname());
 
         return registerUserResponse;
+    }
+
+    public LoginUserResponse loginUser(LoginUserRequest loginUserRequest) {
+
+        User user = this.userDao.getUserFromUsername(loginUserRequest.getUsername());
+
+        if(!this.passwordEncoder.matches(loginUserRequest.getPassword(), user.getHashedPassword())) {
+            //failure
+            //throw some incorrect password exception
+        }
+
+        JwsHeader header = JwsHeader.with(MacAlgorithm.HS256)
+            .type("JWT")
+            .build();
+
+        JwtClaimsSet claimsSet = JwtClaimsSet.builder()
+            .audience(Collections.singletonList(System.getenv("BASE_URL")))
+            .issuedAt(Instant.ofEpochMilli(user.getRecentPasswordUpdateTimestamp()))
+            .issuer(System.getenv("BASE_URL"))
+            .subject(String.valueOf(user.getId()))
+            .build();
+
+        Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(header, claimsSet));
+
+        return null;
     }
 }
