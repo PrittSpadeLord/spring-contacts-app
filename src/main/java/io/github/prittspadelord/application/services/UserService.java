@@ -9,6 +9,7 @@ import io.github.prittspadelord.application.rest.models.LoginUserRequest;
 import io.github.prittspadelord.application.rest.models.LoginUserResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
+import io.github.prittspadelord.application.services.support.IncorrectPasswordException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,8 +72,7 @@ public class UserService {
         User user = this.userDao.getUserFromUsername(loginUserRequest.getUsername());
 
         if(!this.passwordEncoder.matches(loginUserRequest.getPassword(), user.getHashedPassword())) {
-            //failure
-            //throw some incorrect password exception
+            throw new IncorrectPasswordException();
         }
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256)

@@ -4,6 +4,7 @@ import io.github.prittspadelord.application.rest.RateLimitException;
 import io.github.prittspadelord.application.rest.models.ApiErrorResponse;
 import io.github.prittspadelord.application.rest.support.ValidationErrorEnumeration;
 
+import io.github.prittspadelord.application.services.support.IncorrectPasswordException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,21 @@ public class ContactsAppRestControllerV1Advice {
         error.setAdditionalData(null);
 
         log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.CONFLICT.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrorResponse incorrectPasswordExceptionHandler(IncorrectPasswordException e, HttpServletRequest req) {
+
+        var error = new ApiErrorResponse();
+        error.setStatus(HttpStatus.UNAUTHORIZED.value());
+        error.setTimestamp(Instant.now());
+        error.setErrorType(HttpStatus.UNAUTHORIZED.name());
+        error.setDescription("The password you have supplied is incorrect!");
+        error.setAdditionalData(null);
+
+        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.UNAUTHORIZED.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
         return error;
     }
 
