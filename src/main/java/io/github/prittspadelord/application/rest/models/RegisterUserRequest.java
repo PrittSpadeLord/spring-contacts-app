@@ -1,8 +1,8 @@
 package io.github.prittspadelord.application.rest.models;
 
 import io.github.prittspadelord.application.rest.annotations.ValidPassword;
-
 import io.github.prittspadelord.application.rest.support.PasswordDeserializer;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 

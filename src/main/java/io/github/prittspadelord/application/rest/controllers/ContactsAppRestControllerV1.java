@@ -2,7 +2,6 @@ package io.github.prittspadelord.application.rest.controllers;
 
 import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.rest.annotations.support.AuthorizationLevel;
-
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
 import io.github.prittspadelord.application.rest.models.LoginUserRequest;
 import io.github.prittspadelord.application.rest.models.LoginUserResponse;

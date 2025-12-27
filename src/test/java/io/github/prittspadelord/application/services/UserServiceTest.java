@@ -60,12 +60,12 @@ class UserServiceTest {
         registerUserRequest.setPassword(rawPassword);
 
         Mockito.when(this.passwordEncoder.encode(rawPassword))
-                .thenReturn(hashedPassword);
+            .thenReturn(hashedPassword);
 
         Arrays.fill(rawPassword, '\0');
 
         Mockito.when(this.snowflakeIdGenerator.generateSnowflakeId(Mockito.any(Instant.class)))
-                .thenReturn(id);
+            .thenReturn(id);
 
         RegisterUserResponse registerUserResponse = this.userService.createUser(registerUserRequest);
 

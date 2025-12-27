@@ -1,8 +1,9 @@
 package io.github.prittspadelord.application.rest.interceptors;
 
-import io.github.bucket4j.Bucket;
 import io.github.prittspadelord.application.rest.RateLimitException;
 import io.github.prittspadelord.application.components.BucketFactory;
+
+import io.github.bucket4j.Bucket;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
