@@ -1,5 +1,6 @@
 package io.github.prittspadelord.application.rest.interceptors;
 
+import io.github.prittspadelord.application.data.models.User;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.rest.annotations.support.AuthorizationLevel;
 
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -36,20 +38,24 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         return switch(authorizationLevel) {
             case NONE -> true;
-            case USER -> {
-                //scan JWT token for user permissions
+            case ADMIN -> {
+                User user = this.getUserFromJwtString(request.getHeader("Authorization"));
 
-                String jwtString = request.getHeader("Authorization");
+                //check if user object has admin
 
                 yield false;
             }
-            case ADMIN -> {
-                //scan JWT token for admin permissions
-
-                String jwtString = request.getHeader("Authorization");
+            case USER -> {
+                User user = this.getUserFromJwtString(request.getHeader("Authorization"));
 
                 yield false;
             }
         };
+    }
+
+    private User getUserFromJwtString(String jwtString) {
+        Jwt jwt = jwtDecoder.decode(jwtString);
+
+        return userService.getUserFromId(Long.parseLong(jwt.getSubject()));
     }
 }

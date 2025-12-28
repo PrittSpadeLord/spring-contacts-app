@@ -67,7 +67,7 @@ public class UserService {
         return registerUserResponse;
     }
 
-    private User getUserFromId(long id) {
+    public User getUserFromId(long id) {
         return this.userDao.getUserFromId(id);
     }
 
