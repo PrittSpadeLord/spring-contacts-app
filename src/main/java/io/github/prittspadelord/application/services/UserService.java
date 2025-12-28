@@ -11,6 +11,7 @@ import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 import io.github.prittspadelord.application.services.support.IncorrectPasswordException;
 
+import io.github.prittspadelord.application.support.AuthorizationLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,6 +51,7 @@ public class UserService {
         String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword());
 
         user.setId(snowflakeId);
+        user.setAuthorizationLevel(AuthorizationLevel.USER);
         user.setUsername(registerUserRequest.getUsername());
         user.setNickname(registerUserRequest.getNickname());
         user.setHashedPassword(hashedPassword);

@@ -35,7 +35,12 @@ public class UserDao {
     }
 
     public User getUserFromId(long id) {
-        String sql = "SELECT id, recent_password_update_timestamp, username, nickname, hashed_password FROM users WHERE id = :id";
+        String sql = """
+            SELECT
+                id, recent_password_update_timestamp, username, nickname, hashed_password
+            FROM users
+            WHERE id = :id
+            """;
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", id);
@@ -48,7 +53,12 @@ public class UserDao {
     //should we add another param to filter fields here?
     //it would limit the data fetched, but would increase complexity of the return object
     public User getUserFromUsername(String username) {
-        String sql = "SELECT id, recent_password_update_timestamp, username, nickname, hashed_password FROM users WHERE username = :username";
+        String sql = """
+            SELECT
+                id, recent_password_update_timestamp, username, nickname, hashed_password
+            FROM users
+            WHERE username = :username
+            """;
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("username", username);
@@ -60,14 +70,32 @@ public class UserDao {
 
     public void insertUser(User user) {
 
-        String sql = "INSERT INTO users (id, recent_password_update_timestamp, username, nickname, hashed_password) VALUES (:id, :recent_password_update_timestamp, :username, :nickname, :hashed_password)";
+        String sql = """
+            INSERT INTO users (
+                id,
+                authorization_level,
+                recent_password_update_timestamp,
+                username,
+                nickname,
+                hashed_password
+            )
+            VALUES (
+                :id,
+                :authorization_level::authorization_level,
+                :recent_password_update_timestamp,
+                :username,
+                :nickname,
+                :hashed_password
+            )
+            """;
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", user.getId())
+            .addValue("authorization_level", user.getAuthorizationLevel())
+            .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp())
             .addValue("username", user.getUsername())
             .addValue("nickname", user.getNickname())
-            .addValue("hashed_password", user.getHashedPassword())
-            .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp());
+            .addValue("hashed_password", user.getHashedPassword());
 
         int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 
