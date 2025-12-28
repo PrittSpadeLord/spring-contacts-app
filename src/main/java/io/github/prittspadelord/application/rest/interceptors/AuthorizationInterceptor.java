@@ -36,26 +36,17 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         AuthorizationLevel authorizationLevel = Objects.requireNonNull(handlerMethod.getMethodAnnotation(Authorized.class)).value();
 
+        Jwt jwt = jwtDecoder.decode(request.getHeader("Authorization"));
+
+        User user = userService.getUserFromId(Long.parseLong(jwt.getSubject()));
+
         return switch(authorizationLevel) {
-            case NONE -> true;
             case ADMIN -> {
-                User user = this.getUserFromJwtString(request.getHeader("Authorization"));
-
-                //check if user object has admin
-
-                yield false;
+                yield true;
             }
             case USER -> {
-                User user = this.getUserFromJwtString(request.getHeader("Authorization"));
-
                 yield false;
             }
         };
-    }
-
-    private User getUserFromJwtString(String jwtString) {
-        Jwt jwt = jwtDecoder.decode(jwtString);
-
-        return userService.getUserFromId(Long.parseLong(jwt.getSubject()));
     }
 }

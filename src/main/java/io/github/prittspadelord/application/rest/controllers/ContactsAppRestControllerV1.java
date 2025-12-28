@@ -28,21 +28,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContactsAppRestControllerV1 {
     private final UserService userService;
 
-    @Authorized(AuthorizationLevel.NONE)
     @GetMapping("/checkUsername")
     public CheckUsernameExistsResponse handleUsernameCheck(@RequestParam("username") String username) {
         return this.userService.checkUsername(username);
     }
 
-    @Authorized(AuthorizationLevel.NONE)
     @PostMapping("/login")
     public LoginUserResponse handleLogin(@Valid @RequestBody LoginUserRequest loginUserRequest) {
         return this.userService.loginUser(loginUserRequest);
     }
 
-    @Authorized(AuthorizationLevel.NONE)
     @PostMapping("/register")
     public RegisterUserResponse handleAccountRegistration(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         return this.userService.createUser(registerUserRequest);
+    }
+
+    @Authorized(AuthorizationLevel.ADMIN)
+    @GetMapping("/temp")
+    public String temp() {
+        return "temporary!";
     }
 }

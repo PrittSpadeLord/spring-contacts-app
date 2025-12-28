@@ -38,20 +38,17 @@ After performing the necessary validation, the server may begin to insert the da
 Given the information we have gathered, we shall name the database as `spring_contacts_db` and it's first table shall be:
 
 ```sql
-
 CREATE TYPE authorization_level AS enum (
-    'NONE',
     'USER',
     'ADMIN'
 );
 
 CREATE TABLE users (
-     id bigint NOT NULL PRIMARY KEY,
-     recent_password_update_timestamp bigint NOT NULL, --should type be timestamptz instead?
-     username varchar(63) NOT NULL UNIQUE,
-     nickname varchar(63) NOT NULL,
-     hashed_password varchar(127) NOT NULL
+    id bigint NOT NULL PRIMARY KEY,
+    authorization_level authorization_level,
+    recent_password_update_timestamp bigint NOT NULL, --should type be timestamptz instead?
+    username varchar(63) NOT NULL UNIQUE,
+    nickname varchar(63) NOT NULL,
+    hashed_password varchar(127) NOT NULL
 );
 ```
-
-SHOULD 
