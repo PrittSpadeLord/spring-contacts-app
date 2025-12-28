@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -33,6 +32,17 @@ public class UserDao {
         catch(EmptyResultDataAccessException e) {
             return false;
         }
+    }
+
+    public User getUserFromId(long id) {
+        String sql = "SELECT id, recent_password_update_timestamp, username, nickname, hashed_password FROM users WHERE id = :id";
+
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+
+        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
     }
 
     //should we add another param to filter fields here?

@@ -67,6 +67,10 @@ public class UserService {
         return registerUserResponse;
     }
 
+    private User getUserFromId(long id) {
+        return this.userDao.getUserFromId(id);
+    }
+
     public LoginUserResponse loginUser(LoginUserRequest loginUserRequest) {
 
         User user = this.userDao.getUserFromUsername(loginUserRequest.getUsername());
