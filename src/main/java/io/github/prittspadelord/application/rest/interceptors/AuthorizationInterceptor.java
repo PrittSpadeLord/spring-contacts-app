@@ -2,9 +2,9 @@ package io.github.prittspadelord.application.rest.interceptors;
 
 import io.github.prittspadelord.application.data.models.User;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
-import io.github.prittspadelord.application.rest.annotations.support.AuthorizationLevel;
-
+import io.github.prittspadelord.application.support.AuthorizationLevel;
 import io.github.prittspadelord.application.services.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

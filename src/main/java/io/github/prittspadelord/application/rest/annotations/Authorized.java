@@ -1,6 +1,6 @@
 package io.github.prittspadelord.application.rest.annotations;
 
-import io.github.prittspadelord.application.rest.annotations.support.AuthorizationLevel;
+import io.github.prittspadelord.application.support.AuthorizationLevel;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
