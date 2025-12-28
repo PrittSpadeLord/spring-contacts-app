@@ -1,15 +1,3 @@
--how will it be
-
-we need to model the entire flow and the process
-
-first set forth the schema, then the implementation
-
-things we need: endpoint, payload format, and response formats
-
-maybe the stuff above can be retained within plan, and only implementation stuff here
-
-------
-
 Behind the scenes, the server must undertake the following:
 
 - Validate `username` for uniqueness by querying the database (the client app is expected to do the same)
