@@ -21,23 +21,20 @@ public class UserDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public boolean checkUsername(String username) {
-        String sql = "SELECT id FROM users WHERE username = :username";
+        String sql = "SELECT count(id) FROM users WHERE username = :username";
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("username", username);
 
-        try {
-            return Boolean.TRUE.equals(this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Boolean.class));
-        }
-        catch(EmptyResultDataAccessException e) {
-            return false;
-        }
+        Integer count = this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Integer.class);
+
+        return count != null && count > 0;
     }
 
     public User getUserFromId(long id) {
         String sql = """
             SELECT
-                id, recent_password_update_timestamp, username, nickname, hashed_password
+                id, authorization_level, recent_password_update_timestamp, username, nickname, hashed_password
             FROM users
             WHERE id = :id
             """;
@@ -50,12 +47,10 @@ public class UserDao {
         return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
     }
 
-    //should we add another param to filter fields here?
-    //it would limit the data fetched, but would increase complexity of the return object
     public User getUserFromUsername(String username) {
         String sql = """
             SELECT
-                id, recent_password_update_timestamp, username, nickname, hashed_password
+                id, authorization_level, recent_password_update_timestamp, username, nickname, hashed_password
             FROM users
             WHERE username = :username
             """;

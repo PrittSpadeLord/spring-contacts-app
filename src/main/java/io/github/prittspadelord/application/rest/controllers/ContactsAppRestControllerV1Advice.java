@@ -1,6 +1,7 @@
 package io.github.prittspadelord.application.rest.controllers;
 
 import io.github.prittspadelord.application.rest.RateLimitException;
+import io.github.prittspadelord.application.rest.UnauthorizedException;
 import io.github.prittspadelord.application.rest.models.ApiErrorResponse;
 import io.github.prittspadelord.application.rest.support.ValidationErrorEnumeration;
 
@@ -96,6 +97,20 @@ public class ContactsAppRestControllerV1Advice {
         error.setAdditionalData(null);
 
         log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.TOO_MANY_REQUESTS.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiErrorResponse rateLimitExceptionHander(UnauthorizedException e, HttpServletRequest req) {
+        var error = new ApiErrorResponse();
+        error.setStatus(HttpStatus.FORBIDDEN.value());
+        error.setTimestamp(Instant.now());
+        error.setErrorType(HttpStatus.FORBIDDEN.name());
+        error.setDescription(e.getMessage()); //for now this is a user-friendly message, but I suppose we can put that logic here, and have more details to be logged
+        error.setAdditionalData(null);
+
+        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.FORBIDDEN.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
         return error;
     }
 

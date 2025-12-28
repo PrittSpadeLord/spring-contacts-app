@@ -1,6 +1,7 @@
 package io.github.prittspadelord.application.rest.interceptors;
 
 import io.github.prittspadelord.application.data.models.User;
+import io.github.prittspadelord.application.rest.UnauthorizedException;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.support.AuthorizationLevel;
 import io.github.prittspadelord.application.services.UserService;
@@ -42,9 +43,15 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         User user = userService.getUserFromId(Long.parseLong(jwt.getSubject()));
 
-        if(jwt.getClaim("pst") != String.valueOf(Instant.ofEpochMilli(user.getRecentPasswordUpdateTimestamp()).getEpochSecond())) {
-            return false; //change this to throw exception of invalid with message token revoked
+        if(!jwt.getClaim("pst").equals(String.valueOf(user.getRecentPasswordUpdateTimestamp()))) {
+            System.out.println("LHS: " + jwt.getClaim("pst"));
+            System.out.println("RHS: " + user.getRecentPasswordUpdateTimestamp());
+            throw new UnauthorizedException("Provided token has been revoked!");
         }
+
+        if(user.getAuthorizationLevel() == AuthorizationLevel.ADMIN) return true;
+
+        if(user.getAuthorizationLevel() != authorizationLevel) throw new UnauthorizedException("You do not possess the authorization level to make this request!");
 
         return switch(authorizationLevel) {
             case ADMIN -> {
