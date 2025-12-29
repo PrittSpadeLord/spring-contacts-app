@@ -53,13 +53,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         if(user.getAuthorizationLevel() != authorizationLevel) throw new UnauthorizedException("You do not possess the authorization level to make this request!");
 
-        return switch(authorizationLevel) {
-            case ADMIN -> {
-                yield true;
-            }
-            case USER -> {
-                yield false;
-            }
-        };
+        return true;
     }
 }
