@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 @Component
 public class SecureArgon2PasswordEncoder {
 
+    private final Pattern argon2idHashedPasswordPattern = Pattern.compile("^\\$argon2(?:i|d|id)\\$v=\\d+\\$m=(\\d+),t=(\\d+),p=(\\d+)\\$([^$]+)\\$([^$]+)$");
     private final BytesKeyGenerator saltGenerator = KeyGenerators.secureRandom(16);
 
     public String encode(char[] rawPassword) {
@@ -49,7 +50,7 @@ public class SecureArgon2PasswordEncoder {
         byte[] expectedHash = null;
 
         try {
-            Matcher matcher = Pattern.compile("^\\$argon2(?:i|d|id)\\$v=\\d+\\$m=(\\d+),t=(\\d+),p=(\\d+)\\$([^$]+)\\$([^$]+)$").matcher(encodedPassword);
+            Matcher matcher = argon2idHashedPasswordPattern.matcher(encodedPassword);
 
             if (!matcher.find()) {
                 return false;
@@ -68,12 +69,14 @@ public class SecureArgon2PasswordEncoder {
                 .withIterations(iterations)
                 .build();
 
+            Arrays.fill(salt, (byte) 0); //move this into the finally block so any exception here won't cause it to linger!
+
             Argon2BytesGenerator generator = new Argon2BytesGenerator();
             generator.init(params);
 
             actualHash = new byte[expectedHash.length];
             generator.generateBytes(rawPassword, actualHash);
-            Arrays.fill(rawPassword, '\0');
+            Arrays.fill(rawPassword, '\0'); //move this into the finally block so any exception here won't cause it to linger!
 
             return MessageDigest.isEqual(actualHash, expectedHash);
         }
