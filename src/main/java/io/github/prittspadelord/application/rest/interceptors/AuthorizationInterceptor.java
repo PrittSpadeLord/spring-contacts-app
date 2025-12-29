@@ -46,8 +46,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         User user = userService.getUserFromId(Long.parseLong(jwt.getSubject()));
 
         if(!jwt.getClaim("pst").equals(String.valueOf(user.getRecentPasswordUpdateTimestamp()))) {
-            System.out.println("LHS: " + jwt.getClaim("pst"));
-            System.out.println("RHS: " + user.getRecentPasswordUpdateTimestamp());
             throw new UnauthorizedException("Provided token has been revoked!");
         }
 
