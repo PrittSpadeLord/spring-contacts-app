@@ -1,9 +1,9 @@
 package io.github.prittspadelord.application.data.models;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,28 +12,29 @@ import lombok.Setter;
 public class Contact {
 
     public enum NamePrefix {
-        MR, MS, MRS, DR, SIR
+        DR, MR, MRS, MS, SIR
     }
 
     private long id;
+    private long userId;
 
-    @Nullable private NamePrefix namePrefix;
+    private NamePrefix namePrefix;
     @NotNull @Pattern(regexp = "[a-zA-Z]+") private String firstName; //more discussion on whether to allow accented characters or not
-    @Nullable @Pattern(regexp = "[a-zA-Z]+") private String lastName; //plus where do we draw the line?
+    @Pattern(regexp = "[a-zA-Z]+") private String lastName; //plus where do we draw the line?
 
-    @Nullable @Pattern(regexp = "[0-9]{1,4}") private String homePhoneNumberCountryCode;
-    @Nullable @Pattern(regexp = "[0-9]{10}") private String homePhoneNumber; //google phone validator something
+    @Pattern(regexp = "[0-9]{1,4}") private String homePhoneNumberCountryCode;
+    @Pattern(regexp = "[0-9]{10}") private String homePhoneNumber; //google phone validator something
 
-    @Nullable @Pattern(regexp = "[0-9]{1,4}") private String mobilePhoneNumberCountryCode;
-    @Nullable @Pattern(regexp = "[0-9]{10}") private String mobilePhoneNumber;
+    @Pattern(regexp = "[0-9]{1,4}") private String mobilePhoneNumberCountryCode;
+    @Pattern(regexp = "[0-9]{10}") private String mobilePhoneNumber;
 
-    @Email @Nullable private String personalEmailAddress;
-    @Email @Nullable private String workEmailAddress;
+    @Email private String personalEmailAddress;
+    @Email private String workEmailAddress;
 
-    @Nullable @Pattern(regexp = "[a-zA-Z ,0-9]+") private String addressLine1;
-    @Nullable @Pattern(regexp = "[a-zA-Z ,0-9]+") private String addressLine2;
-    @Nullable @Pattern(regexp = "[a-zA-Z ]+") private String city;
-    @Nullable @Pattern(regexp = "[a-zA-Z ]+") private String province;
-    @Nullable @Pattern(regexp = "[a-zA-Z ]+") private String country;
-    @Nullable @Pattern(regexp = "[0-9]{6}") private String postalCode; //only works in india?
+    @Pattern(regexp = "[a-zA-Z ,0-9]+") private String addressLine1;
+    @Pattern(regexp = "[a-zA-Z ,0-9]+") private String addressLine2;
+    @Pattern(regexp = "[a-zA-Z ]+") private String city;
+    @Pattern(regexp = "[a-zA-Z ]+") private String province;
+    @Pattern(regexp = "[a-zA-Z ]+") private String country;
+    @Pattern(regexp = "[0-9]{6}") private String postalCode; //only works in india?
 }
