@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Mockito;
+
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 
 import java.time.Instant;
@@ -64,7 +65,7 @@ class UserServiceTest {
         Mockito.when(this.passwordEncoder.encode(rawPassword))
             .thenReturn(hashedPassword);
 
-        Arrays.fill(rawPassword, '\0');
+        Arrays.fill(rawPassword, '\0'); //can this be incorporated into Mockito `when` logic?
 
         Mockito.when(this.snowflakeIdGenerator.generateSnowflakeId(Mockito.any(Instant.class)))
             .thenReturn(id);

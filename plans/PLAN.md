@@ -102,6 +102,17 @@ WIP
 
 ### Contacts Management
 
+Now that we have our JWTs to provide identity proof, We may devise the various CRUD operations:
+
+- Creating a new contact
+- Reading a contact (as list or as details)
+- Updating some fields in a contact
+- Deleting the contact
+
+The reading, updating, and deleting contacts need to be designed in such a way that each token is only allowed to access contacts it has "ownership" of. If the contacts was an SQL table, it would have a user_id column as foreign key, and only those entries should be permissible for access. In practice, we will also have a client-side layer that never loads content the user does not have access to, so this will rarely occur in practice, but having the security on serverside is paramount nontheless
+
+It may be time to decide what are the fields needed in a contacts table, such as phone, email, etc.
+
 <!-- This section is still work in progress -->
 -----
 

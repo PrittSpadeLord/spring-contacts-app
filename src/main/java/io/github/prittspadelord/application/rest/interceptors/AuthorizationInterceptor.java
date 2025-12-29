@@ -33,7 +33,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
 
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
+            return true; 
+        }
 
         if(!handlerMethod.hasMethodAnnotation(Authorized.class)) return true;
 
@@ -44,8 +46,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         User user = userService.getUserFromId(Long.parseLong(jwt.getSubject()));
 
         if(!jwt.getClaim("pst").equals(String.valueOf(user.getRecentPasswordUpdateTimestamp()))) {
-            System.out.println("LHS: " + jwt.getClaim("pst"));
-            System.out.println("RHS: " + user.getRecentPasswordUpdateTimestamp());
             throw new UnauthorizedException("Provided token has been revoked!");
         }
 
@@ -53,13 +53,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         if(user.getAuthorizationLevel() != authorizationLevel) throw new UnauthorizedException("You do not possess the authorization level to make this request!");
 
-        return switch(authorizationLevel) {
-            case ADMIN -> {
-                yield true;
-            }
-            case USER -> {
-                yield false;
-            }
-        };
+        return true;
     }
 }

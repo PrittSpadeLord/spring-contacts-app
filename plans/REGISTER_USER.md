@@ -16,7 +16,7 @@ After performing the necessary validation, the server may begin to insert the da
     - The id will be a 64-bit integer (`long`)
     - The first 45 bits represent the number of milliseconds since 00:00:00 January 01, 2020, UTC
     - The next 8 bits represent the server id (must be passed in via environmental variables)
-    - The next 8 bits represent the thread id
+    - The next 8 bits represent the thread id (NOTE THIS IS NO LONGER THE CASE!!!)
     - The remaining 3 bits will be used for an autoincrementer to disambiguate any ids that are created within the same millisecond and on the same server and thread. We will keep this at 0 for now due to simplicity
     - The overall formula would be: `((timestamp - 1577836800000L) << 19) + (id1 << 11) + (id2 << 3) + (inc)`
 - Hash `password` using a strong computationally expensive hashing process such as Argon2

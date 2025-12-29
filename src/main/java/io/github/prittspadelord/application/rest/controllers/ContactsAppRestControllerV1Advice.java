@@ -4,8 +4,8 @@ import io.github.prittspadelord.application.rest.RateLimitException;
 import io.github.prittspadelord.application.rest.UnauthorizedException;
 import io.github.prittspadelord.application.rest.models.ApiErrorResponse;
 import io.github.prittspadelord.application.rest.support.ValidationErrorEnumeration;
-
 import io.github.prittspadelord.application.services.support.IncorrectPasswordException;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
