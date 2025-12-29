@@ -22,7 +22,7 @@ public class Contact {
     @Nullable @Pattern(regexp = "[a-zA-Z]+") private String lastName; //plus where do we draw the line?
 
     @Nullable @Pattern(regexp = "[0-9]{1,4}") private String homePhoneNumberCountryCode;
-    @Nullable @Pattern(regexp = "[0-9]{10}") private String homePhoneNumber;
+    @Nullable @Pattern(regexp = "[0-9]{10}") private String homePhoneNumber; //google phone validator something
 
     @Nullable @Pattern(regexp = "[0-9]{1,4}") private String mobilePhoneNumberCountryCode;
     @Nullable @Pattern(regexp = "[0-9]{10}") private String mobilePhoneNumber;
@@ -35,5 +35,5 @@ public class Contact {
     @Nullable @Pattern(regexp = "[a-zA-Z ]+") private String city;
     @Nullable @Pattern(regexp = "[a-zA-Z ]+") private String province;
     @Nullable @Pattern(regexp = "[a-zA-Z ]+") private String country;
-    @Nullable @Pattern(regexp = "[0-9]{6}") private String postalCode;
+    @Nullable @Pattern(regexp = "[0-9]{6}") private String postalCode; //only works in india?
 }

@@ -39,8 +39,8 @@ public class SecureArgon2PasswordEncoder {
             return this.encode(hash, params);
         }
         finally {
-            Arrays.fill(rawPassword, '\0');
             Arrays.fill(hash, (byte) 0);
+            if(rawPassword != null) Arrays.fill(rawPassword, '\0');
         }
     }
 
@@ -48,6 +48,7 @@ public class SecureArgon2PasswordEncoder {
 
         byte[] actualHash = null;
         byte[] expectedHash = null;
+        byte[] salt = null;
 
         try {
             Matcher matcher = argon2idHashedPasswordPattern.matcher(encodedPassword);
@@ -59,7 +60,7 @@ public class SecureArgon2PasswordEncoder {
             int memory = Integer.parseInt(matcher.group(1));
             int iterations = Integer.parseInt(matcher.group(2));
             int parallelism = Integer.parseInt(matcher.group(3));
-            byte[] salt = Base64.getDecoder().decode(matcher.group(4));
+            salt = Base64.getDecoder().decode(matcher.group(4));
             expectedHash = Base64.getDecoder().decode(matcher.group(5));
 
             Argon2Parameters params = new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
@@ -69,24 +70,22 @@ public class SecureArgon2PasswordEncoder {
                 .withIterations(iterations)
                 .build();
 
-            Arrays.fill(salt, (byte) 0); //move this into the finally block so any exception here won't cause it to linger!
-
             Argon2BytesGenerator generator = new Argon2BytesGenerator();
             generator.init(params);
 
             actualHash = new byte[expectedHash.length];
             generator.generateBytes(rawPassword, actualHash);
-            Arrays.fill(rawPassword, '\0'); //move this into the finally block so any exception here won't cause it to linger!
 
             return MessageDigest.isEqual(actualHash, expectedHash);
         }
         finally {
-            if(expectedHash != null) {
-                Arrays.fill(expectedHash, (byte) 0);
-            }
-            if(actualHash != null) {
-                Arrays.fill(actualHash, (byte) 0);
-            }
+            if(actualHash != null) Arrays.fill(actualHash, (byte) 0);
+
+            if(expectedHash != null)  Arrays.fill(expectedHash, (byte) 0);
+
+            if(rawPassword != null) Arrays.fill(rawPassword, '\0');
+
+            if(salt != null) Arrays.fill(salt, (byte) 0);
         }
     }
 
