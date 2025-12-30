@@ -39,4 +39,7 @@ CREATE TABLE users (
     nickname varchar(63) NOT NULL,
     hashed_password varchar(127) NOT NULL
 );
+
+CREATE INDEX idx_users_id ON contacts USING btree (id);
+CREATE INDEX idx_users_username ON contacts USING btree (username);
 ```

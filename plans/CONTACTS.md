@@ -31,4 +31,8 @@ CREATE TABLE contacts (
     country varchar(63),
     postal_code varchar(7)
 );
+
+CREATE INDEX idx_contacts_id ON contacts USING btree (id);
+CREATE INDEX idx_contacts_user_id ON contacts USING btree (user_id);
+CREATE INDEX idx_contacts_first_name ON contacts USING btree (first_name);
 ```
