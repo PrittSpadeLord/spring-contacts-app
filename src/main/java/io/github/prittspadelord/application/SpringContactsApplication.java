@@ -6,6 +6,7 @@ import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.coyote.http2.Http2Protocol;
 
 import org.springframework.core.task.VirtualThreadTaskExecutor;
 import org.springframework.web.SpringServletContainerInitializer;
@@ -23,6 +24,7 @@ public class SpringContactsApplication {
         Connector connector = tomcat.getConnector();
         connector.setPort(Integer.parseInt(System.getenv("PORT")));
         connector.getProtocolHandler().setExecutor(new VirtualThreadTaskExecutor());
+        connector.addUpgradeProtocol(new Http2Protocol());
         tomcat.setConnector(connector);
 
         Context tomcatContext = tomcat.addContext("", new File(".").getAbsolutePath());

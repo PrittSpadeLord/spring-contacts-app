@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/* NOTE! GET RID OF THIS ENTIRELY AFTER IMPLEMETING THIS WITHIN NGINX LAYER OF THE BROWSER APP */
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
