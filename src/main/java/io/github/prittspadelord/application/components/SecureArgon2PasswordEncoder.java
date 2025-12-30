@@ -89,7 +89,7 @@ public class SecureArgon2PasswordEncoder {
     private String encode(byte[] hash, Argon2Parameters parameters) throws IllegalArgumentException {
 
         Base64.Encoder b64encoder = Base64.getEncoder().withoutPadding();
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder(); //replace this with a CharBuffer implementation!
 
         String type = switch (parameters.getType()) {
             case Argon2Parameters.ARGON2_d -> "$argon2d";

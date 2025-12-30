@@ -10,7 +10,7 @@ COPY .mvn .mvn/
 
 RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 
-# Generate builder
+# Generate tester
 FROM base AS tester
 
 COPY src src
