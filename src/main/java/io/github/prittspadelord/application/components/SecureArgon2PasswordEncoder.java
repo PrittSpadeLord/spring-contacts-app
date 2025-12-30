@@ -36,7 +36,7 @@ public class SecureArgon2PasswordEncoder {
             generator.init(params);
             generator.generateBytes(rawPassword, hash);
 
-            return this.encode(hash, params);
+            return this.constructArgon2Hash(hash, params);
         }
         finally {
             Arrays.fill(hash, (byte) 0);
@@ -86,10 +86,10 @@ public class SecureArgon2PasswordEncoder {
         }
     }
 
-    private String encode(byte[] hash, Argon2Parameters parameters) throws IllegalArgumentException {
+    private String constructArgon2Hash(byte[] hash, Argon2Parameters parameters) throws IllegalArgumentException {
 
         Base64.Encoder b64encoder = Base64.getEncoder().withoutPadding();
-        StringBuilder stringBuilder = new StringBuilder(); //replace this with a CharBuffer implementation!
+        StringBuilder stringBuilder = new StringBuilder();
 
         String type = switch (parameters.getType()) {
             case Argon2Parameters.ARGON2_d -> "$argon2d";
