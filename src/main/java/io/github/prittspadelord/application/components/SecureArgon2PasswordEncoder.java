@@ -80,11 +80,8 @@ public class SecureArgon2PasswordEncoder {
         }
         finally {
             if(actualHash != null) Arrays.fill(actualHash, (byte) 0);
-
             if(expectedHash != null)  Arrays.fill(expectedHash, (byte) 0);
-
             if(rawPassword != null) Arrays.fill(rawPassword, '\0');
-
             if(salt != null) Arrays.fill(salt, (byte) 0);
         }
     }
