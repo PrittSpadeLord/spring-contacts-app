@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -85,7 +86,7 @@ public class UserDao {
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", user.getId())
-            .addValue("authorization_level", user.getAuthorizationLevel())
+            .addValue("authorization_level", user.getAuthorizationLevel().name())
             .addValue("recent_password_update_timestamp", user.getRecentPasswordUpdateTimestamp())
             .addValue("username", user.getUsername())
             .addValue("nickname", user.getNickname())
