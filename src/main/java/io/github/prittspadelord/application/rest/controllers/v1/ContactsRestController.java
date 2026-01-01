@@ -4,6 +4,7 @@ import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.rest.models.CreateContactRequest;
 import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
+import io.github.prittspadelord.application.rest.models.ListContactsResponse;
 import io.github.prittspadelord.application.services.ContactService;
 import io.github.prittspadelord.application.support.AuthorizationLevel;
 
@@ -36,7 +37,13 @@ public class ContactsRestController {
 
     @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contact")
-    public GetContactResponse handleGetContact(@RequestParam("contactId") long id) {
-        return this.contactService.getContact(id);
+    public GetContactResponse handleGetContact(@RequestParam("contactId") long id, HttpServletRequest request) {
+        return this.contactService.getContact(id, request);
+    }
+
+    @Authorized(AuthorizationLevel.USER)
+    @GetMapping("/contacts")
+    public ListContactsResponse handleListContact(HttpServletRequest request) {
+        return this.contactService.listContacts(request);
     }
 }

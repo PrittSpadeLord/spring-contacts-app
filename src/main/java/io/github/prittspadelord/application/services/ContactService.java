@@ -7,6 +7,8 @@ import io.github.prittspadelord.application.rest.models.CreateContactRequest;
 import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
+import io.github.prittspadelord.application.rest.models.ListContactsResponse;
+import io.github.prittspadelord.application.services.support.ResourceAccessException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -61,13 +64,31 @@ public class ContactService {
         return createContactResponse;
     }
 
-    public GetContactResponse getContact(long id) {
-        Contact contact = this.contactDao.getContact(id);
+    public GetContactResponse getContact(long contactId, HttpServletRequest request) {
+
+        Contact contact = this.contactDao.getContact(contactId);
+        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+
+        if(contact.getUserId() != userId) {
+            throw new ResourceAccessException("User with id " + userId + " is forbidden from accessing the contact with id " + contactId + " that belongs to user of id " + contact.getUserId());
+        }
 
         GetContactResponse getContactResponse = new GetContactResponse();
         getContactResponse.setTimestamp(Instant.now());
         getContactResponse.setContact(contact);
 
         return getContactResponse;
+    }
+
+    public ListContactsResponse listContacts(HttpServletRequest request) {
+        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+
+        List<Contact> contacts = this.contactDao.listContacts(userId);
+
+        ListContactsResponse listContactsResponse = new ListContactsResponse();
+        listContactsResponse.setTimestamp(Instant.now());
+        listContactsResponse.setContacts(contacts);
+
+        return listContactsResponse;
     }
 }
