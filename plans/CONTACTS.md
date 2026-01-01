@@ -15,7 +15,7 @@ CREATE TYPE name_prefix AS enum (
 CREATE TABLE contacts (
     id bigint NOT NULL PRIMARY KEY,
     user_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    name_prefix name_prefix NOT NULL,
+    name_prefix name_prefix,
     first_name varchar(63),
     last_name varchar(63),
     home_phone_number_country_code varchar(7),

@@ -55,7 +55,7 @@ public class ContactsAppRestControllerV1 {
 
     @Authorized(AuthorizationLevel.USER)
     @PostMapping("/createContact")
-    public CreateContactResponse handleContactCreation(@Valid CreateContactRequest createContactRequest, HttpServletRequest request) {
+    public CreateContactResponse handleContactCreation(@Valid @RequestBody CreateContactRequest createContactRequest, HttpServletRequest request) {
         return this.contactService.createContact(createContactRequest, request);
     }
 

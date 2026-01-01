@@ -7,11 +7,11 @@ import io.github.prittspadelord.application.rest.models.CreateContactRequest;
 import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.jwt.Jwt;
+
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -27,14 +27,14 @@ public class ContactService {
 
     public CreateContactResponse createContact(CreateContactRequest createContactRequest, HttpServletRequest request) {
 
-        Jwt jwt = jwtDecoder.decode(request.getHeader("Authorization"));
+        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
 
         Instant now = Instant.now();
         long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
 
         Contact contact = new Contact();
         contact.setId(snowflakeId);
-        contact.setUserId(Long.parseLong(jwt.getAudience().getFirst()));
+        contact.setUserId(userId);
         contact.setNamePrefix(createContactRequest.getNamePrefix());
         contact.setFirstName(createContactRequest.getFirstName());
         contact.setLastName(createContactRequest.getLastName());
@@ -53,6 +53,10 @@ public class ContactService {
 
         contactDao.addContact(contact);
 
-        return null;
+        CreateContactResponse createContactResponse = new CreateContactResponse();
+        createContactResponse.setId(String.valueOf(snowflakeId));
+        createContactResponse.setTimestamp(now);
+
+        return createContactResponse;
     }
 }
