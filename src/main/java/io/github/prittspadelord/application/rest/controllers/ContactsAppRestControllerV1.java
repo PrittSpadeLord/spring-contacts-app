@@ -1,8 +1,11 @@
 package io.github.prittspadelord.application.rest.controllers;
 
 import io.github.prittspadelord.application.rest.annotations.Authorized;
+import io.github.prittspadelord.application.rest.models.CreateContactRequest;
+import io.github.prittspadelord.application.services.ContactService;
 import io.github.prittspadelord.application.support.AuthorizationLevel;
 import io.github.prittspadelord.application.rest.models.CheckUsernameExistsResponse;
+import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 import io.github.prittspadelord.application.rest.models.LoginUserRequest;
 import io.github.prittspadelord.application.rest.models.LoginUserResponse;
 import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
@@ -26,7 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class ContactsAppRestControllerV1 {
+
+    private final ContactService contactService;
     private final UserService userService;
+
+    // Registering and Logging in
 
     @GetMapping("/checkUsername")
     public CheckUsernameExistsResponse handleUsernameCheck(@RequestParam("username") String username) {
@@ -42,6 +49,16 @@ public class ContactsAppRestControllerV1 {
     public RegisterUserResponse handleAccountRegistration(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         return this.userService.createUser(registerUserRequest);
     }
+
+    // Contacts CRUD
+
+    @Authorized(AuthorizationLevel.USER)
+    @PostMapping("/createContact")
+    public CreateContactResponse handleContactCreation(@Valid CreateContactRequest createContactRequest) {
+        return this.contactService.createContact(createContactRequest);
+    }
+
+    // Misc
 
     @Authorized(AuthorizationLevel.ADMIN)
     @GetMapping("/temp")

@@ -11,10 +11,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /* NOTE! GET RID OF THIS ENTIRELY AFTER IMPLEMETING THIS WITHIN NGINX LAYER OF THE BROWSER APP */
+
+// but! can we safely do this, since CORS is not safe enough
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +28,7 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
     private final BucketFactory bucketFactory;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse ignoredResponse, Object ignoredHandler) {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse ignoredResponse, @NonNull Object ignoredHandler) {
 
         Bucket bucket = bucketFactory.getBucket(request.getRemoteAddr());
 

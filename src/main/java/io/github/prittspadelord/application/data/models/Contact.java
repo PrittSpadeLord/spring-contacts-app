@@ -19,22 +19,22 @@ public class Contact {
     private long userId;
 
     private NamePrefix namePrefix;
-    @NotNull @Pattern(regexp = "[a-zA-Z]+") private String firstName; //more discussion on whether to allow accented characters or not
-    @Pattern(regexp = "[a-zA-Z]+") private String lastName; //plus where do we draw the line?
+    @NotNull private String firstName;
+    private String lastName;
 
-    @Pattern(regexp = "[0-9]{1,4}") private String homePhoneNumberCountryCode;
-    @Pattern(regexp = "[0-9]{10}") private String homePhoneNumber; //google phone validator something
+    private String homePhoneNumberCountryCode;
+    private String homePhoneNumber;
 
-    @Pattern(regexp = "[0-9]{1,4}") private String mobilePhoneNumberCountryCode;
-    @Pattern(regexp = "[0-9]{10}") private String mobilePhoneNumber;
+    private String mobilePhoneNumberCountryCode;
+    private String mobilePhoneNumber;
 
-    @Email private String personalEmailAddress;
-    @Email private String workEmailAddress;
+    private String personalEmailAddress;
+    private String workEmailAddress;
 
-    @Pattern(regexp = "[a-zA-Z ,0-9]+") private String addressLine1;
-    @Pattern(regexp = "[a-zA-Z ,0-9]+") private String addressLine2;
-    @Pattern(regexp = "[a-zA-Z ]+") private String city;
-    @Pattern(regexp = "[a-zA-Z ]+") private String province;
-    @Pattern(regexp = "[a-zA-Z ]+") private String country;
-    @Pattern(regexp = "[0-9]{6}") private String postalCode; //only works in india?
+    private String addressLine1;
+    private String addressLine2;
+    private String city;
+    private String province;
+    private String country;
+    private String postalCode;
 }
