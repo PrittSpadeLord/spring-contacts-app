@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -128,6 +129,15 @@ public class ContactDao {
         RowMapper<Contact> rowMapper = new BeanPropertyRowMapper<>(Contact.class);
 
         return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
+    }
+
+    public long getUserId(long id) {
+        String sql = "SELECT user_id FROM contacts WHERE id = :id";
+
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+            .addValue("id", id);
+
+        return Objects.requireNonNull(this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Long.class));
     }
 
     public List<Contact> listContacts(long userId) {

@@ -3,6 +3,7 @@ package io.github.prittspadelord.application.rest.interceptors;
 import io.github.prittspadelord.application.data.models.User;
 import io.github.prittspadelord.application.rest.UnauthorizedException;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
+import io.github.prittspadelord.application.services.ContactService;
 import io.github.prittspadelord.application.support.AuthorizationLevel;
 import io.github.prittspadelord.application.services.UserService;
 
@@ -27,8 +28,10 @@ import java.util.Objects;
 @Slf4j
 public class AuthorizationInterceptor implements HandlerInterceptor {
 
-    private final JwtDecoder jwtDecoder;
+    private final ContactService contactService;
     private final UserService userService;
+
+    private final JwtDecoder jwtDecoder;
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {

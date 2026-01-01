@@ -3,6 +3,7 @@ package io.github.prittspadelord.application.rest.controllers.v1;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.rest.models.CreateContactRequest;
 import io.github.prittspadelord.application.rest.models.CreateContactResponse;
+import io.github.prittspadelord.application.rest.models.DeleteContactResponse;
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
 import io.github.prittspadelord.application.rest.models.ListContactsResponse;
 import io.github.prittspadelord.application.services.ContactService;
@@ -36,9 +37,15 @@ public class ContactsRestController {
     }
 
     @Authorized(AuthorizationLevel.USER)
+    @PostMapping("/deleteContact")
+    public DeleteContactResponse handleContactDeletion(@RequestParam("id") long contactId, HttpServletRequest request) {
+        return this.contactService.deleteContact(contactId, request);
+    }
+
+    @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contact")
-    public GetContactResponse handleGetContact(@RequestParam("contactId") long id, HttpServletRequest request) {
-        return this.contactService.getContact(id, request);
+    public GetContactResponse handleGetContact(@RequestParam("id") long contactId, HttpServletRequest request) {
+        return this.contactService.getContact(contactId, request);
     }
 
     @Authorized(AuthorizationLevel.USER)

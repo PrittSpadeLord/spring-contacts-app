@@ -6,6 +6,7 @@ import io.github.prittspadelord.application.data.models.Contact;
 import io.github.prittspadelord.application.rest.models.CreateContactRequest;
 import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 
+import io.github.prittspadelord.application.rest.models.DeleteContactResponse;
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
 import io.github.prittspadelord.application.rest.models.ListContactsResponse;
 import io.github.prittspadelord.application.services.support.ResourceAccessException;
@@ -62,6 +63,12 @@ public class ContactService {
         createContactResponse.setTimestamp(now);
 
         return createContactResponse;
+    }
+
+    public DeleteContactResponse deleteContact(long contactId, HttpServletRequest request) {
+        //wip
+
+        return null;
     }
 
     public GetContactResponse getContact(long contactId, HttpServletRequest request) {

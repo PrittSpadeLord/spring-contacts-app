@@ -5,3 +5,5 @@ public class ResourceAccessException extends RuntimeException {
         super(message);
     }
 }
+
+//This should be deleted in favor of UnauthorizedException handling it
