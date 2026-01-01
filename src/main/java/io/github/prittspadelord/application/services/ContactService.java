@@ -6,6 +6,7 @@ import io.github.prittspadelord.application.data.models.Contact;
 import io.github.prittspadelord.application.rest.models.CreateContactRequest;
 import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 
+import io.github.prittspadelord.application.rest.models.GetContactResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,15 @@ public class ContactService {
         createContactResponse.setTimestamp(now);
 
         return createContactResponse;
+    }
+
+    public GetContactResponse getContact(long id) {
+        Contact contact = this.contactDao.getContact(id);
+
+        GetContactResponse getContactResponse = new GetContactResponse();
+        getContactResponse.setTimestamp(Instant.now());
+        getContactResponse.setContact(contact);
+
+        return getContactResponse;
     }
 }
