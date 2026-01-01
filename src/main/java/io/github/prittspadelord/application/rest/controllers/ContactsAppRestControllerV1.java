@@ -12,6 +12,7 @@ import io.github.prittspadelord.application.rest.models.RegisterUserRequest;
 import io.github.prittspadelord.application.rest.models.RegisterUserResponse;
 import io.github.prittspadelord.application.services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
@@ -54,8 +55,8 @@ public class ContactsAppRestControllerV1 {
 
     @Authorized(AuthorizationLevel.USER)
     @PostMapping("/createContact")
-    public CreateContactResponse handleContactCreation(@Valid CreateContactRequest createContactRequest) {
-        return this.contactService.createContact(createContactRequest);
+    public CreateContactResponse handleContactCreation(@Valid CreateContactRequest createContactRequest, HttpServletRequest request) {
+        return this.contactService.createContact(createContactRequest, request);
     }
 
     // Misc
