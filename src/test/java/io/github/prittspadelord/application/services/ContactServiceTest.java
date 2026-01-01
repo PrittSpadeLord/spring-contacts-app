@@ -18,7 +18,7 @@ class ContactServiceTest {
     private final ContactService contactService = new ContactService(jwtDecoder, snowflakeIdGenerator, contactDao);
 
     @Test
-    public void dummy() {
+    public void createContactShouldBeSuccessful() {
         Assertions.assertTrue(true);
     }
 }

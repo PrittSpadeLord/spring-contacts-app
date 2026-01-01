@@ -17,7 +17,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import tools.jackson.databind.json.JsonMapper;
 
-@ComponentScan(basePackages = "io.github.prittspadelord.application.rest.controllers")
+@ComponentScan(basePackages = {
+    "io.github.prittspadelord.application.rest.controllers.v1",
+    "io.github.prittspadelord.application.rest.controllers.v2"
+})
 @Configuration
 @EnableWebMvc
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package io.github.prittspadelord.application.rest.controllers;
+package io.github.prittspadelord.application.rest.controllers.v1;
 
 import io.github.prittspadelord.application.rest.RateLimitException;
 import io.github.prittspadelord.application.rest.UnauthorizedException;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestControllerAdvice
 @Slf4j
-public class ContactsAppRestControllerV1Advice {
+public class ApplicationRestControllerAdvice {
 
     @ExceptionHandler(BadJwtException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
