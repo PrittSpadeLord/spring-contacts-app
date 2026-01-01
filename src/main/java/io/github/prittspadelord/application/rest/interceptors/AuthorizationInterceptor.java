@@ -1,7 +1,9 @@
 package io.github.prittspadelord.application.rest.interceptors;
 
 import io.github.prittspadelord.application.data.models.User;
-import io.github.prittspadelord.application.rest.UnauthorizedException;
+import io.github.prittspadelord.application.rest.InsufficientAuthorizationException;
+import io.github.prittspadelord.application.rest.JwtRevokedException;
+import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
 import io.github.prittspadelord.application.services.ContactService;
 import io.github.prittspadelord.application.support.AuthorizationLevel;
@@ -49,12 +51,20 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         User user = userService.getUserFromId(Long.parseLong(jwt.getSubject()));
 
         if(!jwt.getClaim("pst").equals(String.valueOf(user.getRecentPasswordUpdateTimestamp()))) {
-            throw new UnauthorizedException("Provided token has been revoked!");
+            throw new JwtRevokedException("JWT with pst of", jwt.getClaim("pst"), "can no longer be used to access resource for user who's password was reset on timestamp ", user.getRecentPasswordUpdateTimestamp());
         }
 
         if(user.getAuthorizationLevel() == AuthorizationLevel.ADMIN) return true;
 
-        if(user.getAuthorizationLevel() != authorizationLevel) throw new UnauthorizedException("You do not possess the authorization level to make this request!");
+        if(user.getAuthorizationLevel() != authorizationLevel) throw new InsufficientAuthorizationException("User with id", user.getId(), "with authorization level", user.getAuthorizationLevel().name(), "was prevented from accessing endpoint reserved for" + authorizationLevel.name());
+
+        if(handlerMethod.getMethod().getName().contains("Contact")) {
+            long contactId = Long.parseLong(request.getParameter("id"));
+
+            long contactUserId = this.contactService.getUserId(contactId);
+
+            if(user.getId() != contactUserId) throw new UnauthorizedResourceAccessException("User with id", user.getId(), "is forbidden from accessing the contact with id", contactId, "that belongs to user of id", contactUserId);
+        }
 
         return true;
     }

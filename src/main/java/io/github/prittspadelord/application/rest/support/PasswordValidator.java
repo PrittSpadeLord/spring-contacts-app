@@ -17,7 +17,7 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, cha
     @Override
     public boolean isValid(char[] value, ConstraintValidatorContext context) {
         CharBuffer buffer = CharBuffer.wrap(value);
-        boolean doesMatch = this.passwordPattern.matcher(buffer).matches();
+        boolean doesMatch = PasswordValidator.passwordPattern.matcher(buffer).matches();
 
         if(!doesMatch) {
             Arrays.fill(value, '\0');

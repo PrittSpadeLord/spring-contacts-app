@@ -1,5 +1,6 @@
 package io.github.prittspadelord.application.rest.controllers.v1;
 
+import io.github.prittspadelord.application.rest.InsufficientAuthorizationException;
 import io.github.prittspadelord.application.rest.RateLimitException;
 import io.github.prittspadelord.application.rest.models.ApiErrorResponse;
 import io.github.prittspadelord.application.rest.support.ValidationErrorEnumeration;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,13 +20,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 import java.util.List;
 
+@Order(2)
 @RestControllerAdvice
 @Slf4j
 public class CommonRestControllerAdvice {
 
     @ExceptionHandler(DuplicateKeyException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiErrorResponse duplicateEntryExceptionHandler(DuplicateKeyException e, HttpServletRequest req) {
+    public ApiErrorResponse handleDuplicateKeyException(DuplicateKeyException e, HttpServletRequest req) {
         var error = new ApiErrorResponse();
         error.setStatus(HttpStatus.CONFLICT.value());
         error.setTimestamp(Instant.now());
@@ -36,9 +39,23 @@ public class CommonRestControllerAdvice {
         return error;
     }
 
+    @ExceptionHandler(InsufficientAuthorizationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrorResponse handleInsufficientAuthorizationException(InsufficientAuthorizationException e, HttpServletRequest req) {
+        var error = new ApiErrorResponse();
+        error.setStatus(HttpStatus.UNAUTHORIZED.value());
+        error.setTimestamp(Instant.now());
+        error.setErrorType(HttpStatus.UNAUTHORIZED.name());
+        error.setDescription("You do not possess the authorization level to access this endpoint!");
+        error.setAdditionalData(null);
+
+        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.UNAUTHORIZED.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrorResponse validationExceptionHandler(MethodArgumentNotValidException e, HttpServletRequest req) {
+    public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest req) {
         var error = new ApiErrorResponse();
         error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setTimestamp(Instant.now());
@@ -54,6 +71,7 @@ public class CommonRestControllerAdvice {
         return error;
     }
 
+    //nuke this later
     @ExceptionHandler(RateLimitException.class)
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
     public ApiErrorResponse rateLimitExceptionHander(RateLimitException e, HttpServletRequest req) {
@@ -72,7 +90,7 @@ public class CommonRestControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiErrorResponse genericExceptionHandler(Exception e, HttpServletRequest req) {
+    public ApiErrorResponse handleException(Exception e, HttpServletRequest req) {
         var error = new ApiErrorResponse();
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setTimestamp(Instant.now());

@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,29 +29,32 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ContactsRestController {
 
+    private final JwtDecoder jwtDecoder;
     private final ContactService contactService;
 
     @Authorized(AuthorizationLevel.USER)
     @PostMapping("/createContact")
     public CreateContactResponse handleContactCreation(@Valid @RequestBody CreateContactRequest createContactRequest, HttpServletRequest request) {
-        return this.contactService.createContact(createContactRequest, request);
+        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+        return this.contactService.createContact(createContactRequest, userId);
     }
 
     @Authorized(AuthorizationLevel.USER)
     @PostMapping("/deleteContact")
-    public DeleteContactResponse handleContactDeletion(@RequestParam("id") long contactId, HttpServletRequest request) {
-        return this.contactService.deleteContact(contactId, request);
+    public DeleteContactResponse handleContactDeletion(@RequestParam("id") long contactId) {
+        return this.contactService.deleteContact(contactId);
     }
 
     @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contact")
-    public GetContactResponse handleGetContact(@RequestParam("id") long contactId, HttpServletRequest request) {
-        return this.contactService.getContact(contactId, request);
+    public GetContactResponse handleGetContact(@RequestParam("id") long contactId) {
+        return this.contactService.getContact(contactId);
     }
 
     @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contacts")
     public ListContactsResponse handleListContact(HttpServletRequest request) {
-        return this.contactService.listContacts(request);
+        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+        return this.contactService.listContacts(userId);
     }
 }

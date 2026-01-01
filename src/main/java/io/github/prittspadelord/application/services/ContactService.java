@@ -9,7 +9,7 @@ import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 import io.github.prittspadelord.application.rest.models.DeleteContactResponse;
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
 import io.github.prittspadelord.application.rest.models.ListContactsResponse;
-import io.github.prittspadelord.application.services.support.ResourceAccessException;
+import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,7 @@ public class ContactService {
     private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final ContactDao contactDao;
 
-    public CreateContactResponse createContact(CreateContactRequest createContactRequest, HttpServletRequest request) {
-
-        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+    public CreateContactResponse createContact(CreateContactRequest createContactRequest, long userId) {
 
         Instant now = Instant.now();
         long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
@@ -65,20 +63,14 @@ public class ContactService {
         return createContactResponse;
     }
 
-    public DeleteContactResponse deleteContact(long contactId, HttpServletRequest request) {
+    public DeleteContactResponse deleteContact(long contactId) {
         //wip
 
         return null;
     }
 
-    public GetContactResponse getContact(long contactId, HttpServletRequest request) {
-
+    public GetContactResponse getContact(long contactId) {
         Contact contact = this.contactDao.getContact(contactId);
-        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
-
-        if(contact.getUserId() != userId) {
-            throw new ResourceAccessException("User with id " + userId + " is forbidden from accessing the contact with id " + contactId + " that belongs to user of id " + contact.getUserId());
-        }
 
         GetContactResponse getContactResponse = new GetContactResponse();
         getContactResponse.setTimestamp(Instant.now());
@@ -87,9 +79,11 @@ public class ContactService {
         return getContactResponse;
     }
 
-    public ListContactsResponse listContacts(HttpServletRequest request) {
-        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+    public long getUserId(long contactId) {
+        return this.contactDao.getUserId(contactId);
+    }
 
+    public ListContactsResponse listContacts(long userId) {
         List<Contact> contacts = this.contactDao.listContacts(userId);
 
         ListContactsResponse listContactsResponse = new ListContactsResponse();
