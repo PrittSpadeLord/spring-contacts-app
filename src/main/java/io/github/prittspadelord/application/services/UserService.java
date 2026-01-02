@@ -93,7 +93,7 @@ public class UserService {
             .subject(String.valueOf(user.getId()))
             .build();
 
-        Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(header, claimsSet));
+        Jwt jwt = this.jwtEncoder.encode(JwtEncoderParameters.from(header, claimsSet));
 
         LoginUserResponse loginUserResponse = new LoginUserResponse();
         loginUserResponse.setTimestamp(String.valueOf(Instant.now().toEpochMilli()));

@@ -51,7 +51,7 @@ public class SecureArgon2PasswordEncoder {
         byte[] salt = null;
 
         try {
-            Matcher matcher = argon2idHashedPasswordPattern.matcher(encodedPassword);
+            Matcher matcher = this.argon2idHashedPasswordPattern.matcher(encodedPassword);
 
             if (!matcher.find()) {
                 return false;

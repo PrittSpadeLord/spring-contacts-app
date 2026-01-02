@@ -35,7 +35,7 @@ public class ContactsRestController {
     @Authorized(AuthorizationLevel.USER)
     @PostMapping("/createContact")
     public CreateContactResponse handleContactCreation(@Valid @RequestBody CreateContactRequest createContactRequest, HttpServletRequest request) {
-        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+        long userId = Long.parseLong(this.jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
         return this.contactService.createContact(createContactRequest, userId);
     }
 
@@ -54,7 +54,7 @@ public class ContactsRestController {
     @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contacts")
     public ListContactsResponse handleListContact(HttpServletRequest request) {
-        long userId = Long.parseLong(jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+        long userId = Long.parseLong(this.jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
         return this.contactService.listContacts(userId);
     }
 }

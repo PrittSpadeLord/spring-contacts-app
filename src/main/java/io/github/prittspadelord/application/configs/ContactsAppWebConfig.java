@@ -55,6 +55,6 @@ public class ContactsAppWebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(HttpMessageConverters.ServerBuilder converters) {
-        converters.addCustomConverter(new JacksonJsonHttpMessageConverter(jsonMapper));
+        converters.addCustomConverter(new JacksonJsonHttpMessageConverter(this.jsonMapper));
     }
 }

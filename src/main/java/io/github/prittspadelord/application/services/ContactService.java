@@ -26,7 +26,6 @@ import java.util.List;
 @Slf4j
 public class ContactService {
 
-    private final JwtDecoder jwtDecoder;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final ContactDao contactDao;
 
@@ -54,7 +53,7 @@ public class ContactService {
         contact.setCountry(createContactRequest.getCountry());
         contact.setPostalCode(createContactRequest.getPostalCode());
 
-        contactDao.addContact(contact);
+        this.contactDao.addContact(contact);
 
         CreateContactResponse createContactResponse = new CreateContactResponse();
         createContactResponse.setId(String.valueOf(snowflakeId));

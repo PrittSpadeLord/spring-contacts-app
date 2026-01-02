@@ -24,7 +24,7 @@ class UserServiceTest {
     private final SnowflakeIdGenerator snowflakeIdGenerator = Mockito.mock(SnowflakeIdGenerator.class);
     private final UserDao userDao = Mockito.mock(UserDao.class);
 
-    private final UserService userService = new UserService(this.jwtEncoder, this.passwordEncoder, this.snowflakeIdGenerator, userDao);
+    private final UserService userService = new UserService(this.jwtEncoder, this.passwordEncoder, this.snowflakeIdGenerator, this.userDao);
 
     @Test
     public void checkUsernameShouldReturnFalseIfDoesntExist() {

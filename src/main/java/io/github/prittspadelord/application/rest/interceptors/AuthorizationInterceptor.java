@@ -46,9 +46,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         AuthorizationLevel authorizationLevel = Objects.requireNonNull(handlerMethod.getMethodAnnotation(Authorized.class)).value();
 
-        Jwt jwt = jwtDecoder.decode(request.getHeader("Authorization"));
+        Jwt jwt = this.jwtDecoder.decode(request.getHeader("Authorization"));
 
-        User user = userService.getUserFromId(Long.parseLong(jwt.getSubject()));
+        User user = this.userService.getUserFromId(Long.parseLong(jwt.getSubject()));
 
         if(!jwt.getClaim("pst").equals(String.valueOf(user.getRecentPasswordUpdateTimestamp()))) {
             throw new JwtRevokedException("JWT with pst of", jwt.getClaim("pst"), "can no longer be used to access resource for user who's password was reset on timestamp ", user.getRecentPasswordUpdateTimestamp());

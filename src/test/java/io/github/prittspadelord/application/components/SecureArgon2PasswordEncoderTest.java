@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.util.regex.Pattern;
 
 class SecureArgon2PasswordEncoderTest {
+
+    private static final Pattern argon2hashPatternForMemory19456 = Pattern.compile("^\\$argon2id\\$v=19\\$m=19456,t=\\d+,p=\\d+\\$[A-Za-z0-9+/]+={0,2}\\$[A-Za-z0-9+/]+={0,2}$");
+
     private final SecureArgon2PasswordEncoder secureArgon2PasswordEncoder = new SecureArgon2PasswordEncoder();
-    private final Pattern argon2hashPatternForMemory19456 = Pattern.compile("^\\$argon2id\\$v=19\\$m=19456,t=\\d+,p=\\d+\\$[A-Za-z0-9+/]+={0,2}\\$[A-Za-z0-9+/]+={0,2}$");
 
     @Test
     public void encodedPasswordShouldBeAValidArgon2Hash() {
@@ -15,7 +17,7 @@ class SecureArgon2PasswordEncoderTest {
 
         String hashedPassword = this.secureArgon2PasswordEncoder.encode(rawPassword);
 
-        Assertions.assertTrue(this.argon2hashPatternForMemory19456.matcher(hashedPassword).matches());
+        Assertions.assertTrue(SecureArgon2PasswordEncoderTest.argon2hashPatternForMemory19456.matcher(hashedPassword).matches());
     }
 
     @Test
