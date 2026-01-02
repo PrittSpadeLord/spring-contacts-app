@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 
-@Order(1)
+@Order(1) //edit this to be more semantic: 1 is meaningless
 @RestControllerAdvice
 @Slf4j
 public class ContactsRestControllerAdvice {

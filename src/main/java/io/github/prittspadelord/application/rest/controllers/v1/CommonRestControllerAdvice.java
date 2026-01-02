@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 import java.util.List;
 
-@Order(2)
+@Order(2) //edit this to be more semantic: 2 is meaningless
 @RestControllerAdvice
 @Slf4j
 public class CommonRestControllerAdvice {
