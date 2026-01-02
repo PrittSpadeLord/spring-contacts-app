@@ -1,3 +1,138 @@
+# Introduction
+
+Hey there! :wave:
+
+Before we proceed any further, I should first clarify a few things about this project and its scope:
+
+- This project was built as a way to showcase all the things I learned in the year of 2025 regarding the Spring framework and PostgreSQL.
+
+- The choice to avoid using Spring Boot is 100% intentional: Spring Boot greatly simplifies the development of applications in practice by providing meaningful auto-configuration out of the box. However, for the purposes of learning, I decided to manually configure everything from scratch in order to truly understand the purpose behind the various configurations. In many cases, I have actually discovered that my requirement may involve a different configuration from what is provided from Spring Boot by default.
+
+- The design decisions made in this project are not meant to be practical: I do not in any point make the claim that the decisions made here constitute a reasonable path to building a Contacts application. Rather it is simply meant to explore the limits of various configurations and try to make them as secure as possible. For example, this project features a custom Jackson deserializer and Banking-grade password security (more on that later) to protect essentially zero sensitive information. If I were to make an application with practical utility in mind, I would not be making such a decision.
+
+- No part of the application has been AI-generated in any way. Every single line of code present in this project has been hand-typed and with full intent and purpose.
+
+Now that that's out of the way, without further ado, let's dive in!
+
+# Project Structure
+
+## Overview
+
+- The application is built around Spring Framework version `7.0.x` as well as Spring Security version `7.0.x`. Thus it follows that it also follows Jakarta EE 11 (and by extension Apache Tomcat 11).
+
+- Bouncy Castle is used to handle the various cryptographic operations used by our application.
+
+- Lombok greatly simplifies the boilerplate in our application, improving readability and maintainability. This project uses Lombok to:
+
+    - Generate getters and setters
+    - Generate constructors with required args (works seamlessly with Spring autowiring)
+    - Generate logging instances using SLF4J
+
+- Logging is done using SLF4J with LogBack as the implementation.
+
+- Jakarta Validation with Hibernate Validator is used for validation of user inputs.
+
+- The project is provided with a built-in maven wrapper that can handle testing and packaging. This application does not generate a "Fat JAR" when packaged, but instead a regular sized JAR is generated along with dependencies in a `lib/` directory. This decision makes sense when using Docker containers, as it ensures only our application JAR file changes between builds, taking full advantage of Docker's layer caching to build quickly.
+
+- [OWASP](https://owasp.org/)'s Maven Dependency Checker plugin checks our plugins for vulnerabilities and will not allow the packaging to proceed if the threshold exceeds acceptable limits.
+
+- **TODO:** ErrorProne and NullAway will be used to enforce JSpecify annotations, which ensures good developer experience as well as provides for future Kotlin integration, which is rapidly growing in popularity.
+
+- **TODO:** JaCoCo will be used to enforce code coverage, ensuring no part of our codebase remains untested.
+
+- Our project's `pom.xml` uses `<dependencyManagement></dependencyManagement>` tags to explicitly enforce dependency version resolution.
+
+## Web Server
+
+- The application is configured with an embedded Tomcat servlet container that uses HTTP 2 as well as JDK 21+'s virtual threads via Spring's `VirtualThreadTaskExecutor` to map every incoming HTTP request to a new virtual thread, greatly improving our application's ability to handle a large volume of requests.
+
+- The Spring `ApplicationContext`s for providing IoC for DI is configured into Tomcat's servlet context using `SpringServletContainerInitializer()` as well as a custom `ContactsAppServletInitializer`, which we shall delve into in more detail in the next section.
+
+- **TODO:** We will configure Tomcat to only listen to requests from a specific source, such as Cloudflare or Nginx. This will let us offload both our ratelimiting logic as well as SSL certificates for HTTPS away from our application.
+
+## Spring IoC and DI overview
+
+- The `ContactsAppServletInitializer` discussed earlier is actually a custom subclass of `AbstractAnnotationConfigDispatcherServletInitializer`, which is used initialize `DispatcherServlet` using our preferred configurations and beans. It uses three root configurations: `ContactsAppDatabaseConfig`, `ContactsAppRootConfig`, `ContactsAppSecurityConfig`; as well as one servlet configuration: `ContactsAppWebConfig`. Their names are self-explanatory and are used for separation of concerns.
+
+## Controllers
+
+- The incoming requests to our Web Servlet are handled at the controllers and the controller advices. We have two sets of controllers: one for handling user authentication and another for handling contacts; as well as three sets of controller advices: one low-priority common advice, and two high-propriority advices for user authentication and contact management respectively.
+
+- Handler interceptors are used to intercept incoming requests before the controllers are even allowed to access them. Currently, we have interceptors for implementing Rate limits (will be removed soon) as well as enforcing authentication/authorization. The Auth interceptor checks if a method contains the `@Authorized` annotation or not, and if so, enforces the authorization level required by the method from the user (more on that when it comes to look at Services).
+
+## JSON Handling
+
+- Jackson 3 is used by our application to handle both Serialization and Deserialization of JSON, the standard data format used in RESTful APIs.
+
+- Given that we wish to be stricter than Jackson's default configuration when it comes to data size and depth limits, we decide to provide to ourselves a custom `JsonMapper` `@Bean`.
+
+- Let us revisit an important fact in Java: `String`s are immutable. This means that any `String` object created will persist in memory until the next garbage collection cycle. This poses a security risk: raw passwords entered by the user if processed in a `String` form will persist in memory for a period of time. If any attacker were to dump the memory of the running process, it can be analyzed to expose raw passwords, a serious security risk. As such, it is imperative that only `char[]` is used for passwords and other sensitive data in this application, and they are all manually "zeroed out" by filling each array element with null or 0 character after use.
+
+- However, Jackson is the first point of contact when incoming JSON payloads are deserialized into POJOs. And the default Jackson deserializer uses `String` objects internally to perform this operation. This means that even if we continue using `char[]` in our POJOs and follow all proper precautions, the incoming requesr (with the password) has already been leaked into the memory.
+
+- Therefore, we provide our own custom `PasswordDeserializer` that implemented `ValueDeserializer<char[]>` that deserializes the data as character streams. This is then passed in using `@JsonDeserialize(using = PasswordDeserializer.class)` to our password POJO fields.
+
+## Services
+
+### User Service
+
+The `UserService` handles the business logic when it comes to...
+
+### Contacts Service
+
+WIP
+
+## Data Layer
+
+### The Database
+
+PostgreSQL WIP
+
+### Connection Pooling
+
+HikariCP WIP
+
+### Database Access Abstraction
+
+JdbcTemplate WIP
+
+## Utility Components
+
+### Password Hashing
+
+WIP
+
+### Unique ID generation
+
+- Our application generates database IDs for our users and contacts using a customized snowflake 64-bit integer. Here is how the individual 64 bits of the resultant integer are mapped:
+
+    - The first 45 most significant bits store the number of milliseconds that have passed between present moment and January 01, 2020. This ensures that data can naturally be sorted by order of creation
+    - {to fill the rest here}
+
+- This approach will ensure that no two database entries will ever have the same ID, as well as ensuring the IDs have inherent semantic information contained within them.
+
+- **TODO:** We will need to change the logic behind the other components and how they will be assigned.
+
+## Testing
+
+WIP
+
+## Deployment
+
+WIP Docker MAKE SURE TO LINK CONFIGURATION URLS HERE
+
+# Usage
+
+## Prerequisites
+
+WIP
+
+## Running the application
+
+WIP
+
+#----
+
 Currently work in progress. Future updates to this readme will mention the project's scope and purpose.
 
 Docker compose has been set up!
