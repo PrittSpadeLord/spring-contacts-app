@@ -6,6 +6,8 @@ import io.github.prittspadelord.application.rest.models.CreateContactResponse;
 import io.github.prittspadelord.application.rest.models.DeleteContactResponse;
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
 import io.github.prittspadelord.application.rest.models.ListContactsResponse;
+import io.github.prittspadelord.application.rest.models.UpdateContactRequest;
+import io.github.prittspadelord.application.rest.models.UpdateContactResponse;
 import io.github.prittspadelord.application.services.ContactService;
 import io.github.prittspadelord.application.support.AuthorizationLevel;
 
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,5 +59,12 @@ public class ContactsRestController {
     public ListContactsResponse handleListContact(HttpServletRequest request) {
         long userId = Long.parseLong(this.jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
         return this.contactService.listContacts(userId);
+    }
+
+    @Authorized(AuthorizationLevel.USER)
+    @PutMapping("/updateContact")
+    public UpdateContactResponse handleUpdateContact(@RequestParam("id") long contactId, @Valid @RequestBody UpdateContactRequest updateContactRequest, HttpServletRequest request) {
+        long userId = Long.parseLong(this.jwtDecoder.decode(request.getHeader("Authorization")).getSubject());
+        return this.contactService.updateContactResponse(updateContactRequest, contactId, userId);
     }
 }

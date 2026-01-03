@@ -10,6 +10,8 @@ import io.github.prittspadelord.application.rest.models.DeleteContactResponse;
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
 import io.github.prittspadelord.application.rest.models.ListContactsResponse;
 import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
+import io.github.prittspadelord.application.rest.models.UpdateContactRequest;
+import io.github.prittspadelord.application.rest.models.UpdateContactResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -90,5 +92,33 @@ public class ContactService {
         listContactsResponse.setContacts(contacts);
 
         return listContactsResponse;
+    }
+
+    public UpdateContactResponse updateContactResponse(UpdateContactRequest updateContactRequest, long contactId, long userId) {
+
+        Contact contact = new Contact();
+        contact.setUserId(userId);
+        contact.setNamePrefix(updateContactRequest.getNamePrefix());
+        contact.setFirstName(updateContactRequest.getFirstName());
+        contact.setLastName(updateContactRequest.getLastName());
+        contact.setHomePhoneNumberCountryCode(updateContactRequest.getHomePhoneNumberCountryCode());
+        contact.setHomePhoneNumber(updateContactRequest.getHomePhoneNumber());
+        contact.setMobilePhoneNumberCountryCode(updateContactRequest.getMobilePhoneNumberCountryCode());
+        contact.setMobilePhoneNumber(updateContactRequest.getMobilePhoneNumber());
+        contact.setPersonalEmailAddress(updateContactRequest.getPersonalEmailAddress());
+        contact.setWorkEmailAddress(updateContactRequest.getWorkEmailAddress());
+        contact.setAddressLine1(updateContactRequest.getAddressLine1());
+        contact.setAddressLine2(updateContactRequest.getAddressLine2());
+        contact.setCity(updateContactRequest.getCity());
+        contact.setProvince(updateContactRequest.getProvince());
+        contact.setCountry(updateContactRequest.getCountry());
+        contact.setPostalCode(updateContactRequest.getPostalCode());
+
+        this.contactDao.updateContact(contactId, contact);
+
+        UpdateContactResponse updateContactResponse = new UpdateContactResponse();
+        updateContactResponse.setTimestamp(Instant.now());
+
+        return updateContactResponse;
     }
 }

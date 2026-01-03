@@ -33,6 +33,10 @@ public class ValidationErrorEnumeration {
             return "Must only contain characters on the QWERTY English keyboard";
         }
 
+        if("must match \"[a-zA-Z]+\"".equals(defaultMessage)) {
+            return "Must only contain characters from the english alphabet";
+        }
+
         return "Unspecified error";
     }
 }

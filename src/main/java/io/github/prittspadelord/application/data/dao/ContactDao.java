@@ -196,7 +196,7 @@ public class ContactDao {
             """;
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-            .addValue("id", newContact.getId())
+            .addValue("id", id)
             .addValue("user_id", newContact.getUserId())
             .addValue("name_prefix", newContact.getNamePrefix() != null ? newContact.getNamePrefix().name() : null)
             .addValue("first_name", newContact.getFirstName())
