@@ -1,0 +1,19 @@
+UPDATE contacts
+SET
+    user_id = :user_id,
+    name_prefix = :name_prefix::name_prefix,
+    first_name = :first_name,
+    last_name = :last_name,
+    home_phone_number_country_code = :home_phone_number_country_code,
+    home_phone_number = :home_phone_number,
+    mobile_phone_number_country_code = :mobile_phone_number_country_code,
+    mobile_phone_number = :mobile_phone_number,
+    personal_email_address = :personal_email_address,
+    work_email_address = :work_email_address,
+    address_line1 = :address_line1,
+    address_line2 = :address_line2,
+    city = :city,
+    province = :province,
+    country = :country,
+    postal_code = :postal_code
+WHERE id = :id
