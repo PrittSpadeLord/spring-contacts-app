@@ -5,19 +5,15 @@ import io.github.prittspadelord.application.data.dao.ContactDao;
 import io.github.prittspadelord.application.data.models.Contact;
 import io.github.prittspadelord.application.rest.models.CreateContactRequest;
 import io.github.prittspadelord.application.rest.models.CreateContactResponse;
-
 import io.github.prittspadelord.application.rest.models.DeleteContactResponse;
 import io.github.prittspadelord.application.rest.models.GetContactResponse;
 import io.github.prittspadelord.application.rest.models.ListContactsResponse;
-import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
 import io.github.prittspadelord.application.rest.models.UpdateContactRequest;
 import io.github.prittspadelord.application.rest.models.UpdateContactResponse;
-import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -55,7 +51,7 @@ public class ContactService {
         contact.setCountry(createContactRequest.getCountry());
         contact.setPostalCode(createContactRequest.getPostalCode());
 
-        this.contactDao.addContact(contact);
+        this.contactDao.addContact(contact, userId);
 
         CreateContactResponse createContactResponse = new CreateContactResponse();
         createContactResponse.setId(String.valueOf(snowflakeId));
@@ -64,24 +60,21 @@ public class ContactService {
         return createContactResponse;
     }
 
-    public DeleteContactResponse deleteContact(long contactId) {
+    public DeleteContactResponse deleteContact(long contactId, long userId) {
         //wip
+        //this.contactDao.deleteContact(contactId, userId);
 
         return null;
     }
 
-    public GetContactResponse getContact(long contactId) {
-        Contact contact = this.contactDao.getContact(contactId);
+    public GetContactResponse getContact(long contactId, long userId) {
+        Contact contact = this.contactDao.getContact(contactId, userId);
 
         GetContactResponse getContactResponse = new GetContactResponse();
         getContactResponse.setTimestamp(Instant.now());
         getContactResponse.setContact(contact);
 
         return getContactResponse;
-    }
-
-    public long getUserId(long contactId) {
-        return this.contactDao.getUserId(contactId);
     }
 
     public ListContactsResponse listContacts(long userId) {
@@ -114,7 +107,7 @@ public class ContactService {
         contact.setCountry(updateContactRequest.getCountry());
         contact.setPostalCode(updateContactRequest.getPostalCode());
 
-        this.contactDao.updateContact(contactId, contact);
+        this.contactDao.updateContact(contactId, userId, contact);
 
         UpdateContactResponse updateContactResponse = new UpdateContactResponse();
         updateContactResponse.setTimestamp(Instant.now());

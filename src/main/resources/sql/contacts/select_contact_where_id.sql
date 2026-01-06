@@ -17,4 +17,4 @@ SELECT
     country,
     postal_code
 FROM contacts
-WHERE id = :id
+WHERE id = :id AND user_id = :user_id

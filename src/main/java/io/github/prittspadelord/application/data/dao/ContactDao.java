@@ -26,12 +26,12 @@ public class ContactDao {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public void addContact(Contact contact) {
+    public void addContact(Contact contact, long userId) {
         String sql = this.sqlFromFile("insert_into_contacts.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", contact.getId())
-            .addValue("user_id", contact.getUserId())
+            .addValue("user_id", userId)
             .addValue("name_prefix", contact.getNamePrefix() != null ? contact.getNamePrefix().name() : null)
             .addValue("first_name", contact.getFirstName())
             .addValue("last_name", contact.getLastName())
@@ -65,24 +65,16 @@ public class ContactDao {
         log.info("Deleted contact with id {} for user with id {}, with {} rows affected", id, userId, rowsAffected);
     }
 
-    public Contact getContact(long id) {
+    public Contact getContact(long id, long userId) {
         String sql = this.sqlFromFile("select_contact_where_id.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-            .addValue("id", id);
+            .addValue("id", id)
+            .addValue("user_id", userId);
 
         RowMapper<Contact> rowMapper = new BeanPropertyRowMapper<>(Contact.class);
 
         return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
-    }
-
-    public long getUserId(long id) {
-        String sql = this.sqlFromFile("select_userid_where_id.sql");
-
-        SqlParameterSource parameterSource = new MapSqlParameterSource()
-            .addValue("id", id);
-
-        return Objects.requireNonNull(this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Long.class));
     }
 
     public List<Contact> listContacts(long userId) {
@@ -96,7 +88,7 @@ public class ContactDao {
         return this.namedParameterJdbcTemplate.queryForStream(sql, parameterSource, rowMapper).toList();
     }
 
-    public void updateContact(long id, Contact newContact) {
+    public void updateContact(long id, long userId, Contact newContact) {
         String sql = this.sqlFromFile("update_contact_where_id.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
