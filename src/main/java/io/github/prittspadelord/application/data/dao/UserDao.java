@@ -1,8 +1,8 @@
 package io.github.prittspadelord.application.data.dao;
 
 import io.github.prittspadelord.application.data.models.User;
-
 import io.github.prittspadelord.application.support.AuthorizationLevel;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

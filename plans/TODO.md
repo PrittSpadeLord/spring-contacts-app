@@ -1,5 +1,5 @@
-2. Move sensitive data into a properties file and create a template properties file
-3. See if we can improve the performance of the user authentication by reducing the delay further
+1. Move sensitive data into a properties file and create a template properties file
+2. See if we can improve the performance of the user authentication by reducing the delay further
 3. Write tests for Contacts
 4. Research on how to test for controllers and other classes. Also research on how we can incorporate IoC in tests instead of manually initializing them.
 5. Write tests for Logging in Functionality, and make sure non-existent username case is handled
