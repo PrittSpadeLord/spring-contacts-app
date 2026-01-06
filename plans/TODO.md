@@ -1,4 +1,4 @@
-1. Replace the raw SQL in `src/main/java/.../data/dao` with the sqls in `src/main/resources`
+1. There is significant delay in database queries, perhaps due to querying during the auth checks. This must be addressed, perhaps by using an Object to store the value after being passed.
 2. Move sensitive data into a properties file and create a template properties file
 3. Write tests for Contacts
 4. Research on how to test for controllers and other classes. Also research on how we can incorporate IoC in tests instead of manually initializing them.

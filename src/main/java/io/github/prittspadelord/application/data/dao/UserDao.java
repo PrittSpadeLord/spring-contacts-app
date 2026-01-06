@@ -12,6 +12,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Objects;
+
 @Repository
 @RequiredArgsConstructor
 @Slf4j
@@ -20,7 +26,7 @@ public class UserDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public boolean checkUsername(String username) {
-        String sql = "SELECT count(id) FROM users WHERE username = :username";
+        String sql = this.sqlFromFile("select_idcount_where_username.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("username", username);
@@ -31,12 +37,7 @@ public class UserDao {
     }
 
     public User getUserFromId(long id) {
-        String sql = """
-            SELECT
-                id, authorization_level, recent_password_update_timestamp, username, nickname, hashed_password
-            FROM users
-            WHERE id = :id
-            """;
+        String sql = this.sqlFromFile("select_user_where_id.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("id", id);
@@ -47,12 +48,7 @@ public class UserDao {
     }
 
     public User getUserFromUsername(String username) {
-        String sql = """
-            SELECT
-                id, authorization_level, recent_password_update_timestamp, username, nickname, hashed_password
-            FROM users
-            WHERE username = :username
-            """;
+        String sql = this.sqlFromFile("select_user_where_username.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("username", username);
@@ -63,25 +59,7 @@ public class UserDao {
     }
 
     public void insertUser(User user) {
-
-        String sql = """
-            INSERT INTO users (
-                id,
-                authorization_level,
-                recent_password_update_timestamp,
-                username,
-                nickname,
-                hashed_password
-            )
-            VALUES (
-                :id,
-                :authorization_level::authorization_level,
-                :recent_password_update_timestamp,
-                :username,
-                :nickname,
-                :hashed_password
-            )
-            """;
+        String sql = this.sqlFromFile("insert_into_users.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", user.getId())
@@ -94,5 +72,27 @@ public class UserDao {
         int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 
         log.info("Inserted user with id {} with {} rows affected", user.getId(), rowsAffected);
+    }
+
+    private String sqlFromFile(String fileUrlString) {
+        InputStream sqlStream = Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("sql/users/" + fileUrlString));
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(sqlStream));
+
+        StringBuilder sb = new StringBuilder();
+
+        int character;
+
+        try {
+            while((character = reader.read()) != -1) {
+                sb.append((char) character);
+            }
+
+            return sb.toString();
+        }
+        catch(IOException e) {
+            log.error("Critical failure (edit this later)");
+            throw new RuntimeException(e);
+        }
     }
 }

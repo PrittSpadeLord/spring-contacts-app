@@ -12,6 +12,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,45 +27,7 @@ public class ContactDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public void addContact(Contact contact) {
-        String sql = """
-            INSERT INTO contacts (
-                id,
-                user_id,
-                name_prefix,
-                first_name,
-                last_name,
-                home_phone_number_country_code,
-                home_phone_number,
-                mobile_phone_number_country_code,
-                mobile_phone_number,
-                personal_email_address,
-                work_email_address,
-                address_line1,
-                address_line2,
-                city,
-                province,
-                country,
-                postal_code
-            ) VALUES (
-                :id,
-                :user_id,
-                :name_prefix::name_prefix,
-                :first_name,
-                :last_name,
-                :home_phone_number_country_code,
-                :home_phone_number,
-                :mobile_phone_number_country_code,
-                :mobile_phone_number,
-                :personal_email_address,
-                :work_email_address,
-                :address_line1,
-                :address_line2,
-                :city,
-                :province,
-                :country,
-                :postal_code
-            )
-            """;
+        String sql = this.sqlFromFile("insert_into_contacts.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", contact.getId())
@@ -88,7 +54,7 @@ public class ContactDao {
     }
 
     public void deleteContact(long id, long userId) {
-        String sql = "DELETE FROM contacts WHERE id = :id AND user_id = :user_id";
+        String sql = this.sqlFromFile("delete_where_id_and_userid.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id)
@@ -100,28 +66,7 @@ public class ContactDao {
     }
 
     public Contact getContact(long id) {
-        String sql = """
-            SELECT
-                id,
-                user_id,
-                name_prefix,
-                first_name,
-                last_name,
-                home_phone_number_country_code,
-                home_phone_number,
-                mobile_phone_number_country_code,
-                mobile_phone_number,
-                personal_email_address,
-                work_email_address,
-                address_line1,
-                address_line2,
-                city,
-                province,
-                country,
-                postal_code
-            FROM contacts
-            WHERE id = :id
-            """;
+        String sql = this.sqlFromFile("select_contact_where_id.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id);
@@ -132,7 +77,7 @@ public class ContactDao {
     }
 
     public long getUserId(long id) {
-        String sql = "SELECT user_id FROM contacts WHERE id = :id";
+        String sql = this.sqlFromFile("select_userid_where_id.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id);
@@ -141,28 +86,7 @@ public class ContactDao {
     }
 
     public List<Contact> listContacts(long userId) {
-        String sql = """
-            SELECT
-                id,
-                user_id,
-                name_prefix,
-                first_name,
-                last_name,
-                home_phone_number_country_code,
-                home_phone_number,
-                mobile_phone_number_country_code,
-                mobile_phone_number,
-                personal_email_address,
-                work_email_address,
-                address_line1,
-                address_line2,
-                city,
-                province,
-                country,
-                postal_code
-            FROM contacts
-            WHERE user_id = :user_id
-            """;
+        String sql = this.sqlFromFile("select_contacts_where_userid.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("user_id", userId);
@@ -173,27 +97,7 @@ public class ContactDao {
     }
 
     public void updateContact(long id, Contact newContact) {
-        String sql = """
-            UPDATE contacts
-            SET
-                user_id = :user_id,
-                name_prefix = :name_prefix::name_prefix,
-                first_name = :first_name,
-                last_name = :last_name,
-                home_phone_number_country_code = :home_phone_number_country_code,
-                home_phone_number = :home_phone_number,
-                mobile_phone_number_country_code = :mobile_phone_number_country_code,
-                mobile_phone_number = :mobile_phone_number,
-                personal_email_address = :personal_email_address,
-                work_email_address = :work_email_address,
-                address_line1 = :address_line1,
-                address_line2 = :address_line2,
-                city = :city,
-                province = :province,
-                country = :country,
-                postal_code = :postal_code
-            WHERE id = :id
-            """;
+        String sql = this.sqlFromFile("update_contact_where_id.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id)
@@ -217,5 +121,27 @@ public class ContactDao {
         int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
 
         log.info("Updated contact with id {} for user with id {}, with {} rows affected", newContact.getId(), newContact.getUserId(), rowsAffected);
+    }
+
+    private String sqlFromFile(String fileUrlString) {
+        InputStream sqlStream = Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("sql/contacts/" + fileUrlString));
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(sqlStream));
+
+        StringBuilder sb = new StringBuilder();
+
+        int character;
+
+        try {
+            while((character = reader.read()) != -1) {
+                sb.append((char) character);
+            }
+
+            return sb.toString();
+        }
+        catch(IOException e) {
+            log.error("Critical failure (edit this later)");
+            throw new RuntimeException(e);
+        }
     }
 }
