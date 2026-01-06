@@ -69,8 +69,12 @@ public class UserService {
         return registerUserResponse;
     }
 
-    public User getUserFromId(long id) {
-        return this.userDao.getUserFromId(id);
+    public AuthorizationLevel getAuthorizationLevelForId(long id) {
+        return this.userDao.getAuthorizationLevelForId(id);
+    }
+
+    public long getPSTForId(long id) {
+        return this.userDao.getPSTForId(id);
     }
 
     public LoginUserResponse loginUser(LoginUserRequest loginUserRequest) {

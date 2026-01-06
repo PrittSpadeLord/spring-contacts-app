@@ -2,6 +2,7 @@ package io.github.prittspadelord.application.data.dao;
 
 import io.github.prittspadelord.application.data.models.User;
 
+import io.github.prittspadelord.application.support.AuthorizationLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,15 +37,24 @@ public class UserDao {
         return count != null && count > 0;
     }
 
-    public User getUserFromId(long id) {
-        String sql = this.sqlFromFile("select_user_where_id.sql");
+    public AuthorizationLevel getAuthorizationLevelForId(long id) {
+        // in the future we will run an unlogged postgresql table query or valkey query before we call the db like this
+        String sql = this.sqlFromFile("select_auth_where_id.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("id", id);
+            .addValue("id", id);
 
-        RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, AuthorizationLevel.class);
+    }
 
-        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
+    public long getPSTForId(long id) {
+        // in the future we will run an unlogged postgresql table query or valkey query before we call the db like this
+        String sql = this.sqlFromFile("select_pst_where_id.sql");
+
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+            .addValue("id", id);
+
+        return Objects.requireNonNull(this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, Long.class));
     }
 
     public User getUserFromUsername(String username) {

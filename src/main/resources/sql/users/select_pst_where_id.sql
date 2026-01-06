@@ -1,0 +1,1 @@
+SELECT recent_password_update_timestamp FROM users WHERE id = :id
