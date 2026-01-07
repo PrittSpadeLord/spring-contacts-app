@@ -36,9 +36,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
 
-        if (!(handler instanceof HandlerMethod handlerMethod)) {
+        if(!(handler instanceof HandlerMethod handlerMethod)) {
             return true; 
         }
+
+        //if((Authorized methodAnnotation = handlerMethod.getMethodAnnotation(Authorized.class)) != null && )
 
         if(!handlerMethod.hasMethodAnnotation(Authorized.class)) return true;
 
