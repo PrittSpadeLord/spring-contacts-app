@@ -4,7 +4,7 @@ import java.util.StringJoiner;
 
 public class VarargStringMessageRuntimeException extends RuntimeException {
     public VarargStringMessageRuntimeException(Object... args) {
-        super(join(args));
+        super(VarargStringMessageRuntimeException.join(args));
     }
 
     private static String join(Object[] args) {
