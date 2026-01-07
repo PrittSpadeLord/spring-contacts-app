@@ -1,1 +1,3 @@
-SELECT user_id FROM contacts WHERE id = :id
+SELECT user_id
+FROM contacts
+WHERE id = :id

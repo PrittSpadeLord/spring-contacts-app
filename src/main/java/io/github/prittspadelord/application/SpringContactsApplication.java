@@ -38,7 +38,7 @@ public class SpringContactsApplication {
                 log.info("Gracefully shutting down the server...");
                 tomcat.stop();
                 tomcat.getServer().await();
-                deleteDirectory(new File("tomcat." + System.getenv("PORT")));
+                SpringContactsApplication.deleteDirectory(new File("tomcat." + System.getenv("PORT")));
                 log.info("Shutdown complete");
             }
             catch(LifecycleException e) {

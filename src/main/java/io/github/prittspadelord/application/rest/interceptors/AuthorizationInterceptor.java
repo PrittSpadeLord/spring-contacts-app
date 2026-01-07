@@ -47,7 +47,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Jwt jwt = this.jwtDecoder.decode(request.getHeader("Authorization"));
         long userId = Long.parseLong(jwt.getSubject());
 
-        //User user = this.userService.getUserFromId(userId);
         long recentPasswordUpdateTimestamp = this.userService.getPSTForId(userId);
 
         if(!jwt.getClaim("pst").equals(String.valueOf(recentPasswordUpdateTimestamp))) {

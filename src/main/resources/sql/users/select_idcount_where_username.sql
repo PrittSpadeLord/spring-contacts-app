@@ -1,1 +1,3 @@
-SELECT count(id) FROM users WHERE username = :username
+SELECT count(id)
+FROM users
+WHERE username = :username
