@@ -24,8 +24,8 @@ import java.util.List;
 @Slf4j
 public class ContactService {
 
-    private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final ContactDao contactDao;
+    private final SnowflakeIdGenerator snowflakeIdGenerator;
 
     public CreateContactResponse createContact(CreateContactRequest createContactRequest, long userId) {
 

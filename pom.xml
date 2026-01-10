@@ -33,7 +33,7 @@
         <maven.dependency.plugin.version>3.9.0</maven.dependency.plugin.version>
         <maven.jar.plugin.version>3.5.0</maven.jar.plugin.version>
         <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
-        <owasp.dependency.check.version>12.1.9</owasp.dependency.check.version>
+        <owasp.dependency.check.version>12.2.0</owasp.dependency.check.version>
     </properties>
 
     <dependencyManagement>
