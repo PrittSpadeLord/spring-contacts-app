@@ -54,7 +54,7 @@ public class ContactDao {
     }
 
     public Contact deleteContact(long id, long userId) {
-        String sql = this.sqlFromFile("delete_where_id_and_userid_returning.sql");
+        String sql = this.sqlFromFile("delete_contact_where_id_and_userid_returning.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id)
@@ -91,7 +91,7 @@ public class ContactDao {
     }
 
     public Contact updateContact(long id, long userId, Contact newContact) {
-        String sql = this.sqlFromFile("update_where_id_and_userid_returning.sql");
+        String sql = this.sqlFromFile("update_contact_where_id_and_userid_returning.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id)
