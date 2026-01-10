@@ -1,5 +1,7 @@
 package io.github.prittspadelord.application.rest.models;
 
+import io.github.prittspadelord.application.data.models.Contact;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,4 +13,5 @@ import java.time.Instant;
 @Setter
 public class UpdateContactResponse {
     @NonNull private Instant timestamp;
+    @NonNull private Contact contact;
 }

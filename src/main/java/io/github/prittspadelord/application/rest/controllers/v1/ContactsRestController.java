@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,7 +41,7 @@ public class ContactsRestController {
     }
 
     @Authorized(AuthorizationLevel.USER)
-    @PostMapping("/deleteContact")
+    @DeleteMapping("/deleteContact")
     public DeleteContactResponse handleContactDeletion(@RequestParam("id") long contactId, HttpServletRequest request) {
         long userId = (Long) request.getAttribute("user_id");
         return this.contactService.deleteContact(contactId, userId);

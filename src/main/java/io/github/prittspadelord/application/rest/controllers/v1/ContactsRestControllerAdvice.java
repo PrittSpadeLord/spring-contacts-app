@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,6 +21,20 @@ import java.time.Instant;
 @RestControllerAdvice
 @Slf4j
 public class ContactsRestControllerAdvice {
+
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrorResponse handleEmptyResultDataAccessException(EmptyResultDataAccessException e, HttpServletRequest req) {
+        var error = new ApiErrorResponse();
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setTimestamp(Instant.now());
+        error.setErrorType(HttpStatus.NOT_FOUND.name());
+        error.setDescription("The resource(s) you request don't exist!");
+        error.setAdditionalData(null);
+
+        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.NOT_FOUND.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
 
     @ExceptionHandler(UnauthorizedResourceAccessException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

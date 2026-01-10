@@ -61,13 +61,18 @@ public class ContactService {
     }
 
     public DeleteContactResponse deleteContact(long contactId, long userId) {
-        //wip
-        //this.contactDao.deleteContact(contactId, userId);
 
-        return null;
+        Contact deleteContact = this.contactDao.deleteContact(contactId, userId);
+
+        DeleteContactResponse deleteContactResponse = new DeleteContactResponse();
+        deleteContactResponse.setContact(deleteContact);
+        deleteContactResponse.setTimestamp(Instant.now());
+
+        return deleteContactResponse;
     }
 
     public GetContactResponse getContact(long contactId, long userId) {
+
         Contact contact = this.contactDao.getContact(contactId, userId);
 
         GetContactResponse getContactResponse = new GetContactResponse();
@@ -78,6 +83,7 @@ public class ContactService {
     }
 
     public ListContactsResponse listContacts(long userId) {
+
         List<Contact> contacts = this.contactDao.listContacts(userId);
 
         ListContactsResponse listContactsResponse = new ListContactsResponse();
@@ -107,9 +113,10 @@ public class ContactService {
         contact.setCountry(updateContactRequest.getCountry());
         contact.setPostalCode(updateContactRequest.getPostalCode());
 
-        this.contactDao.updateContact(contactId, userId, contact);
+        Contact updatedContact = this.contactDao.updateContact(contactId, userId, contact);
 
         UpdateContactResponse updateContactResponse = new UpdateContactResponse();
+        updateContactResponse.setContact(updatedContact);
         updateContactResponse.setTimestamp(Instant.now());
 
         return updateContactResponse;

@@ -53,16 +53,18 @@ public class ContactDao {
         log.info("Added contact with id {} for user with id {}, with {} rows affected", contact.getId(), contact.getUserId(), rowsAffected);
     }
 
-    public void deleteContact(long id, long userId) {
-        String sql = this.sqlFromFile("delete_where_id_and_userid.sql");
+    public Contact deleteContact(long id, long userId) {
+        String sql = this.sqlFromFile("delete_where_id_and_userid_returning.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id)
             .addValue("user_id", userId);
 
-        int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
+        RowMapper<Contact> rowMapper = new BeanPropertyRowMapper<>(Contact.class);
 
-        log.info("Deleted contact with id {} for user with id {}, with {} rows affected", id, userId, rowsAffected);
+        log.info("Deleted contact with id {} for user with id {}", id, userId);
+
+        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
     }
 
     public Contact getContact(long id, long userId) {
@@ -88,12 +90,12 @@ public class ContactDao {
         return this.namedParameterJdbcTemplate.queryForStream(sql, parameterSource, rowMapper).toList();
     }
 
-    public void updateContact(long id, long userId, Contact newContact) {
-        String sql = this.sqlFromFile("update_contact_where_id.sql");
+    public Contact updateContact(long id, long userId, Contact newContact) {
+        String sql = this.sqlFromFile("update_where_id_and_userid_returning.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
             .addValue("id", id)
-            .addValue("user_id", newContact.getUserId())
+            .addValue("user_id", userId)
             .addValue("name_prefix", newContact.getNamePrefix() != null ? newContact.getNamePrefix().name() : null)
             .addValue("first_name", newContact.getFirstName())
             .addValue("last_name", newContact.getLastName())
@@ -110,9 +112,10 @@ public class ContactDao {
             .addValue("country", newContact.getCountry())
             .addValue("postal_code", newContact.getPostalCode());
 
-        int rowsAffected = this.namedParameterJdbcTemplate.update(sql, parameterSource);
+        RowMapper<Contact> rowMapper = new BeanPropertyRowMapper<>(Contact.class);
 
-        log.info("Updated contact with id {} for user with id {}, with {} rows affected", newContact.getId(), newContact.getUserId(), rowsAffected);
+        log.info("Updated contact with id {} for user with id {}", newContact.getId(), newContact.getUserId());
+        return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
     }
 
     private String sqlFromFile(String fileUrlString) {
