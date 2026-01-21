@@ -1,5 +1,5 @@
 # Generate base
-FROM amazoncorretto:25.0.1-al2023 AS base
+FROM amazoncorretto:25-al2023 AS base
 
 WORKDIR /app
 
