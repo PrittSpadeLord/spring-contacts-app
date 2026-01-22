@@ -9,10 +9,10 @@ public class SnowflakeIdGenerator {
 
     public long generateSnowflakeId(Instant instant) {
         long timestamp = instant.toEpochMilli();
-        long machineId = Long.parseLong(System.getenv("MACHINE_ID"));
-        long workerId = 0L; //temporarily
+        long regionId = Long.parseLong(System.getenv("REGION_ID"));
+        long instanceId = Long.parseLong(System.getenv("INSTANCE_ID"));
         long incrementer = 0L; //for now, later this will be thread-safe and atomically incremented for requests within the same millisecond
 
-        return ((timestamp - 1577836800000L) << 19) + (machineId << 11) + (workerId << 3) + (incrementer);
+        return ((timestamp - 1577836800000L) << 19) + (regionId << 11) + (instanceId << 3) + (incrementer);
     }
 }

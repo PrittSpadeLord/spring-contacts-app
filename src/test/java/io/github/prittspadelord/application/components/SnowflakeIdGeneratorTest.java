@@ -19,21 +19,21 @@ public class SnowflakeIdGeneratorTest {
     }
 
     @Test
-    public void snowflakeMachineIdIsCorrect() {
+    public void snowflakeRegionIdIsCorrect() {
         Instant now = Instant.now();
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
-        long machineId = (snowflake >> 11) & 0xFFL;
+        long regionId = (snowflake >> 11) & 0xFFL;
 
-        Assertions.assertEquals(Long.parseLong(System.getenv("MACHINE_ID")), machineId);
+        Assertions.assertEquals(Long.parseLong(System.getenv("REGION_ID")), regionId);
     }
 
     @Test
-    public void snowflakeWorkerIdIsCorrect() {
+    public void snowflakeInstanceIdIsCorrect() {
         Instant now = Instant.now();
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
-        long workerId = (snowflake >> 3) & 0xFFL;
+        long instanceId = (snowflake >> 3) & 0xFFL;
 
-        Assertions.assertEquals(0L, workerId);
+        Assertions.assertEquals(Long.parseLong(System.getenv("INSTANCE_ID")), instanceId);
     }
 
     @Test
