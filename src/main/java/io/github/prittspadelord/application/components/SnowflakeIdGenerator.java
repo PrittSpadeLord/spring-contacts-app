@@ -3,16 +3,37 @@ package io.github.prittspadelord.application.components;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.concurrent.atomic.AtomicLong;
+
+/* WARNING: THIS CLASS IS UNDER DEVELOPMENT AND IS IN AN INCOMPLETE STATE. Tests on this class may fail */
 
 @Component
 public class SnowflakeIdGenerator {
 
+    public static final long EPOCH_2020 = 1577836800000L;
+
+    private final long regionId;
+    private final long instanceId;
+    private final AtomicLong previousTimestamp;
+    private final AtomicLong incrementer;
+
+    public SnowflakeIdGenerator() {
+        regionId = Long.parseLong(System.getenv("REGION_ID"));
+        instanceId = Long.parseLong(System.getenv("INSTANCE_ID"));
+        previousTimestamp = new AtomicLong(Instant.now().toEpochMilli());
+        incrementer = new AtomicLong(0L);
+    }
+
     public long generateSnowflakeId(Instant instant) {
         long timestamp = instant.toEpochMilli();
-        long regionId = Long.parseLong(System.getenv("REGION_ID"));
-        long instanceId = Long.parseLong(System.getenv("INSTANCE_ID"));
-        long incrementer = 0L; //for now, later this will be thread-safe and atomically incremented for requests within the same millisecond
+        handleIncrementer(previousTimestamp.get(), timestamp);
+        previousTimestamp.set(timestamp);
 
-        return ((timestamp - 1577836800000L) << 19) + (regionId << 11) + (instanceId << 3) + (incrementer);
+        return ((timestamp - SnowflakeIdGenerator.EPOCH_2020) << 19) + (this.regionId << 11) + (this.instanceId << 3) + (this.incrementer.get());
+    }
+
+    private void handleIncrementer(long previousTimestamp, long timeStamp) {
+        if(previousTimestamp == timeStamp) incrementer.incrementAndGet();
+        else incrementer.set(0L);
     }
 }

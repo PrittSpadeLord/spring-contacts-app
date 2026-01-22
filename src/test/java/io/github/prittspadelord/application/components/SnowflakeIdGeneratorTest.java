@@ -13,7 +13,7 @@ public class SnowflakeIdGeneratorTest {
     public void snowflakeTimestampIsCorrect() {
         Instant now = Instant.now();
         long snowflake = this.snowflakeIdGenerator.generateSnowflakeId(now);
-        long timestamp = (snowflake >> 19) + 1577836800000L;
+        long timestamp = (snowflake >> 19) + SnowflakeIdGenerator.EPOCH_2020;
 
         Assertions.assertEquals(now.toEpochMilli(), timestamp);
     }
