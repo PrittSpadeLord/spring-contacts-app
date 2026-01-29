@@ -9,9 +9,10 @@ services:
       - DB_PASSWORD
       - DB_URL
       - DB_USERNAME
-      - MACHINE_ID
+      - INSTANCE_ID
       - NVD_API_KEY
       - PORT
+      - REGION_ID
     ports:
       - "8080:8080"
     extra_hosts:

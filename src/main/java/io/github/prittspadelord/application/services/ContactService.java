@@ -82,9 +82,9 @@ public class ContactService {
         return getContactResponse;
     }
 
-    public ListContactsResponse listContacts(long userId) {
+    public ListContactsResponse listContacts(long userId, int limit, int offset) {
 
-        List<Contact> contacts = this.contactDao.listContacts(userId);
+        List<Contact> contacts = this.contactDao.listContacts(userId, limit, offset);
 
         ListContactsResponse listContactsResponse = new ListContactsResponse();
         listContactsResponse.setTimestamp(Instant.now());

@@ -3,12 +3,14 @@ FROM amazoncorretto:25-al2023 AS base
 
 WORKDIR /app
 
-RUN dnf install -y tar gzip binutils && dnf clean all
+RUN dnf install -y tar gzip binutils \
+ && dnf clean all
 
 COPY pom.xml mvnw mvnw.cmd ./
 COPY .mvn .mvn/
 
-RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+RUN chmod +x mvnw \
+ && ./mvnw dependency:go-offline -B
 
 # Generate tester
 FROM base AS tester
@@ -19,8 +21,8 @@ COPY src src
 FROM tester AS builder
 
 RUN ./mvnw -DskipTests clean package \
-    && MODULES=$(jdeps --multi-release 25 -cp "target/lib/*" --ignore-missing-deps --print-module-deps target/spring-contacts-app-1.0.0.jar) \
-    && jlink --compress=zip-9 --strip-debug --no-header-files --no-man-pages --add-modules "${MODULES}" --output /app/jlink-runtime
+ && MODULES=$(jdeps --multi-release 25 -cp "target/lib/*" --ignore-missing-deps --print-module-deps target/spring-contacts-app-1.0.0.jar) \
+ && jlink --compress=zip-9 --strip-debug --no-header-files --no-man-pages --add-modules "${MODULES}" --output /app/jlink-runtime
 
 # Set up the runtime
 FROM scratch

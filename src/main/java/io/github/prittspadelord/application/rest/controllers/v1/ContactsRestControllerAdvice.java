@@ -2,6 +2,7 @@ package io.github.prittspadelord.application.rest.controllers.v1;
 
 import io.github.prittspadelord.application.rest.models.ApiErrorResponse;
 import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
+import io.github.prittspadelord.application.rest.models.MissingParameterAdditionalData;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -11,11 +12,14 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -33,6 +37,29 @@ public class ContactsRestControllerAdvice {
         error.setAdditionalData(null);
 
         log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.NOT_FOUND.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+        return error;
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleMissingServletRequestParameterException(MissingServletRequestParameterException e, HttpServletRequest req) {
+        var error = new ApiErrorResponse();
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setTimestamp(Instant.now());
+        error.setErrorType(HttpStatus.BAD_REQUEST.name());
+        error.setDescription("You are missing some important URL parameters! Check additionalData for more information");
+
+        List<MissingParameterAdditionalData> missingParameters = new ArrayList<>();
+
+        MissingParameterAdditionalData missingParameter = new MissingParameterAdditionalData();
+        missingParameter.setParameterName(e.getParameterName());
+        missingParameter.setParameterType(e.getParameterType());
+
+        missingParameters.add(missingParameter); //this only adds for a single missing parameter, how can we make it do so for more?
+
+        error.setAdditionalData(missingParameters);
+
+        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.BAD_REQUEST.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
         return error;
     }
 

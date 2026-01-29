@@ -18,3 +18,5 @@ SELECT
     postal_code
 FROM contacts
 WHERE user_id = :user_id
+ORDER BY first_name ASC
+LIMIT :limit OFFSET :offset

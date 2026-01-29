@@ -56,9 +56,9 @@ public class ContactsRestController {
 
     @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contacts")
-    public ListContactsResponse handleListContact(HttpServletRequest request) {
+    public ListContactsResponse handleListContact(@RequestParam("limit") int limit, @RequestParam("offset") int offset, HttpServletRequest request) {
         long userId = (Long) request.getAttribute("user_id");
-        return this.contactService.listContacts(userId);
+        return this.contactService.listContacts(userId, limit, offset);
     }
 
     @Authorized(AuthorizationLevel.USER)

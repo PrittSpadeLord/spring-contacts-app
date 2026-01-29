@@ -86,9 +86,9 @@ public class CommonRestControllerAdvice {
 
     /* --- Catch-all handler placed at the very bottom --- */
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiErrorResponse handleException(Exception e, HttpServletRequest req) {
+    public ApiErrorResponse handleRuntimeException(RuntimeException e, HttpServletRequest req) {
         var error = new ApiErrorResponse();
         error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         error.setTimestamp(Instant.now());

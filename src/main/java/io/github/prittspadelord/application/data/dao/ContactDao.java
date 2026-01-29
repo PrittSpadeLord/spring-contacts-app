@@ -79,11 +79,13 @@ public class ContactDao {
         return this.namedParameterJdbcTemplate.queryForObject(sql, parameterSource, rowMapper);
     }
 
-    public List<Contact> listContacts(long userId) {
-        String sql = this.sqlFromFile("select_contacts_where_userid.sql");
+    public List<Contact> listContacts(long userId, int limit, int offset) {
+        String sql = this.sqlFromFile("select_contacts_where_userid_limit_offset.sql");
 
         SqlParameterSource parameterSource = new MapSqlParameterSource()
-            .addValue("user_id", userId);
+            .addValue("user_id", userId)
+            .addValue("limit", limit)
+            .addValue("offset", offset);
 
         RowMapper<Contact> rowMapper = new BeanPropertyRowMapper<>(Contact.class);
 
