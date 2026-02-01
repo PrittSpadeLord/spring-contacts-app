@@ -21,7 +21,7 @@
         <jackson.version>3.0.3</jackson.version>
         <jakarta.el.version>4.0.2</jakarta.el.version>
         <junit5.version>5.14.1</junit5.version>
-        <logback.version>1.5.22</logback.version>
+        <logback.version>1.5.27</logback.version>
         <lombok.version>1.18.42</lombok.version>
         <mockito.version>5.21.0</mockito.version>
         <postgresql.version>42.7.9</postgresql.version>
@@ -255,7 +255,7 @@
                 <version>${owasp.dependency.check.version}</version>
                 <configuration>
                     <nvdApiKeyEnvironmentVariable>NVD_API_KEY</nvdApiKeyEnvironmentVariable>
-                    <failBuildOnCVSS>7</failBuildOnCVSS>
+                    <failBuildOnCVSS>4</failBuildOnCVSS>
                 </configuration>
                 <executions>
                     <execution>
