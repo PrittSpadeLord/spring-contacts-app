@@ -1,5 +1,5 @@
 # Generate base
-FROM amazoncorretto:25-al2023 AS base
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:25-al2023 AS base
 
 WORKDIR /app
 

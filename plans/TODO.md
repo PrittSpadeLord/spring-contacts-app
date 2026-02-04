@@ -6,3 +6,4 @@
 6. Set up JSpecify static analysis using ErrorProne and NullAway
 7. Set up JaCoCo to ensure all areas of our application get tested
 8. When it's time to create UI endpoints, make sure `/register` returns a 201 (Resource created) instead of 200.
+9. Experiment with Open J Proxy
