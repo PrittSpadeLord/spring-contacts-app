@@ -12,7 +12,7 @@ target/
 !.gitignore
 !.mvn/**
 !.dockerignore
-!Dockerfile
+!Containerfile
 !README.md
 !docker-compose.yml
 !mvnw

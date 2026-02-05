@@ -2,6 +2,7 @@ services:
   app:
     build:
       context: .
+      dockerfile: Containerfile
     environment:
       - BASE_URL
       - GLOBAL_SECRET
@@ -21,6 +22,7 @@ services:
   tester:
     build:
       context: .
+      dockerfile: Containerfile
       target: tester
     volumes:
       - ./src:/app/src
