@@ -13,24 +13,25 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <apache.tomcat.version>11.0.15</apache.tomcat.version>
+        <apache.tomcat.version>11.0.18</apache.tomcat.version>
         <bouncycastle.version>2.73.10</bouncycastle.version>
-        <bucket4j.version>8.15.0</bucket4j.version>
+        <bucket4j.version>8.15.0</bucket4j.version> <!--we will remove it soon-->
         <hibernate.validator.version>9.1.0.Final</hibernate.validator.version>
         <hikaricp.version>7.0.2</hikaricp.version>
-        <jackson.version>3.0.3</jackson.version>
+        <jackson.version>3.0.4</jackson.version>
         <jakarta.el.version>4.0.2</jakarta.el.version>
-        <junit5.version>5.14.1</junit5.version>
-        <logback.version>1.5.27</logback.version>
+        <junit5.version>5.14.2</junit5.version>
+        <logback.version>1.5.28</logback.version>
         <lombok.version>1.18.42</lombok.version>
+        <micrometer.observation.version>1.16.3</micrometer.observation.version>
         <mockito.version>5.21.0</mockito.version>
-        <postgresql.version>42.7.9</postgresql.version>
+        <postgresql.version>42.7.10</postgresql.version>
         <slf4j.version>2.0.17</slf4j.version>
         <spring.framework.version>7.0.3</spring.framework.version>
         <spring.security.version>7.0.2</spring.security.version>
 
-        <maven.compiler.plugin.version>3.14.1</maven.compiler.plugin.version>
-        <maven.dependency.plugin.version>3.9.0</maven.dependency.plugin.version>
+        <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
+        <maven.dependency.plugin.version>3.10.0</maven.dependency.plugin.version>
         <maven.jar.plugin.version>3.5.0</maven.jar.plugin.version>
         <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
         <owasp.dependency.check.version>12.2.0</owasp.dependency.check.version>
@@ -38,6 +39,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-observation</artifactId>
+                <version>${micrometer.observation.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
