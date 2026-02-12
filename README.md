@@ -10,7 +10,7 @@ Before we proceed any further, I should first clarify a few things about this pr
 
 - This project was built as a way to showcase all the things I learned in the year of 2025 regarding the Spring framework and PostgreSQL.
 
-- The choice to avoid using Spring Boot is 100% intentional: Spring Boot greatly simplifies the development of applications in practice by providing meaningful auto-configuration out of the box. However, for the purposes of learning, I decided to manually configure everything from scratch in order to truly understand the purpose behind the various configurations. In many cases, I have actually discovered that my requirement may involve a different configuration from what is provided from Spring Boot by default.
+- The choice to avoid using Spring Boot is 100% intentional: Spring Boot greatly simplifies the development of applications in practice by providing meaningful autoconfiguration out of the box. However, for the purposes of learning, I decided to manually configure everything from scratch in order to truly understand the purpose behind the various configurations. In many cases, I have actually discovered that my requirement may involve a different configuration from what is provided from Spring Boot by default.
 
 - The design decisions made in this project are not meant to be practical: I do not in any point make the claim that the decisions made here constitute a reasonable path to building a Contacts application. Rather it is simply meant to explore the limits of various configurations and try to make them as secure as possible. For example, this project features a custom Jackson deserializer and Banking-grade password security (more on that later) to protect essentially zero sensitive information. If I were to make an application with practical utility in mind aimed towards real users, I would most certainly do things differently from how they are done here.
 
@@ -30,7 +30,7 @@ Now that that's out of the way, without further ado, let's dive in!
 
 ## Overview
 
-- The application is built around Spring Framework version `7.0.x` as well as Spring Security version `7.0.x`. Thus it follows that it also follows Jakarta EE 11 (and by extension Apache Tomcat 11).
+- The application is built around Spring Framework version `7.0.x` as well as Spring Security version `7.0.x`. Thus, it follows that it also follows Jakarta EE 11 (and by extension Apache Tomcat 11).
 
 - Bouncy Castle is used to handle the various cryptographic operations used by our application.
 
@@ -60,7 +60,7 @@ Now that that's out of the way, without further ado, let's dive in!
 
 - The Spring `ApplicationContext`s for providing IoC for DI is configured into Tomcat's servlet context using `SpringServletContainerInitializer()` as well as a custom `ContactsAppServletInitializer`, which we shall delve into in more detail in the next section.
 
-- **TODO:** We will configure Tomcat to only listen to requests from a specific source, such as Cloudflare or Nginx. This will let us offload both our ratelimiting logic as well as SSL certificates for HTTPS away from our application.
+- **TODO:** We will configure Tomcat to only listen to requests from a specific source, such as Cloudflare or Nginx. This will let us offload both our rate-limiting both logic and SSL certificates for HTTPS away from our application.
 
 ## Spring IoC and DI overview
 
@@ -68,7 +68,7 @@ Now that that's out of the way, without further ado, let's dive in!
 
 ## Controllers
 
-- The incoming requests to our Web Servlet are handled at the controllers and the controller advices. We have two sets of controllers: one for handling user authentication and another for handling contacts; as well as three sets of controller advices: one low-priority common advice, and two high-propriority advices for user authentication and contact management respectively.
+- The incoming requests to our Web Servlet are handled at the controllers and the controller advices. We have two sets of controllers: one for handling user authentication and another for handling contacts; as well as three sets of controller advices: one low-priority common advice, and two high-priority advices for user authentication and contact management respectively.
 
 - Handler interceptors are used to intercept incoming requests before the controllers are even allowed to access them. Currently, we have interceptors for implementing Rate limits (will be removed soon) as well as enforcing authentication/authorization. The Auth interceptor checks if a method contains the `@Authorized` annotation or not, and if so, enforces the authorization level required by the method from the user (more on that when it comes to look at Services).
 
@@ -80,7 +80,7 @@ Now that that's out of the way, without further ado, let's dive in!
 
 - Let us revisit an important fact in Java: `String`s are immutable. This means that any `String` object created will persist in memory until the next garbage collection cycle. This poses a security risk: raw passwords entered by the user if processed in a `String` form will persist in memory for a period of time. If any attacker were to dump the memory of the running process, it can be analyzed to expose raw passwords, a serious security risk. As such, it is imperative that only `char[]` is used for passwords and other sensitive data in this application, and they are all manually "zeroed out" by filling each array element with null or 0 character after use.
 
-- However, Jackson is the first point of contact when incoming JSON payloads are deserialized into POJOs. And the default Jackson deserializer uses `String` objects internally to perform this operation. This means that even if we continue using `char[]` in our POJOs and follow all proper precautions, the incoming requesr (with the password) has already been leaked into the memory.
+- However, Jackson is the first point of contact when incoming JSON payloads are deserialized into POJOs. And the default Jackson deserializer uses `String` objects internally to perform this operation. This means that even if we continue using `char[]` in our POJOs and follow all proper precautions, the incoming request (with the password) has already been leaked into the memory.
 
 - Therefore, we provide our own custom `PasswordDeserializer` that implemented `ValueDeserializer<char[]>` that deserializes the data as character streams. This is then passed in using `@JsonDeserialize(using = PasswordDeserializer.class)` to our password POJO fields.
 
