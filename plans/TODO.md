@@ -1,4 +1,5 @@
-1. Move sensitive data into a properties file and create a template properties file
+1. Move from Docker to Podman by April
+2. Move sensitive data into a properties file and create a template properties file
 2. See if we can improve the performance of the user authentication by reducing the delay further
 3. Write tests for Contacts
 4. Research on how to test for controllers and other classes. Also research on how we can incorporate IoC in tests instead of manually initializing them.

@@ -1,3 +1,7 @@
+# NOTICE!
+
+- This project is currently on a pause. Minor maintenance and housekeeping will be performed, but major feature additions will have to wait until July or later.
+
 # Introduction
 
 Hey there! :wave:
