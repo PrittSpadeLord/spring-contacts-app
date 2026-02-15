@@ -36,35 +36,35 @@ public class ContactsRestController {
     @Authorized(AuthorizationLevel.USER)
     @PostMapping("/createContact")
     public CreateContactResponse handleContactCreation(@Valid @RequestBody CreateContactRequest createContactRequest, HttpServletRequest request) {
-        long userId = (Long) request.getAttribute("user_id");
+        long userId = (long) request.getAttribute("user_id");
         return this.contactService.createContact(createContactRequest, userId);
     }
 
     @Authorized(AuthorizationLevel.USER)
     @DeleteMapping("/deleteContact")
     public DeleteContactResponse handleContactDeletion(@RequestParam("id") long contactId, HttpServletRequest request) {
-        long userId = (Long) request.getAttribute("user_id");
+        long userId = (long) request.getAttribute("user_id");
         return this.contactService.deleteContact(contactId, userId);
     }
 
     @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contact")
     public GetContactResponse handleGetContact(@RequestParam("id") long contactId, HttpServletRequest request) {
-        long userId = (Long) request.getAttribute("user_id");
+        long userId = (long) request.getAttribute("user_id");
         return this.contactService.getContact(contactId, userId);
     }
 
     @Authorized(AuthorizationLevel.USER)
     @GetMapping("/contacts")
     public ListContactsResponse handleListContact(@RequestParam("limit") int limit, @RequestParam("offset") int offset, HttpServletRequest request) {
-        long userId = (Long) request.getAttribute("user_id");
+        long userId = (long) request.getAttribute("user_id");
         return this.contactService.listContacts(userId, limit, offset);
     }
 
     @Authorized(AuthorizationLevel.USER)
     @PutMapping("/updateContact")
     public UpdateContactResponse handleUpdateContact(@RequestParam("id") long contactId, @Valid @RequestBody UpdateContactRequest updateContactRequest, HttpServletRequest request) {
-        long userId = (Long) request.getAttribute("user_id");
+        long userId = (long) request.getAttribute("user_id");
         return this.contactService.updateContactResponse(updateContactRequest, contactId, userId);
     }
 }
