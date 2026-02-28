@@ -10,7 +10,7 @@ COPY pom.xml mvnw mvnw.cmd ./
 COPY .mvn .mvn/
 
 RUN chmod +x mvnw \
- && ./mvnw dependency:go-offline -B
+ && ./mvnw dependency:go-offline -B -DdownloadSources=false -DdownloadJavadocs=false
 
 # Generate tester
 FROM base AS tester

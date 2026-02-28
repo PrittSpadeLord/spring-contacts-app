@@ -18,7 +18,7 @@
         <bucket4j.version>8.15.0</bucket4j.version> <!--we will remove it soon-->
         <hibernate.validator.version>9.1.0.Final</hibernate.validator.version>
         <hikaricp.version>7.0.2</hikaricp.version>
-        <jackson.version>3.0.4</jackson.version>
+        <jackson.version>3.1.0</jackson.version>
         <jakarta.el.version>4.0.2</jakarta.el.version>
         <junit5.version>5.14.3</junit5.version>
         <logback.version>1.5.32</logback.version>
