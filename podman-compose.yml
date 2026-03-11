@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Containerfile
+      # dockerfile: Containerfile
     environment:
       - BASE_URL
       - GLOBAL_SECRET
@@ -22,8 +22,8 @@ services:
   tester:
     build:
       context: .
-      dockerfile: Containerfile
+      # dockerfile: Containerfile
       target: tester
     volumes:
-      - ./src:/app/src
+      - ./src:/app/src:z
     command: ./mvnw clean test

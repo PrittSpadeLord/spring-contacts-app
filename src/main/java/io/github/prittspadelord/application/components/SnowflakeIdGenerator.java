@@ -18,10 +18,10 @@ public class SnowflakeIdGenerator {
     private final AtomicLong incrementer;
 
     public SnowflakeIdGenerator() {
-        regionId = Long.parseLong(System.getenv("REGION_ID"));
-        instanceId = Long.parseLong(System.getenv("INSTANCE_ID"));
-        previousTimestamp = new AtomicLong(Instant.now().toEpochMilli());
-        incrementer = new AtomicLong(0L);
+        this.regionId = Long.parseLong(System.getenv("REGION_ID"));
+        this.instanceId = Long.parseLong(System.getenv("INSTANCE_ID"));
+        this.previousTimestamp = new AtomicLong(Instant.now().toEpochMilli());
+        this.incrementer = new AtomicLong(0L);
     }
 
     public long generateSnowflakeId(Instant instant) {

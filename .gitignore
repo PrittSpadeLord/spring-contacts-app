@@ -11,10 +11,10 @@ target/
 # Add what we need
 !.gitignore
 !.mvn/**
-!.dockerignore
+!.containerignore
 !Containerfile
 !README.md
-!docker-compose.yml
+!podman-compose.yml
 !mvnw
 !mvnw.cmd
 !plans/**
