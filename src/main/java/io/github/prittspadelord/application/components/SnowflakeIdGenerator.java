@@ -20,7 +20,7 @@ public class SnowflakeIdGenerator {
     public SnowflakeIdGenerator() {
         this.regionId = Long.parseLong(System.getenv("REGION_ID"));
         this.instanceId = Long.parseLong(System.getenv("INSTANCE_ID"));
-        this.previousTimestamp = new AtomicLong(Instant.now().toEpochMilli());
+        this.previousTimestamp = new AtomicLong(0L);
         this.incrementer = new AtomicLong(0L);
     }
 
@@ -33,7 +33,7 @@ public class SnowflakeIdGenerator {
     }
 
     private void handleIncrementer(long previousTimestamp, long timeStamp) {
-        if(previousTimestamp == timeStamp) incrementer.incrementAndGet();
+        if(previousTimestamp != 0 && previousTimestamp == timeStamp) incrementer.incrementAndGet();
         else incrementer.set(0L);
     }
 }
