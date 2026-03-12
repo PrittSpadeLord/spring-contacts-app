@@ -24,7 +24,7 @@
         <logback.version>1.5.32</logback.version>
         <lombok.version>1.18.42</lombok.version>
         <micrometer.observation.version>1.16.3</micrometer.observation.version>
-        <mockito.version>5.22.0</mockito.version>
+        <mockito.version>5.23.0</mockito.version>
         <postgresql.version>42.7.10</postgresql.version>
         <slf4j.version>2.0.17</slf4j.version>
         <spring.framework.version>7.0.5</spring.framework.version>
