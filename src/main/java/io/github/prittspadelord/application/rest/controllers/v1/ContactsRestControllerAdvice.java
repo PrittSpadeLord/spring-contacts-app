@@ -1,7 +1,7 @@
 package io.github.prittspadelord.application.rest.controllers.v1;
 
 import io.github.prittspadelord.application.rest.models.ApiErrorResponse;
-import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
+// import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
 import io.github.prittspadelord.application.rest.models.MissingParameterAdditionalData;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,18 +63,18 @@ public class ContactsRestControllerAdvice {
         return error;
     }
 
-    @ExceptionHandler(UnauthorizedResourceAccessException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ApiErrorResponse handleUnauthorizedResourceAccessException(UnauthorizedResourceAccessException e, HttpServletRequest req) {
-
-        var error = new ApiErrorResponse();
-        error.setStatus(HttpStatus.UNAUTHORIZED.value());
-        error.setTimestamp(Instant.now());
-        error.setErrorType(HttpStatus.UNAUTHORIZED.name());
-        error.setDescription("You do not have the authority to access this resource!");
-        error.setAdditionalData(null);
-
-        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.UNAUTHORIZED.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
-        return error;
-    }
+//    @ExceptionHandler(UnauthorizedResourceAccessException.class)
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    public ApiErrorResponse handleUnauthorizedResourceAccessException(UnauthorizedResourceAccessException e, HttpServletRequest req) {
+//
+//        var error = new ApiErrorResponse();
+//        error.setStatus(HttpStatus.UNAUTHORIZED.value());
+//        error.setTimestamp(Instant.now());
+//        error.setErrorType(HttpStatus.UNAUTHORIZED.name());
+//        error.setDescription("You do not have the authority to access this resource!");
+//        error.setAdditionalData(null);
+//
+//        log.info("Proper error message with status {} has been sent to user of remote address {} for triggering {} with message: {}", HttpStatus.UNAUTHORIZED.value(), req.getRemoteAddr(), e.getClass().getName(), e.getMessage());
+//        return error;
+//    }
 }

@@ -1,11 +1,8 @@
 package io.github.prittspadelord.application.rest.interceptors;
 
-import io.github.prittspadelord.application.data.models.User;
 import io.github.prittspadelord.application.rest.InsufficientAuthorizationException;
 import io.github.prittspadelord.application.rest.JwtRevokedException;
-import io.github.prittspadelord.application.rest.UnauthorizedResourceAccessException;
 import io.github.prittspadelord.application.rest.annotations.Authorized;
-import io.github.prittspadelord.application.services.ContactService;
 import io.github.prittspadelord.application.support.AuthorizationLevel;
 import io.github.prittspadelord.application.services.UserService;
 
