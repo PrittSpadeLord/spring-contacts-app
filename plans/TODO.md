@@ -1,4 +1,7 @@
-1. Move from Docker to Podman by April
+1. Update status codes
+   - Use 201 when resource is created
+   - Use 422 if the JSON is properly formatted but invalid
+2. Follow RESTful naming practices for URL endpoints
 2. Move sensitive data into a properties file and create a template properties file
 3. See if we can improve the performance of the user authentication by reducing the delay further
 4. Write tests for Contacts
