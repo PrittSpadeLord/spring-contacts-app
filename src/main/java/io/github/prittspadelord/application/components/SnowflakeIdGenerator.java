@@ -3,7 +3,6 @@ package io.github.prittspadelord.application.components;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class SnowflakeIdGenerator {
@@ -12,22 +11,22 @@ public class SnowflakeIdGenerator {
 
     private final long regionId;
     private final long instanceId;
-    private final AtomicLong previousTimestamp;
-    private final AtomicLong incrementer;
+    private long previousTimestamp;
+    private long incrementer;
 
     public SnowflakeIdGenerator() {
         this.regionId = Long.parseLong(System.getenv("REGION_ID"));
         this.instanceId = Long.parseLong(System.getenv("INSTANCE_ID"));
-        this.previousTimestamp = new AtomicLong(0L);
-        this.incrementer = new AtomicLong(0L);
+        this.previousTimestamp = 0L;
+        this.incrementer = 0L;
     }
 
-    public synchronized long generateSnowflakeId(Instant instant) {
+    public synchronized long generateSnowflakeId() {
 
-        long timestamp = instant.toEpochMilli();
+        long timestamp = Instant.now().toEpochMilli();
 
-        if(timestamp < previousTimestamp.get()) {
-            long offset = previousTimestamp.get() - timestamp;
+        if(timestamp < previousTimestamp) {
+            long offset = previousTimestamp - timestamp;
 
             try {
                 Thread.sleep(offset);
@@ -38,11 +37,11 @@ public class SnowflakeIdGenerator {
             }
         }
 
-        if(previousTimestamp.get() != 0 && previousTimestamp.get() == timestamp) incrementer.incrementAndGet();
-        else incrementer.set(0L);
+        if(previousTimestamp != 0 && previousTimestamp == timestamp) incrementer++;
+        else incrementer = 0L;
 
-        previousTimestamp.set(timestamp);
+        previousTimestamp = timestamp;
 
-        return ((timestamp - SnowflakeIdGenerator.EPOCH_2020) << 19) | (this.regionId << 11) | (this.instanceId << 3) | (this.incrementer.get());
+        return ((timestamp - SnowflakeIdGenerator.EPOCH_2020) << 19) | (this.regionId << 11) | (this.instanceId << 3) | (this.incrementer);
     }
 }

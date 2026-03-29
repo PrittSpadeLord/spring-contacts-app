@@ -30,7 +30,7 @@ public class ContactService {
     public CreateContactResponse createContact(CreateContactRequest createContactRequest, long userId) {
 
         Instant now = Instant.now();
-        long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
+        long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId();
 
         Contact contact = new Contact();
         contact.setId(snowflakeId);

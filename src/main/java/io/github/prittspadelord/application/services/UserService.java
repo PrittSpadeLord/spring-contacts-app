@@ -47,7 +47,7 @@ public class UserService {
 
         User user = new User();
         Instant now = Instant.now();
-        long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId(now);
+        long snowflakeId = this.snowflakeIdGenerator.generateSnowflakeId();
         String hashedPassword = this.passwordEncoder.encode(registerUserRequest.getPassword());
 
         user.setId(snowflakeId);

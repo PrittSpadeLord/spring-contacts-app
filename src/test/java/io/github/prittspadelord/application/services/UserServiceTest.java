@@ -67,7 +67,7 @@ class UserServiceTest {
 
         Arrays.fill(rawPassword, '\0'); //can this be incorporated into Mockito `when` logic?
 
-        Mockito.when(this.snowflakeIdGenerator.generateSnowflakeId(Mockito.any(Instant.class)))
+        Mockito.when(this.snowflakeIdGenerator.generateSnowflakeId())
             .thenReturn(id);
 
         RegisterUserResponse registerUserResponse = this.userService.createUser(registerUserRequest);
