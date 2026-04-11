@@ -10,7 +10,6 @@ services:
       - DB_URL
       - DB_USERNAME
       - INSTANCE_ID
-      - NVD_API_KEY
       - PORT
       - REGION_ID
     ports:
