@@ -18,14 +18,14 @@
         <bucket4j.version>8.15.0</bucket4j.version> <!--we will remove it soon-->
         <hibernate.validator.version>9.1.0.Final</hibernate.validator.version>
         <hikaricp.version>7.0.2</hikaricp.version>
-        <jackson.version>3.1.1</jackson.version>
+        <jackson.version>3.1.2</jackson.version>
         <jakarta.el.version>4.0.2</jakarta.el.version>
-        <junit5.version>5.14.3</junit5.version>
+        <junit5.version>5.14.4</junit5.version>
         <logback.version>1.5.32</logback.version>
-        <lombok.version>1.18.42</lombok.version>
+        <lombok.version>1.18.46</lombok.version>
         <micrometer.observation.version>1.16.3</micrometer.observation.version>
         <mockito.version>5.23.0</mockito.version>
-        <postgresql.version>42.7.10</postgresql.version>
+        <postgresql.version>42.7.11</postgresql.version>
         <slf4j.version>2.0.17</slf4j.version>
         <spring.framework.version>7.0.7</spring.framework.version>
         <spring.security.version>7.0.5</spring.security.version>
@@ -205,7 +205,7 @@
                     </annotationProcessorPaths>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
-                    <encoding>UTF-8</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <useIncrementalCompilation>true</useIncrementalCompilation>
                 </configuration>
             </plugin>
